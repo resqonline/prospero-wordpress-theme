@@ -1,0 +1,42 @@
+# WordPress
+*.log
+.htaccess
+
+# Operating System
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Build files
+*.map
+
+# Downloaded Google Fonts (can be regenerated)
+prospero-theme/assets/fonts/*.css
+prospero-theme/assets/fonts/*.woff
+prospero-theme/assets/fonts/*.woff2
+prospero-theme/assets/fonts/*.ttf
+prospero-theme/assets/fonts/*.eot

@@ -1,0 +1,822 @@
+/**
+ * Prospero Theme Custom Blocks Styles
+ *
+ * @package Prospero
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   Call to Action Block
+   ========================================================================== */
+
+.prospero-cta {
+	position: relative;
+	padding: var(--spacing-xl, 3rem) var(--spacing-md, 1.5rem);
+	margin: var(--spacing-lg, 2rem) 0;
+	border-radius: 8px;
+	background-size: cover;
+	background-position: center;
+	overflow: hidden;
+}
+
+/* Background color variations */
+.prospero-cta.has-primary-background-color {
+	background-color: var(--wp--preset--color--primary, var(--color-primary, #007bff));
+}
+
+.prospero-cta.has-secondary-background-color {
+	background-color: var(--wp--preset--color--secondary, var(--color-secondary, #6c757d));
+}
+
+.prospero-cta.has-tertiary-background-color {
+	background-color: var(--wp--preset--color--tertiary, var(--color-tertiary, #28a745));
+}
+
+.prospero-cta.has-highlight-background-color {
+	background-color: var(--wp--preset--color--highlight, var(--color-highlight, #ffc107));
+}
+
+/* Light text for dark backgrounds */
+.prospero-cta .has-light-text,
+.prospero-cta .has-light-text .prospero-cta-heading,
+.prospero-cta .has-light-text .prospero-cta-text {
+	color: #ffffff;
+}
+
+/* Background image overlay for readability */
+.prospero-cta-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 1;
+}
+
+.prospero-cta.has-background-image .prospero-cta-content,
+.prospero-cta.has-background-image .prospero-cta-image {
+	position: relative;
+	z-index: 2;
+}
+
+.prospero-cta.has-background-image .prospero-cta-heading,
+.prospero-cta.has-background-image .prospero-cta-text {
+	color: #ffffff;
+}
+
+/* Center layout (default) */
+.prospero-cta-center {
+	text-align: center;
+}
+
+.prospero-cta-center .prospero-cta-content {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.prospero-cta-center .prospero-cta-image-center {
+	margin-bottom: var(--spacing-md, 1.5rem);
+}
+
+.prospero-cta-center .prospero-cta-image-center img {
+	max-width: 300px;
+	height: auto;
+	border-radius: 8px;
+	margin: 0 auto;
+	display: block;
+}
+
+/* Left layout (image left, text right) */
+.prospero-cta-left {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-lg, 2rem);
+}
+
+.prospero-cta-left .prospero-cta-image {
+	flex: 0 0 40%;
+	max-width: 40%;
+}
+
+.prospero-cta-left .prospero-cta-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 8px;
+	display: block;
+}
+
+.prospero-cta-left .prospero-cta-content {
+	flex: 1;
+	text-align: left;
+}
+
+/* Right layout (image right, text left) */
+.prospero-cta-right {
+	display: flex;
+	align-items: center;
+	flex-direction: row-reverse;
+	gap: var(--spacing-lg, 2rem);
+}
+
+.prospero-cta-right .prospero-cta-image {
+	flex: 0 0 40%;
+	max-width: 40%;
+}
+
+.prospero-cta-right .prospero-cta-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 8px;
+	display: block;
+}
+
+.prospero-cta-right .prospero-cta-content {
+	flex: 1;
+	text-align: left;
+}
+
+/* CTA content styles */
+.prospero-cta-heading {
+	margin: 0 0 var(--spacing-md, 1rem);
+	font-size: 2rem;
+	line-height: 1.2;
+}
+
+.prospero-cta-text {
+	margin-bottom: var(--spacing-md, 1rem);
+	font-size: 1.1rem;
+	line-height: 1.6;
+}
+
+.prospero-cta-text p:last-child {
+	margin-bottom: 0;
+}
+
+.prospero-cta-button {
+	margin-top: var(--spacing-md, 1rem);
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+	.prospero-cta {
+		padding: var(--spacing-lg, 2rem) var(--spacing-sm, 1rem);
+	}
+	
+	.prospero-cta-left,
+	.prospero-cta-right {
+		flex-direction: column;
+		text-align: center;
+	}
+	
+	.prospero-cta-left .prospero-cta-image,
+	.prospero-cta-right .prospero-cta-image {
+		flex: 0 0 100%;
+		max-width: 100%;
+		margin-bottom: var(--spacing-md, 1rem);
+	}
+	
+	.prospero-cta-left .prospero-cta-content,
+	.prospero-cta-right .prospero-cta-content {
+		text-align: center;
+	}
+	
+	.prospero-cta-heading {
+		font-size: 1.5rem;
+	}
+	
+	.prospero-cta-text {
+		font-size: 1rem;
+	}
+}
+
+/* Editor placeholder styles */
+.prospero-cta .prospero-placeholder {
+	opacity: 0.5;
+}
+
+/* ==========================================================================
+   Testimonial Block (Single)
+   ========================================================================== */
+
+.prospero-testimonial-block {
+	display: flex;
+	gap: var(--spacing-md);
+	padding: var(--spacing-md);
+	margin: var(--spacing-lg) 0;
+	background: rgba(0, 0, 0, 0.02);
+	border-radius: 8px;
+	align-items: flex-start;
+}
+
+body.dark-mode .prospero-testimonial-block {
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.prospero-testimonial-block .testimonial-image {
+	flex-shrink: 0;
+}
+
+.prospero-testimonial-block .testimonial-thumbnail {
+	border-radius: 50%;
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+}
+
+.prospero-testimonial-block .testimonial-content {
+	flex: 1;
+}
+
+.prospero-testimonial-block .testimonial-text {
+	font-style: italic;
+	margin: 0 0 var(--spacing-sm);
+	font-size: 1.1rem;
+	line-height: 1.6;
+	position: relative;
+}
+
+.prospero-testimonial-block .testimonial-text::before {
+	content: '"';
+	font-size: 3rem;
+	line-height: 1;
+	opacity: 0.2;
+	position: absolute;
+	top: -10px;
+	left: -20px;
+}
+
+.prospero-testimonial-block .testimonial-author {
+	display: block;
+	font-weight: 600;
+	font-style: normal;
+	color: var(--color-primary);
+}
+
+@media (max-width: 768px) {
+	.prospero-testimonial-block {
+		flex-direction: column;
+		text-align: center;
+	}
+	
+	.prospero-testimonial-block .testimonial-image {
+		margin: 0 auto;
+	}
+	
+	.prospero-testimonial-block .testimonial-text::before {
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
+
+/* ==========================================================================
+   Team Member Block
+   ========================================================================== */
+
+.prospero-team-member-block {
+	margin: var(--spacing-lg) 0;
+	text-align: center;
+}
+
+.prospero-team-member-block.prospero-team-member-card {
+	background: rgba(0, 0, 0, 0.02);
+	border-radius: 8px;
+	padding: var(--spacing-md);
+}
+
+body.dark-mode .prospero-team-member-block.prospero-team-member-card {
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.prospero-team-member-block .team-member-image {
+	margin-bottom: var(--spacing-sm);
+	overflow: hidden;
+	border-radius: 8px;
+}
+
+.prospero-team-member-block .team-member-image a {
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+.prospero-team-member-block .team-member-thumbnail {
+	width: 100%;
+	height: auto;
+	transition: transform 0.3s ease;
+	display: block;
+}
+
+.prospero-team-member-block .team-member-image a:hover .team-member-thumbnail {
+	transform: scale(1.05);
+}
+
+.prospero-team-member-block .team-member-name {
+	margin: 0 0 var(--spacing-xs);
+	font-size: 1.25rem;
+}
+
+.prospero-team-member-block .team-member-name a {
+	color: var(--color-text);
+	text-decoration: none;
+	transition: color 0.3s ease;
+}
+
+body.dark-mode .prospero-team-member-block .team-member-name a {
+	color: var(--color-text-dark);
+}
+
+.prospero-team-member-block .team-member-name a:hover {
+	color: var(--color-primary);
+}
+
+.prospero-team-member-block .team-member-excerpt {
+	font-size: 0.95rem;
+	line-height: 1.5;
+	color: var(--color-secondary);
+}
+
+body.dark-mode .prospero-team-member-block .team-member-excerpt {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+/* ==========================================================================
+   Member Content Block
+   ========================================================================== */
+
+.prospero-member-content {
+	padding: var(--spacing-md, 1rem);
+	margin: var(--spacing-lg, 2rem) 0;
+}
+
+.prospero-member-content-login,
+.prospero-member-content-restricted {
+	padding: var(--spacing-md, 1.5rem);
+	margin: var(--spacing-lg, 2rem) 0;
+	background: #fff3cd;
+	border-left: 4px solid #ffc107;
+	border-radius: 4px;
+	text-align: center;
+}
+
+body.dark-mode .prospero-member-content-login,
+body.dark-mode .prospero-member-content-restricted {
+	background: rgba(255, 193, 7, 0.2);
+	color: var(--color-text-dark);
+}
+
+.prospero-member-content-login p,
+.prospero-member-content-restricted p {
+	margin: 0 0 var(--spacing-sm, 1rem);
+	font-weight: 500;
+}
+
+.prospero-member-content-login p:last-child {
+	margin-bottom: 0;
+}
+
+.prospero-member-content-form {
+	margin-top: var(--spacing-md, 1rem);
+	text-align: left;
+}
+
+/* Editor wrapper styles */
+.prospero-member-content-wrapper {
+	border: 2px dashed #ffc107;
+	border-radius: 4px;
+	padding: 0;
+	margin: var(--spacing-lg, 2rem) 0;
+	background: rgba(255, 193, 7, 0.05);
+}
+
+.prospero-member-content-header {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	background: rgba(255, 193, 7, 0.2);
+	border-bottom: 1px solid rgba(255, 193, 7, 0.3);
+	font-size: 13px;
+	font-weight: 500;
+	color: #856404;
+}
+
+.prospero-member-content-icon {
+	width: 16px;
+	height: 16px;
+	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23856404"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>') no-repeat center;
+}
+
+.prospero-member-content-label {
+	flex: 1;
+}
+
+.prospero-member-content-inner {
+	padding: var(--spacing-md, 1rem);
+	min-height: 100px;
+}
+
+.prospero-member-content-fallback-preview {
+	padding: 8px 12px;
+	background: rgba(0, 0, 0, 0.05);
+	border-top: 1px solid rgba(0, 0, 0, 0.1);
+	font-size: 12px;
+	color: #666;
+}
+
+/* ==========================================================================
+   Block Editor Styles (Admin Only)
+   ========================================================================== */
+
+.prospero-cta-editor,
+.prospero-testimonial-editor,
+.prospero-testimonials-list-editor,
+.prospero-team-member-editor,
+.prospero-member-content-editor {
+	min-height: 100px;
+}
+
+.prospero-member-content-editor {
+	position: relative;
+}
+
+.prospero-member-content-editor::before {
+	content: '';
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 24px;
+	height: 24px;
+	background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23666"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>') no-repeat center;
+	opacity: 0.3;
+}
+
+/* ==========================================================================
+   Text Content Block
+   ========================================================================== */
+
+.prospero-text-content {
+	margin: var(--spacing-lg, 2rem) 0;
+}
+
+.prospero-text-content > *:first-child {
+	margin-top: 0;
+}
+
+.prospero-text-content > *:last-child {
+	margin-bottom: 0;
+}
+
+/* Ensure proper spacing between elements */
+.prospero-text-content h1,
+.prospero-text-content h2,
+.prospero-text-content h3,
+.prospero-text-content h4,
+.prospero-text-content h5,
+.prospero-text-content h6 {
+	margin-top: 1.5em;
+	margin-bottom: 0.5em;
+}
+
+.prospero-text-content p {
+	margin-bottom: 1em;
+	line-height: 1.7;
+}
+
+.prospero-text-content ul,
+.prospero-text-content ol {
+	margin-bottom: 1em;
+	padding-left: 1.5em;
+}
+
+.prospero-text-content li {
+	margin-bottom: 0.5em;
+}
+
+/* Alignment variations */
+.prospero-text-content.alignwide {
+	max-width: var(--wp--style--global--wide-size, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.prospero-text-content.alignfull {
+	max-width: none;
+	width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+/* Editor-specific styles */
+.wp-block-prospero-text-content {
+	border: 1px dashed #ddd;
+	padding: var(--spacing-sm, 1rem);
+	border-radius: 4px;
+	min-height: 100px;
+}
+
+.wp-block-prospero-text-content:focus-within {
+	border-color: var(--wp--preset--color--primary, #007bff);
+}
+
+/* ========================
+   Team Block Styles
+   ======================== */
+
+/* Base Team Styles */
+.prospero-team {
+	margin: var(--spacing-lg, 2rem) 0;
+}
+
+/* Columns Layout (Grid) */
+.prospero-team-columns {
+	display: grid;
+	gap: var(--spacing-md, 1.5rem);
+}
+
+.prospero-team-columns[data-columns="2"] {
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.prospero-team-columns[data-columns="3"] {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.prospero-team-columns[data-columns="4"] {
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.prospero-team-columns[data-columns="5"] {
+	grid-template-columns: repeat(5, 1fr);
+}
+
+.prospero-team-columns[data-columns="6"] {
+	grid-template-columns: repeat(6, 1fr);
+}
+
+/* Responsive columns */
+@media (max-width: 991px) {
+	.prospero-team-columns[data-columns="4"],
+	.prospero-team-columns[data-columns="5"],
+	.prospero-team-columns[data-columns="6"] {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+@media (max-width: 767px) {
+	.prospero-team-columns[data-columns="3"],
+	.prospero-team-columns[data-columns="4"],
+	.prospero-team-columns[data-columns="5"],
+	.prospero-team-columns[data-columns="6"] {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+@media (max-width: 480px) {
+	.prospero-team-columns {
+		grid-template-columns: 1fr !important;
+	}
+}
+
+/* List Layout */
+.prospero-team-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md, 1.5rem);
+}
+
+.prospero-team-list .team-item {
+	display: flex;
+	gap: var(--spacing-md, 1.5rem);
+	align-items: flex-start;
+}
+
+.prospero-team-list .team-image {
+	flex: 0 0 150px;
+	max-width: 150px;
+}
+
+.prospero-team-list .team-content {
+	flex: 1;
+}
+
+@media (max-width: 480px) {
+	.prospero-team-list .team-item {
+		flex-direction: column;
+	}
+
+	.prospero-team-list .team-image {
+		flex: 0 0 auto;
+		max-width: 100%;
+		width: 100%;
+	}
+}
+
+/* Team Item Base Styles */
+.prospero-team .team-item {
+	text-align: center;
+}
+
+.prospero-team-list .team-item {
+	text-align: left;
+}
+
+.prospero-team .team-image {
+	margin-bottom: var(--spacing-sm, 1rem);
+	overflow: hidden;
+}
+
+.prospero-team .team-image img {
+	width: 100%;
+	height: auto;
+	display: block;
+	transition: transform 0.3s ease;
+}
+
+.prospero-team .team-image a:hover img,
+.prospero-team .team-image button:hover img {
+	transform: scale(1.05);
+}
+
+.prospero-team .team-name {
+	margin: 0 0 var(--spacing-xs, 0.5rem);
+	font-size: 1.125rem;
+}
+
+.prospero-team .team-name a,
+.prospero-team .team-name button {
+	color: inherit;
+	text-decoration: none;
+}
+
+.prospero-team .team-name a:hover,
+.prospero-team .team-name button:hover {
+	color: var(--prospero-primary, #007bff);
+}
+
+.prospero-team .team-position {
+	margin: 0 0 var(--spacing-xs, 0.5rem);
+	font-size: 0.875rem;
+	color: var(--prospero-text-muted, #666);
+	font-style: italic;
+}
+
+.prospero-team .team-excerpt {
+	font-size: 0.9375rem;
+	color: var(--prospero-text-muted, #666);
+}
+
+/* Image Style: Square */
+.prospero-team-image-square .team-image img {
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+/* Image Style: Round */
+.prospero-team-image-round .team-image img {
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: 50%;
+}
+
+.prospero-team-image-round .team-image {
+	border-radius: 50%;
+}
+
+/* Image Style: Portrait */
+.prospero-team-image-portrait .team-image img {
+	aspect-ratio: 3 / 4;
+	object-fit: cover;
+}
+
+/* Lightbox Trigger Styles */
+.prospero-team .team-lightbox-trigger {
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	font: inherit;
+	color: inherit;
+	text-align: inherit;
+	width: 100%;
+}
+
+.prospero-team .team-image .team-lightbox-trigger {
+	display: block;
+}
+
+.prospero-team .team-lightbox-content {
+	display: none;
+}
+
+/* Lightbox Overlay */
+.prospero-team-lightbox-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.85);
+	z-index: 99999;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--spacing-md, 1.5rem);
+	overflow-y: auto;
+}
+
+.prospero-team-lightbox-overlay[hidden] {
+	display: none;
+}
+
+.prospero-team-lightbox-modal {
+	background: var(--prospero-background, #fff);
+	max-width: 900px;
+	width: 100%;
+	max-height: 90vh;
+	overflow-y: auto;
+	border-radius: 8px;
+	position: relative;
+}
+
+.prospero-team-lightbox-close {
+	position: absolute;
+	top: var(--spacing-sm, 1rem);
+	right: var(--spacing-sm, 1rem);
+	background: none;
+	border: none;
+	font-size: 2rem;
+	line-height: 1;
+	cursor: pointer;
+	color: var(--prospero-text, #333);
+	z-index: 1;
+	padding: 0.25rem;
+}
+
+.prospero-team-lightbox-close:hover {
+	opacity: 0.7;
+}
+
+.prospero-team-lightbox-inner {
+	display: flex;
+	gap: var(--spacing-md, 1.5rem);
+	padding: var(--spacing-lg, 2rem);
+}
+
+.prospero-team-lightbox-image {
+	flex: 0 0 300px;
+	max-width: 300px;
+}
+
+.prospero-team-lightbox-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 4px;
+}
+
+.prospero-team-image-round .prospero-team-lightbox-image img {
+	border-radius: 50%;
+}
+
+.prospero-team-lightbox-details {
+	flex: 1;
+}
+
+.prospero-team-lightbox-name {
+	margin: 0 0 0.25rem;
+}
+
+.prospero-team-lightbox-position {
+	margin: 0 0 var(--spacing-sm, 1rem);
+	font-size: 1rem;
+	color: var(--prospero-text-muted, #666);
+	font-style: italic;
+}
+
+.prospero-team-lightbox-bio {
+	line-height: 1.7;
+}
+
+@media (max-width: 767px) {
+	.prospero-team-lightbox-inner {
+		flex-direction: column;
+	}
+
+	.prospero-team-lightbox-image {
+		flex: 0 0 auto;
+		max-width: 200px;
+		margin: 0 auto;
+	}
+}
+
+/* Focus styles for accessibility */
+.prospero-team .team-lightbox-trigger:focus-visible {
+	outline: 2px solid var(--prospero-primary, #007bff);
+	outline-offset: 2px;
+}
+
+.prospero-team-lightbox-close:focus-visible {
+	outline: 2px solid var(--prospero-primary, #007bff);
+	outline-offset: 2px;
+}

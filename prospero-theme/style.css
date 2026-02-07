@@ -1,0 +1,30 @@
+/*
+Theme Name: Prospero
+Theme URI: https://github.com/resqonline/prospero-wordpress-theme
+Author: resQ online e.U.
+Author URI: https://www.resqonline.eu
+Description: A modern, accessible WordPress theme with dark mode support, Gutenberg blocks, and extensive customization options. Built for performance, SEO, and GDPR compliance.
+Version: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.4
+Requires PHP: 7.4
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: prospero-theme
+Tags: one-column, two-columns, custom-colors, custom-menu, custom-logo, editor-style, featured-images, full-width-template, theme-options, threaded-comments, translation-ready, accessibility-ready, block-styles, wide-blocks
+
+Prospero WordPress Theme
+Copyright (C) 2025
+
+This theme is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+This theme is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+*/
+
+/* Theme styles are enqueued via functions.php */

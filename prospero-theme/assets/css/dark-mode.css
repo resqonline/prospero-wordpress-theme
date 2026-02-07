@@ -1,0 +1,304 @@
+/**
+ * Prospero Theme Dark Mode Styles
+ *
+ * @package Prospero
+ * @since 1.0.0
+ */
+
+/* Dark Mode Styles */
+body.dark-mode {
+	color: var(--color-text-dark);
+	background-color: var(--color-background-dark);
+}
+
+body.dark-mode .site-header {
+	background-color: var(--color-background-dark);
+	border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .site-title a,
+body.dark-mode .main-navigation a {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .site-description {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+/* Dark mode logo switching */
+body.dark-mode .custom-logo-link.logo-light {
+	display: none;
+}
+
+body.dark-mode .custom-logo-link.logo-dark {
+	display: block;
+}
+
+body.dark-mode .menu-toggle {
+	border-color: var(--color-text-dark);
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .has-hamburger-menu .main-navigation ul {
+	background-color: var(--color-background-dark);
+}
+
+body.dark-mode .site-footer {
+	background-color: #1a1923;
+}
+
+/* Dark Mode Toggle Button */
+.dark-mode-toggle {
+	background: rgba(0, 0, 0, 0.05);
+	border: 2px solid transparent;
+	border-radius: 50px;
+	cursor: pointer;
+	font-size: 1.125rem;
+	padding: 0.4rem 0.6rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 40px;
+	min-height: 40px;
+	transition: all 0.3s ease;
+	flex-shrink: 0;
+}
+
+.dark-mode-toggle:hover {
+	background: rgba(0, 0, 0, 0.1);
+	border-color: var(--color-primary);
+	transform: scale(1.05);
+}
+
+.dark-mode-toggle:focus {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+}
+
+body.dark-mode .dark-mode-toggle {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .dark-mode-toggle:hover {
+	background: rgba(255, 255, 255, 0.2);
+}
+
+.dark-mode-icon {
+	display: none;
+	line-height: 1;
+}
+
+/* Show moon icon in light mode (to switch to dark) */
+body.light-mode .dark-mode-icon.dark-icon,
+body:not(.dark-mode):not(.light-mode) .dark-mode-icon.dark-icon {
+	display: inline;
+}
+
+/* Show sun icon in dark mode (to switch to light) */
+body.dark-mode .dark-mode-icon.light-icon {
+	display: inline;
+}
+
+/* Dark mode logged-in navigation */
+body.dark-mode .logged-in-navigation {
+	border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .logged-in-navigation a {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .account-navigation a {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .account-navigation a:hover,
+body.dark-mode .account-navigation .current-menu-item a {
+	background-color: var(--color-primary);
+	color: #fff;
+}
+
+/* Dark mode avatar section */
+body.dark-mode .avatar-preview img {
+	border-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .avatar-form input[type="file"] {
+	border-color: rgba(255, 255, 255, 0.2);
+	background: var(--color-background-dark);
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .section-divider {
+	border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dark mode user dropdown */
+body.dark-mode .menu-item-user-account > .sub-menu {
+	background: var(--color-background-dark);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode 404 page */
+body.dark-mode .error-message {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .error-search h2,
+body.dark-mode .error-suggestions h2 {
+	color: var(--color-text-dark);
+}
+
+/* Dark mode search results */
+body.dark-mode .search-result-item {
+	background: var(--color-background-dark);
+	border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .search-result-item:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .result-title a {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .result-excerpt {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .results-count {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .search-suggestions {
+	background: var(--color-background-dark);
+	border-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .search-form .search-field {
+	background: var(--color-background-dark);
+	border-color: rgba(255, 255, 255, 0.2);
+	color: var(--color-text-dark);
+}
+
+/* Dark mode back to top button */
+body.dark-mode .back-to-top {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode search overlay */
+body.dark-mode .search-overlay {
+	background: rgba(43, 42, 51, 0.98);
+}
+
+body.dark-mode .search-overlay-close {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .search-overlay .search-field {
+	color: var(--color-text-dark);
+	border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .search-overlay .search-field::placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+/* Dark mode mobile menu */
+body.dark-mode .mobile-menu-panel {
+	background-color: var(--color-background-dark);
+	box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark-mode .mobile-menu-header {
+	border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .mobile-menu-close {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .mobile-menu-close:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .mobile-menu-list li {
+	border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .mobile-menu-list a {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .submenu-toggle {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .submenu-panel {
+	background-color: var(--color-background-dark);
+}
+
+body.dark-mode .submenu-panel .sub-menu li {
+	border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .submenu-panel .sub-menu a {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .mobile-menu-toggle {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .mobile-menu-toggle:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .menu-toggle-icon {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .header-search-toggle {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .header-search-toggle:hover {
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Dark mode desktop menu dropdown */
+body.dark-mode .desktop-menu .sub-menu {
+	background: var(--color-background-dark);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth transitions for dark mode */
+* {
+	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	* {
+		transition: none !important;
+	}
+}
+
+/* Mobile adjustments for header actions */
+@media (max-width: 1024px) {
+	.header-actions {
+		flex-shrink: 0;
+		gap: var(--spacing-xs);
+	}
+	
+	.mobile-menu-toggle,
+	.dark-mode-toggle,
+	.header-search-toggle {
+		min-width: 36px;
+		min-height: 36px;
+		padding: 0.35rem;
+		font-size: 1rem;
+	}
+}
