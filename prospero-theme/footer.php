@@ -7,6 +7,8 @@
  */
 ?>
 
+	<?php prospero_render_pre_footer(); ?>
+
 	<footer id="colophon" class="site-footer" role="contentinfo">
 		<div class="container">
 			<?php if ( has_nav_menu( 'footer-menu' ) ) : ?>

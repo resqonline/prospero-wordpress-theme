@@ -1,0 +1,44 @@
+/*
+ Theme Name:   Prospero Child
+ Theme URI:    https://github.com/yourusername/prospero-theme-child
+ Description:  Child theme for the Prospero WordPress theme
+ Author:       Your Name
+ Author URI:   https://yourwebsite.com
+ Template:     prospero-theme
+ Version:      1.0.0
+ License:      GNU General Public License v2 or later
+ License URI:  http://www.gnu.org/licenses/gpl-2.0.html
+ Tags:         prospero, child-theme
+ Text Domain:  prospero-theme-child
+*/
+
+/* ==========================================================================
+   Child Theme Styles
+   ==========================================================================
+
+   Add your custom styles below. These will override parent theme styles.
+
+   Available CSS custom properties from parent theme:
+   --color-primary
+   --color-secondary
+   --color-tertiary
+   --color-text
+   --color-text-dark
+   --color-highlight
+   --color-background
+   --color-background-dark
+   --content-width
+   --border-radius
+   --spacing-xs, --spacing-sm, --spacing-md, --spacing-lg, --spacing-xl
+
+   Example overrides:
+
+   :root {
+       --color-primary: #your-color;
+   }
+
+   .site-header {
+       background: #your-color;
+   }
+
+   ========================================================================== */

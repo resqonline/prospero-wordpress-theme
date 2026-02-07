@@ -68,11 +68,27 @@
 		if (!$container.length) return;
 
 		var frame;
-		var $input = $('#prospero_project_gallery');
-		var $preview = $('#prospero-gallery-preview');
+		var $input = $container.find('input[name="prospero_project_gallery"]');
+		var $preview = $container.find('.prospero-gallery-preview');
+
+		if (!$input.length || !$preview.length) return;
+
+		/**
+		 * Update the hidden input with current gallery IDs
+		 */
+		function updateHiddenInput() {
+			var ids = [];
+			$preview.find('.prospero-gallery-item').each(function() {
+				var id = $(this).data('id');
+				if (id) {
+					ids.push(parseInt(id, 10));
+				}
+			});
+			$input.val(ids.join(','));
+		}
 
 		// Add images button
-		$('#prospero-gallery-add').on('click', function(e) {
+		$container.find('.prospero-gallery-add').on('click', function(e) {
 			e.preventDefault();
 
 			// Create media frame
@@ -90,13 +106,16 @@
 			// On select
 			frame.on('select', function() {
 				var attachments = frame.state().get('selection').toJSON();
-				var currentIds = $input.val() ? $input.val().split(',').map(function(id) { return parseInt(id, 10); }) : [];
+				
+				// Get current IDs from DOM
+				var currentIds = [];
+				$preview.find('.prospero-gallery-item').each(function() {
+					currentIds.push(parseInt($(this).data('id'), 10));
+				});
 
 				attachments.forEach(function(attachment) {
 					// Skip if already in gallery
 					if (currentIds.indexOf(attachment.id) !== -1) return;
-
-					currentIds.push(attachment.id);
 
 					// Get thumbnail URL
 					var thumbUrl = attachment.sizes && attachment.sizes.thumbnail 
@@ -112,7 +131,7 @@
 				});
 
 				// Update hidden input
-				$input.val(currentIds.join(','));
+				updateHiddenInput();
 			});
 
 			frame.open();
@@ -121,17 +140,8 @@
 		// Remove image
 		$preview.on('click', '.prospero-gallery-remove', function(e) {
 			e.preventDefault();
-
-			var $item = $(this).closest('.prospero-gallery-item');
-			var idToRemove = parseInt($item.data('id'), 10);
-			var currentIds = $input.val() ? $input.val().split(',').map(function(id) { return parseInt(id, 10); }) : [];
-
-			// Remove from array
-			currentIds = currentIds.filter(function(id) { return id !== idToRemove; });
-
-			// Update input and remove element
-			$input.val(currentIds.join(','));
-			$item.remove();
+			$(this).closest('.prospero-gallery-item').remove();
+			updateHiddenInput();
 		});
 
 		// Make gallery sortable
@@ -141,11 +151,7 @@
 				cursor: 'move',
 				tolerance: 'pointer',
 				update: function() {
-					var newOrder = [];
-					$preview.find('.prospero-gallery-item').each(function() {
-						newOrder.push($(this).data('id'));
-					});
-					$input.val(newOrder.join(','));
+					updateHiddenInput();
 				}
 			});
 		}

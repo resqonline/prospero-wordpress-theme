@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Testimonials shortcode
- * Usage: [testimonials ids="" category="" count="-1" orderby="date" order="DESC" slider="no"]
+ * Usage: [testimonials ids="" category="" count="-1" orderby="date" order="DESC" columns="1" slider="no"]
  */
 function prospero_testimonials_shortcode( $atts ) {
 	$atts = shortcode_atts( array(
@@ -22,6 +22,7 @@ function prospero_testimonials_shortcode( $atts ) {
 		'count'    => -1,
 		'orderby'  => 'date',
 		'order'    => 'DESC',
+		'columns'  => 1,
 		'slider'   => 'no',
 	), $atts, 'testimonials' );
 	
@@ -31,6 +32,7 @@ function prospero_testimonials_shortcode( $atts ) {
 	$count = intval( $atts['count'] );
 	$orderby = sanitize_text_field( $atts['orderby'] );
 	$order = sanitize_text_field( $atts['order'] );
+	$columns = max( 1, min( 4, intval( $atts['columns'] ) ) ); // Limit 1-4 columns
 	$slider = ( $atts['slider'] === 'yes' ) ? true : false;
 	
 	// Build query args
@@ -71,16 +73,18 @@ function prospero_testimonials_shortcode( $atts ) {
 	ob_start();
 	$wrapper_classes = 'prospero-testimonials';
 	if ( $slider ) {
-		$wrapper_classes .= ' flickity-slider';
+		$wrapper_classes .= ' prospero-slider';
 	}
 	?>
-	<div class="<?php echo esc_attr( $wrapper_classes ); ?>"<?php echo $slider ? ' data-slider-type="testimonials"' : ''; ?>>
-		<?php
-		while ( $query->have_posts() ) :
-			$query->the_post();
-			get_template_part( 'template-parts/content', 'testimonial', array( 'slider' => $slider ) );
-		endwhile;
-		?>
+	<div class="prospero-slider-wrapper">
+		<div class="<?php echo esc_attr( $wrapper_classes ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>"<?php echo $slider ? ' data-slider-type="testimonials"' : ''; ?>>
+			<?php
+			while ( $query->have_posts() ) :
+				$query->the_post();
+				get_template_part( 'template-parts/content', 'testimonial', array( 'slider' => $slider ) );
+			endwhile;
+			?>
+		</div>
 	</div>
 	<?php
 	wp_reset_postdata();
@@ -90,7 +94,7 @@ add_shortcode( 'testimonials', 'prospero_testimonials_shortcode' );
 
 /**
  * Partners shortcode
- * Usage: [partners ids="" category="" count="-1" orderby="menu_order" order="ASC" slider="no"]
+ * Usage: [partners ids="" category="" count="-1" orderby="menu_order" order="ASC" columns="4" slider="no"]
  */
 function prospero_partners_shortcode( $atts ) {
 	$atts = shortcode_atts( array(
@@ -99,6 +103,7 @@ function prospero_partners_shortcode( $atts ) {
 		'count'    => -1,
 		'orderby'  => 'menu_order',
 		'order'    => 'ASC',
+		'columns'  => 4,
 		'slider'   => 'no',
 	), $atts, 'partners' );
 	
@@ -108,6 +113,7 @@ function prospero_partners_shortcode( $atts ) {
 	$count = intval( $atts['count'] );
 	$orderby = sanitize_text_field( $atts['orderby'] );
 	$order = sanitize_text_field( $atts['order'] );
+	$columns = max( 2, min( 8, intval( $atts['columns'] ) ) ); // Limit 2-8 columns
 	$slider = ( $atts['slider'] === 'yes' ) ? true : false;
 	
 	// Build query args
@@ -148,16 +154,18 @@ function prospero_partners_shortcode( $atts ) {
 	ob_start();
 	$wrapper_classes = 'prospero-partners';
 	if ( $slider ) {
-		$wrapper_classes .= ' flickity-slider';
+		$wrapper_classes .= ' prospero-slider';
 	}
 	?>
-	<div class="<?php echo esc_attr( $wrapper_classes ); ?>"<?php echo $slider ? ' data-slider-type="partners"' : ''; ?>>
-		<?php
-		while ( $query->have_posts() ) :
-			$query->the_post();
-			get_template_part( 'template-parts/content', 'partner', array( 'slider' => $slider ) );
-		endwhile;
-		?>
+	<div class="prospero-slider-wrapper">
+		<div class="<?php echo esc_attr( $wrapper_classes ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>"<?php echo $slider ? ' data-slider-type="partners"' : ''; ?>>
+			<?php
+			while ( $query->have_posts() ) :
+				$query->the_post();
+				get_template_part( 'template-parts/content', 'partner', array( 'slider' => $slider ) );
+			endwhile;
+			?>
+		</div>
 	</div>
 	<?php
 	wp_reset_postdata();
@@ -238,7 +246,7 @@ function prospero_team_shortcode( $atts ) {
 		'prospero-team-image-' . esc_attr( $image_style ),
 	);
 	if ( $slider ) {
-		$wrapper_classes[] = 'flickity-slider';
+		$wrapper_classes[] = 'prospero-slider';
 	}
 	if ( $lightbox ) {
 		$wrapper_classes[] = 'prospero-team-lightbox';
@@ -247,20 +255,22 @@ function prospero_team_shortcode( $atts ) {
 	// Build output
 	ob_start();
 	?>
-	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>"<?php echo $slider ? ' data-slider-type="team"' : ''; ?><?php echo $lightbox ? ' data-lightbox="true"' : ''; ?>>
-		<?php
-		while ( $query->have_posts() ) :
-			$query->the_post();
-			get_template_part( 'template-parts/content', 'team', array(
-				'slider'       => $slider,
-				'lightbox'     => $lightbox,
-				'layout'       => $layout,
-				'show_contact' => false,
-				'show_social'  => false,
-				'show_link'    => false,
-			) );
-		endwhile;
-		?>
+	<div class="prospero-slider-wrapper">
+		<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>"<?php echo $slider ? ' data-slider-type="team"' : ''; ?><?php echo $lightbox ? ' data-lightbox="true"' : ''; ?>>
+			<?php
+			while ( $query->have_posts() ) :
+				$query->the_post();
+				get_template_part( 'template-parts/content', 'team', array(
+					'slider'       => $slider,
+					'lightbox'     => $lightbox,
+					'layout'       => $layout,
+					'show_contact' => false,
+					'show_social'  => false,
+					'show_link'    => false,
+				) );
+			endwhile;
+			?>
+		</div>
 	</div>
 	<?php
 	wp_reset_postdata();

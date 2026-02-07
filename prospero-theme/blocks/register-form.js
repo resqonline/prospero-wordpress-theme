@@ -25,7 +25,7 @@
 						textAlign: 'center'
 					} 
 				},
-					el( 'p', { style: { margin: 0, fontWeight: 'bold' } }, __( '📝 Register Form', 'prospero-theme' ) ),
+					el( 'p', { style: { margin: 0, fontWeight: 'bold' } }, __( 'Register Form', 'prospero-theme' ) ),
 					el( 'p', { style: { margin: '10px 0 0 0', fontSize: '14px', color: '#666' } }, __( 'The registration form will be displayed here on the frontend.', 'prospero-theme' ) )
 				)
 			);

@@ -1,0 +1,1177 @@
+# Copyright (C) 2024 Prospero Theme
+# This file is distributed under the same license as the Prospero Theme package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Prospero Theme 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-07 12:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Theme Name
+msgid "Prospero Theme"
+msgstr ""
+
+#: Navigation
+msgid "Main Menu"
+msgstr ""
+
+msgid "Footer Menu"
+msgstr ""
+
+msgid "Social Menu"
+msgstr ""
+
+msgid "Logged In Menu"
+msgstr ""
+
+msgid "Menu"
+msgstr ""
+
+msgid "Open submenu"
+msgstr ""
+
+msgid "Skip to content"
+msgstr ""
+
+#: Account/Login
+msgid "Login"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Register"
+msgstr ""
+
+msgid "My Account"
+msgstr ""
+
+msgid "Account Overview"
+msgstr ""
+
+msgid "Edit Profile"
+msgstr ""
+
+msgid "Change Password"
+msgstr ""
+
+msgid "Forgot Password"
+msgstr ""
+
+msgid "Username"
+msgstr ""
+
+msgid "Username or Email"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Email Address"
+msgstr ""
+
+msgid "Password"
+msgstr ""
+
+msgid "Current Password"
+msgstr ""
+
+msgid "New Password"
+msgstr ""
+
+msgid "Confirm Password"
+msgstr ""
+
+msgid "Confirm New Password"
+msgstr ""
+
+msgid "Remember Me"
+msgstr ""
+
+msgid "Log In"
+msgstr ""
+
+msgid "Create Account"
+msgstr ""
+
+msgid "Send Reset Link"
+msgstr ""
+
+msgid "Reset Password"
+msgstr ""
+
+msgid "Update Profile"
+msgstr ""
+
+msgid "First Name"
+msgstr ""
+
+msgid "Last Name"
+msgstr ""
+
+msgid "Display Name"
+msgstr ""
+
+msgid "Biographical Info"
+msgstr ""
+
+msgid "Profile Picture"
+msgstr ""
+
+msgid "Upload Avatar"
+msgstr ""
+
+msgid "Remove Avatar"
+msgstr ""
+
+msgid "View Profile"
+msgstr ""
+
+msgid "Login here"
+msgstr ""
+
+msgid "Register here"
+msgstr ""
+
+msgid "Forgot your password?"
+msgstr ""
+
+msgid "Already have an account?"
+msgstr ""
+
+msgid "Go Back"
+msgstr ""
+
+msgid "Go back"
+msgstr ""
+
+msgid "← Back to Login"
+msgstr ""
+
+#: Account Messages
+msgid "You are already logged in."
+msgstr ""
+
+msgid "You are already registered and logged in."
+msgstr ""
+
+msgid "You must be logged in to view this page."
+msgstr ""
+
+msgid "You must be logged in to upload an avatar."
+msgstr ""
+
+msgid "You must be logged in to remove your avatar."
+msgstr ""
+
+msgid "You must be logged in to update your profile."
+msgstr ""
+
+msgid "You must be logged in to change your password."
+msgstr ""
+
+msgid "Security verification failed."
+msgstr ""
+
+msgid "Username is required."
+msgstr ""
+
+msgid "Username already exists."
+msgstr ""
+
+msgid "Invalid username."
+msgstr ""
+
+msgid "Valid email is required."
+msgstr ""
+
+msgid "Email already registered."
+msgstr ""
+
+msgid "This email is already registered to another user."
+msgstr ""
+
+msgid "Password must be at least 8 characters."
+msgstr ""
+
+msgid "Passwords do not match."
+msgstr ""
+
+msgid "You must accept the terms and conditions."
+msgstr ""
+
+msgid "Current password is incorrect."
+msgstr ""
+
+msgid "New password must be at least 8 characters."
+msgstr ""
+
+msgid "Display name is required."
+msgstr ""
+
+msgid "No user found with that email address."
+msgstr ""
+
+msgid "Invalid or expired reset link."
+msgstr ""
+
+msgid "Profile updated successfully!"
+msgstr ""
+
+msgid "Password changed successfully!"
+msgstr ""
+
+msgid "Avatar updated successfully!"
+msgstr ""
+
+msgid "Avatar removed successfully!"
+msgstr ""
+
+msgid "Password reset email sent! Please check your inbox."
+msgstr ""
+
+msgid "Password reset successfully! You can now log in."
+msgstr ""
+
+msgid "Please select an image to upload."
+msgstr ""
+
+msgid "Invalid file type. Please upload a JPG, PNG, GIF, or WebP image."
+msgstr ""
+
+msgid "File size too large. Maximum size is 2MB."
+msgstr ""
+
+msgid "JPG, PNG, GIF or WebP. Max 2MB."
+msgstr ""
+
+msgid "Letters, numbers, and underscores only."
+msgstr ""
+
+msgid "Must be at least 8 characters long."
+msgstr ""
+
+#: Account Info Labels
+msgid "Username:"
+msgstr ""
+
+msgid "Email:"
+msgstr ""
+
+msgid "Display Name:"
+msgstr ""
+
+msgid "Member Since:"
+msgstr ""
+
+msgid "Phone:"
+msgstr ""
+
+#: Member Benefits
+msgid "Member Benefits"
+msgstr ""
+
+msgid "Member-Only Content"
+msgstr ""
+
+msgid "Access to exclusive member content"
+msgstr ""
+
+msgid "Save and track your favorite content"
+msgstr ""
+
+msgid "Personalized dashboard"
+msgstr ""
+
+msgid "Connect with our community"
+msgstr ""
+
+msgid "Subscribe to our newsletter"
+msgstr ""
+
+msgid "Join our community and get access to exclusive content and features."
+msgstr ""
+
+#: Security Notice
+msgid "Security Notice"
+msgstr ""
+
+msgid "For security reasons, we do not store your password"
+msgstr ""
+
+msgid "The password reset link will expire in 24 hours"
+msgstr ""
+
+msgid "Never share your password reset link with anyone"
+msgstr ""
+
+#: Terms
+msgid "I agree to the Terms and Conditions"
+msgstr ""
+
+#. translators: %s: Link to terms page
+msgid "I agree to the <a href=\"%s\" target=\"_blank\">Terms and Conditions</a>"
+msgstr ""
+
+#: Blog/Posts
+msgid "Blog"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Read More"
+msgstr ""
+
+msgid "Read more"
+msgstr ""
+
+msgid "Featured"
+msgstr ""
+
+msgid "Related Posts"
+msgstr ""
+
+msgid "No posts found."
+msgstr ""
+
+msgid "&laquo; Previous"
+msgstr ""
+
+msgid "Next &raquo;"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Next"
+msgstr ""
+
+msgid "by"
+msgstr ""
+
+#. translators: %s: Author name
+msgid "by %s"
+msgstr ""
+
+#. translators: %s: Post date
+msgid "Posted on %s"
+msgstr ""
+
+#. translators: %s: Author name
+msgid "Posts by %s"
+msgstr ""
+
+#. translators: %d: Reading time in minutes (singular)
+#. translators: %d: Reading time in minutes (plural)
+msgid "%d min read"
+msgid_plural "%d min read"
+msgstr[0] ""
+msgstr[1] ""
+
+#: Search
+msgid "Search"
+msgstr ""
+
+#. translators: %s: Search query
+msgid "Search Results for: %s"
+msgstr ""
+
+#. translators: %s: Search query
+msgid "Search results for: %s"
+msgstr ""
+
+#. translators: %d: Number of results (singular)
+#. translators: %d: Number of results (plural)
+msgid "%d result found"
+msgid_plural "%d results found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: 404/Not Found
+msgid "Page Not Found"
+msgstr ""
+
+msgid "Page not found"
+msgstr ""
+
+msgid "Nothing Found"
+msgstr ""
+
+msgid "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
+msgstr ""
+
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr ""
+
+msgid "Sorry, but nothing matched your search terms. Please try again with different keywords."
+msgstr ""
+
+msgid "Suggestions"
+msgstr ""
+
+msgid "Check your spelling"
+msgstr ""
+
+msgid "Try different keywords"
+msgstr ""
+
+msgid "Try more general keywords"
+msgstr ""
+
+msgid "Try searching"
+msgstr ""
+
+msgid "Or try these links"
+msgstr ""
+
+msgid "Home Page"
+msgstr ""
+
+#. translators: %1$s: Link URL
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: Breadcrumbs
+msgid "Breadcrumbs"
+msgstr ""
+
+msgid "Breadcrumb"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+#: Pagination
+msgid "Page"
+msgstr ""
+
+msgid "Pages:"
+msgstr ""
+
+#: Customizer - Theme Colors
+msgid "Theme Colors"
+msgstr ""
+
+msgid "Primary Color"
+msgstr ""
+
+msgid "Secondary Color"
+msgstr ""
+
+msgid "Tertiary Color"
+msgstr ""
+
+msgid "Text Color"
+msgstr ""
+
+msgid "Background Color"
+msgstr ""
+
+msgid "Highlight Color"
+msgstr ""
+
+#: Customizer - Dark Mode
+msgid "Dark Mode Settings"
+msgstr ""
+
+msgid "Enable Dark Mode"
+msgstr ""
+
+msgid "Allow visitors to switch between light and dark mode"
+msgstr ""
+
+msgid "Default Mode"
+msgstr ""
+
+msgid "Light"
+msgstr ""
+
+msgid "Dark"
+msgstr ""
+
+msgid "Auto (System Preference)"
+msgstr ""
+
+msgid "Show Dark Mode Toggle in Header"
+msgstr ""
+
+msgid "Dark Mode Logo"
+msgstr ""
+
+msgid "Upload a logo for dark mode. Falls back to logo-dark.svg if not set."
+msgstr ""
+
+msgid "Dark Mode Text Color"
+msgstr ""
+
+msgid "Dark Mode Background Color"
+msgstr ""
+
+msgid "Dark Mode Text"
+msgstr ""
+
+msgid "Dark Background"
+msgstr ""
+
+#: Customizer - Typography
+msgid "Typography"
+msgstr ""
+
+msgid "Heading Font"
+msgstr ""
+
+msgid "Body Font"
+msgstr ""
+
+msgid "Enter a Google Font name (will be downloaded locally) or \"system\" for system fonts"
+msgstr ""
+
+#: Customizer - Header & Menu
+msgid "Header & Menu"
+msgstr ""
+
+msgid "Header Layout"
+msgstr ""
+
+msgid "Logo Position"
+msgstr ""
+
+msgid "Left"
+msgstr ""
+
+msgid "Center"
+msgstr ""
+
+msgid "Right"
+msgstr ""
+
+msgid "Menu Position (Desktop)"
+msgstr ""
+
+msgid "Menu Options"
+msgstr ""
+
+msgid "Enable Sticky Header"
+msgstr ""
+
+msgid "Always Show Mobile Menu"
+msgstr ""
+
+msgid "Display mobile menu on all screen sizes"
+msgstr ""
+
+msgid "Show Search in Header"
+msgstr ""
+
+msgid "Display a search icon that opens a search overlay"
+msgstr ""
+
+#: Customizer - Breadcrumbs
+msgid "Enable Breadcrumbs"
+msgstr ""
+
+msgid "Display breadcrumb navigation on pages and posts."
+msgstr ""
+
+msgid "Home Link Text"
+msgstr ""
+
+msgid "Text for the home link in breadcrumbs."
+msgstr ""
+
+msgid "Separator Character"
+msgstr ""
+
+msgid "Character or symbol between breadcrumb items."
+msgstr ""
+
+#: Customizer - Content Settings
+msgid "Content Settings"
+msgstr ""
+
+msgid "Max Content Width"
+msgstr ""
+
+msgid "E.g., 1200px, 80rem, 90vw"
+msgstr ""
+
+#: Customizer - Blog
+msgid "Blog Layout"
+msgstr ""
+
+msgid "Grid"
+msgstr ""
+
+msgid "List"
+msgstr ""
+
+msgid "Grid Columns"
+msgstr ""
+
+msgid "2 Columns"
+msgstr ""
+
+msgid "3 Columns"
+msgstr ""
+
+msgid "4 Columns"
+msgstr ""
+
+msgid "Number of columns in grid layout."
+msgstr ""
+
+msgid "Show Excerpt in Grid"
+msgstr ""
+
+msgid "Display post excerpt in grid view."
+msgstr ""
+
+#: Customizer - Single Post
+msgid "Single Post"
+msgstr ""
+
+msgid "Featured Image Position"
+msgstr ""
+
+msgid "Above title"
+msgstr ""
+
+msgid "Below title and meta"
+msgstr ""
+
+msgid "Hidden"
+msgstr ""
+
+msgid "Where to display the featured image on single posts."
+msgstr ""
+
+msgid "Product Placement Notice"
+msgstr ""
+
+msgid "Text to display on posts with affiliate links or product placements"
+msgstr ""
+
+#: Customizer - Button Styles
+msgid "Button Styles"
+msgstr ""
+
+msgid "Primary Button"
+msgstr ""
+
+msgid "Secondary Button"
+msgstr ""
+
+msgid "Tertiary Button"
+msgstr ""
+
+msgid "Primary"
+msgstr ""
+
+msgid "Secondary"
+msgstr ""
+
+msgid "Tertiary"
+msgstr ""
+
+msgid "Style"
+msgstr ""
+
+msgid "Background"
+msgstr ""
+
+msgid "Text"
+msgstr ""
+
+msgid "Hover Background"
+msgstr ""
+
+msgid "Hover Text Color"
+msgstr ""
+
+msgid "Leave empty for automatic"
+msgstr ""
+
+msgid "Leave empty for automatic darker shade"
+msgstr ""
+
+msgid "Font Style"
+msgstr ""
+
+msgid "Border Radius"
+msgstr ""
+
+msgid "E.g., 0, 4px, 50px, 0.5em, 50%"
+msgstr ""
+
+#: Customizer - Post Types
+msgid "Post Types"
+msgstr ""
+
+msgid "Enable Testimonials Post Type"
+msgstr ""
+
+msgid "Enable Partners Post Type"
+msgstr ""
+
+msgid "Enable Team Post Type"
+msgstr ""
+
+msgid "Enable Projects Post Type"
+msgstr ""
+
+msgid "Enable FAQ Post Type"
+msgstr ""
+
+msgid "Team Page"
+msgstr ""
+
+msgid "Select the page that displays team members (used in breadcrumbs)."
+msgstr ""
+
+msgid "Projects Page"
+msgstr ""
+
+msgid "Select the page that displays projects (used in breadcrumbs)."
+msgstr ""
+
+#: Customizer - Frontend Login
+msgid "Frontend Login"
+msgstr ""
+
+msgid "Use Frontend Login/Profile Editing"
+msgstr ""
+
+msgid "Creates frontend pages for login, registration, password reset, and account management. Pages will be created automatically when enabled."
+msgstr ""
+
+#: Customizer - Pre-Footer
+msgid "Pre-Footer"
+msgstr ""
+
+msgid "Widget area displayed above the footer. Uses a 3-column grid layout."
+msgstr ""
+
+#: Testimonials Post Type
+msgid "Testimonials"
+msgstr ""
+
+msgid "Testimonial"
+msgstr ""
+
+msgid "Add New Testimonial"
+msgstr ""
+
+msgid "Edit Testimonial"
+msgstr ""
+
+msgid "New Testimonial"
+msgstr ""
+
+msgid "View Testimonial"
+msgstr ""
+
+msgid "Search Testimonials"
+msgstr ""
+
+msgid "No testimonials found"
+msgstr ""
+
+msgid "No testimonials found in trash"
+msgstr ""
+
+msgid "Testimonial Categories"
+msgstr ""
+
+msgid "Testimonial Category"
+msgstr ""
+
+msgid "Please select a testimonial."
+msgstr ""
+
+msgid "Select a testimonial to display with this project."
+msgstr ""
+
+msgid "Related Testimonial"
+msgstr ""
+
+#: Partners Post Type
+msgid "Partners"
+msgstr ""
+
+msgid "Partner"
+msgstr ""
+
+msgid "Add New Partner"
+msgstr ""
+
+msgid "Edit Partner"
+msgstr ""
+
+msgid "New Partner"
+msgstr ""
+
+msgid "View Partner"
+msgstr ""
+
+msgid "Search Partners"
+msgstr ""
+
+msgid "No partners found"
+msgstr ""
+
+msgid "No partners found in trash"
+msgstr ""
+
+msgid "Partner Categories"
+msgstr ""
+
+msgid "Partner Category"
+msgstr ""
+
+msgid "Partner Website"
+msgstr ""
+
+msgid "Please select a partner."
+msgstr ""
+
+#: Team Post Type
+msgid "Team"
+msgstr ""
+
+msgid "Team Member"
+msgstr ""
+
+msgid "Add New Team Member"
+msgstr ""
+
+msgid "Edit Team Member"
+msgstr ""
+
+msgid "New Team Member"
+msgstr ""
+
+msgid "View Team Member"
+msgstr ""
+
+msgid "Search Team"
+msgstr ""
+
+msgid "No team members found"
+msgstr ""
+
+msgid "No team members found in trash"
+msgstr ""
+
+msgid "Team Categories"
+msgstr ""
+
+msgid "Team Category"
+msgstr ""
+
+msgid "Please select a team member."
+msgstr ""
+
+msgid "No team members found."
+msgstr ""
+
+msgid "Team custom post type is not enabled. Please enable it in the Customizer."
+msgstr ""
+
+msgid "Team member details"
+msgstr ""
+
+#. translators: %s: Team member name
+msgid "View details for %s"
+msgstr ""
+
+msgid "Contact Information"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Social Links"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Job title or role (e.g., \"CEO\", \"Marketing Manager\")"
+msgstr ""
+
+msgid "The name shown on the frontend (title is used for admin sorting)"
+msgstr ""
+
+msgid "The name shown on the frontend (e.g., \"John D., CEO at Company\")"
+msgstr ""
+
+msgid "Secondary Image (Hover)"
+msgstr ""
+
+#: Projects Post Type
+msgid "Projects"
+msgstr ""
+
+msgid "Project"
+msgstr ""
+
+msgid "Add New Project"
+msgstr ""
+
+msgid "Edit Project"
+msgstr ""
+
+msgid "New Project"
+msgstr ""
+
+msgid "View Project"
+msgstr ""
+
+msgid "Search Projects"
+msgstr ""
+
+msgid "No projects found"
+msgstr ""
+
+msgid "No projects found in trash"
+msgstr ""
+
+msgid "No projects found."
+msgstr ""
+
+msgid "Project Categories"
+msgstr ""
+
+msgid "Project Category"
+msgstr ""
+
+msgid "Project Tags"
+msgstr ""
+
+msgid "Project Tag"
+msgstr ""
+
+msgid "Project Website"
+msgstr ""
+
+msgid "Project Gallery"
+msgstr ""
+
+msgid "Please select a project."
+msgstr ""
+
+msgid "Projects custom post type is not enabled. Please enable it in the Customizer."
+msgstr ""
+
+msgid "Related Projects"
+msgstr ""
+
+msgid "Visit Project Website"
+msgstr ""
+
+msgid "Loading projects..."
+msgstr ""
+
+#: FAQs Post Type
+msgid "FAQs"
+msgstr ""
+
+msgid "FAQ"
+msgstr ""
+
+msgid "Add New FAQ"
+msgstr ""
+
+msgid "Edit FAQ"
+msgstr ""
+
+msgid "New FAQ"
+msgstr ""
+
+msgid "View FAQ"
+msgstr ""
+
+msgid "Search FAQs"
+msgstr ""
+
+msgid "No FAQs found"
+msgstr ""
+
+msgid "No FAQs found in trash"
+msgstr ""
+
+msgid "No FAQs found."
+msgstr ""
+
+msgid "FAQ Categories"
+msgstr ""
+
+msgid "FAQ Category"
+msgstr ""
+
+msgid "Please select an FAQ."
+msgstr ""
+
+#: Gallery/Images
+msgid "Add Gallery Images"
+msgstr ""
+
+msgid "Add to gallery"
+msgstr ""
+
+msgid "Add Images"
+msgstr ""
+
+msgid "Remove image"
+msgstr ""
+
+msgid "Remove Image"
+msgstr ""
+
+msgid "Select Image"
+msgstr ""
+
+msgid "Use this image"
+msgstr ""
+
+msgid "Upload Image"
+msgstr ""
+
+msgid "Upload new avatar"
+msgstr ""
+
+msgid "Click to add images. Drag to reorder."
+msgstr ""
+
+#: Lightbox
+msgid "Image lightbox"
+msgstr ""
+
+msgid "Close lightbox"
+msgstr ""
+
+msgid "Close dialog"
+msgstr ""
+
+msgid "Previous image"
+msgstr ""
+
+msgid "Next image"
+msgstr ""
+
+#: Blocks
+msgid "Prospero Blocks"
+msgstr ""
+
+msgid "Please log in to view this content."
+msgstr ""
+
+msgid "You do not have permission to view this content."
+msgstr ""
+
+msgid "No embed code configured."
+msgstr ""
+
+msgid "Please configure the affiliate link."
+msgstr ""
+
+msgid "Please enter a valid email address."
+msgstr ""
+
+msgid "Request new link"
+msgstr ""
+
+msgid "Go to My Account"
+msgstr ""
+
+#: Social Media
+msgid "Facebook"
+msgstr ""
+
+msgid "Instagram"
+msgstr ""
+
+msgid "LinkedIn"
+msgstr ""
+
+msgid "Xing"
+msgstr ""
+
+msgid "YouTube"
+msgstr ""
+
+#: Widgets
+msgid "Column Span (Pre-Footer)"
+msgstr ""
+
+msgid "1 Column"
+msgstr ""
+
+msgid "3 Columns (Full Width)"
+msgstr ""
+
+msgid "This setting only applies when the widget is placed in the Pre-Footer area."
+msgstr ""
+
+msgid "— None —"
+msgstr ""
+
+#: Footer
+#. translators: %1$s: Year, %2$s: Site name
+msgid "&copy; %1$s %2$s. All rights reserved."
+msgstr ""
+
+#: Admin
+msgid "Add New"
+msgstr ""
+
+#. translators: %s: Post title
+msgid "Edit <span class=\"screen-reader-text\">%s</span>"
+msgstr ""
+
+#: SEO Notice
+msgid "No SEO plugin detected. The theme\\"
+msgstr ""
+
+#: Theme Updater
+#. translators: %s: GitHub URL
+msgid "Prospero Theme: The update checker library is not installed. Automatic updates from GitHub are disabled. Please download the library from %s and place it in the theme\\"
+msgstr ""
+
+#: Avatar Defaults
+msgid "Mystery Person"
+msgstr ""
+
+msgid "Blank"
+msgstr ""
+
+#. translators: %s: User display name
+msgid "Welcome, %s"
+msgstr ""
+
+#: Miscellaneous
+msgid "Back"
+msgstr ""
+
+msgid "Highlight"
+msgstr ""
+
+#. translators: %s: Plugin name
+msgid "Breadcrumbs from %s will be used. The settings below only apply when the theme\\"
+msgstr ""
+
+#. translators: %s: Font names
+msgid "Google Fonts will be downloaded locally on the next page load: %s"
+msgstr ""
+
+#: Filter
+msgid "Filter posts by category"
+msgstr ""

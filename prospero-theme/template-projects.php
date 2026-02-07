@@ -8,22 +8,27 @@
  */
 
 get_header();
+
+// Get the page content within the loop
+if ( have_posts() ) :
+	while ( have_posts() ) :
+		the_post();
+		$page_content = get_the_content();
+	endwhile;
+endif;
 ?>
 
 <main id="main-content" class="site-main projects-template">
+	<?php prospero_breadcrumbs( array( 'wrapper_class' => 'breadcrumbs container' ) ); ?>
+
 	<div class="container">
 		<header class="page-header">
-			<h1 class="page-title"><?php echo esc_html( get_the_title() ); ?></h1>
-			<?php
-			$description = get_the_content();
-			if ( $description ) :
-				?>
+			<h1 class="page-title"><?php the_title(); ?></h1>
+			<?php if ( ! empty( $page_content ) ) : ?>
 				<div class="page-description">
-					<?php echo wp_kses_post( wpautop( $description ) ); ?>
+					<?php echo wp_kses_post( apply_filters( 'the_content', $page_content ) ); ?>
 				</div>
-				<?php
-			endif;
-			?>
+			<?php endif; ?>
 		</header>
 
 		<?php
@@ -57,7 +62,7 @@ get_header();
 			endif;
 			?>
 
-			<div class="projects-grid" id="projects-grid">
+			<div class="projects-grid" id="projects-grid" data-columns="3">
 				<?php
 				$projects_query = new WP_Query( array(
 					'post_type'      => 'project',

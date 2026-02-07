@@ -54,6 +54,7 @@ function prospero_register_custom_blocks() {
 			'category' => array( 'type' => 'string', 'default' => '' ),
 			'count'    => array( 'type' => 'number', 'default' => 3 ),
 			'orderby'  => array( 'type' => 'string', 'default' => 'date' ),
+			'columns'  => array( 'type' => 'number', 'default' => 1 ),
 			'slider'   => array( 'type' => 'boolean', 'default' => false ),
 		),
 		'render_callback' => 'prospero_render_testimonials_list_block',
@@ -126,6 +127,7 @@ function prospero_register_custom_blocks() {
 			'category' => array( 'type' => 'string', 'default' => '' ),
 			'count'    => array( 'type' => 'number', 'default' => -1 ),
 			'orderby'  => array( 'type' => 'string', 'default' => 'menu_order' ),
+			'columns'  => array( 'type' => 'number', 'default' => 4 ),
 			'slider'   => array( 'type' => 'boolean', 'default' => false ),
 		),
 		'render_callback' => 'prospero_render_partners_list_block',
@@ -319,8 +321,9 @@ function prospero_render_testimonial_single_block( $attributes ) {
 function prospero_render_testimonials_list_block( $attributes ) {
 	$ids      = isset( $attributes['ids'] ) && is_array( $attributes['ids'] ) ? array_map( 'absint', $attributes['ids'] ) : array();
 	$category = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
-	$count    = isset( $attributes['count'] ) ? absint( $attributes['count'] ) : 3;
+	$count    = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : 3;
 	$orderby  = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'date';
+	$columns  = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 1;
 	$slider   = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
 	
 	// Use the shortcode function
@@ -330,6 +333,7 @@ function prospero_render_testimonials_list_block( $attributes ) {
 		'count'    => $count,
 		'orderby'  => $orderby,
 		'order'    => 'DESC',
+		'columns'  => $columns,
 		'slider'   => $slider,
 	) );
 }
@@ -502,7 +506,7 @@ function prospero_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'prospero-faq-single-block',
 		PROSPERO_THEME_URI . '/blocks/faq-single.js',
-		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
 		PROSPERO_VERSION,
 		true
 	);
@@ -518,7 +522,7 @@ function prospero_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'prospero-partners-list-block',
 		PROSPERO_THEME_URI . '/blocks/partners-list.js',
-		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
 		PROSPERO_VERSION,
 		true
 	);
@@ -526,7 +530,7 @@ function prospero_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'prospero-team-list-block',
 		PROSPERO_THEME_URI . '/blocks/team-list.js',
-		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
 		PROSPERO_VERSION,
 		true
 	);
@@ -550,7 +554,7 @@ function prospero_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'prospero-partner-single-block',
 		PROSPERO_THEME_URI . '/blocks/partner-single.js',
-		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
 		PROSPERO_VERSION,
 		true
 	);
@@ -558,7 +562,7 @@ function prospero_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'prospero-project-single-block',
 		PROSPERO_THEME_URI . '/blocks/project-single.js',
-		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
 		PROSPERO_VERSION,
 		true
 	);
@@ -594,7 +598,25 @@ function prospero_enqueue_block_editor_assets() {
 	wp_enqueue_script(
 		'prospero-testimonials-list-block',
 		PROSPERO_THEME_URI . '/blocks/testimonials-list.js',
-		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n' ),
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
+		PROSPERO_VERSION,
+		true
+	);
+	
+	// Testimonial Single Block
+	wp_enqueue_script(
+		'prospero-testimonial-single-block',
+		PROSPERO_THEME_URI . '/blocks/testimonial-single.js',
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
+		PROSPERO_VERSION,
+		true
+	);
+	
+	// Team Member Block
+	wp_enqueue_script(
+		'prospero-team-member-block',
+		PROSPERO_THEME_URI . '/blocks/team-member.js',
+		array( 'wp-blocks', 'wp-element', 'wp-block-editor', 'wp-components', 'wp-i18n', 'prospero-blocks-editor' ),
 		PROSPERO_VERSION,
 		true
 	);
@@ -639,7 +661,7 @@ function prospero_render_faq_single_block( $attributes ) {
  */
 function prospero_render_faq_list_block( $attributes ) {
 	$category = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
-	$count = isset( $attributes['count'] ) ? absint( $attributes['count'] ) : -1;
+	$count = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : -1;
 	$orderby = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'menu_order';
 	$accordion = isset( $attributes['accordion'] ) && $attributes['accordion'] ? true : false;
 	
@@ -703,8 +725,9 @@ function prospero_render_faq_list_block( $attributes ) {
 function prospero_render_partners_list_block( $attributes ) {
 	$ids      = isset( $attributes['ids'] ) && is_array( $attributes['ids'] ) ? array_map( 'absint', $attributes['ids'] ) : array();
 	$category = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
-	$count    = isset( $attributes['count'] ) ? absint( $attributes['count'] ) : -1;
+	$count    = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : -1;
 	$orderby  = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'menu_order';
+	$columns  = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 4;
 	$slider   = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
 	
 	// Use the shortcode function
@@ -714,6 +737,7 @@ function prospero_render_partners_list_block( $attributes ) {
 		'count'    => $count,
 		'orderby'  => $orderby,
 		'order'    => 'ASC',
+		'columns'  => $columns,
 		'slider'   => $slider,
 	) );
 }
@@ -724,7 +748,7 @@ function prospero_render_partners_list_block( $attributes ) {
 function prospero_render_team_list_block( $attributes ) {
 	$ids        = isset( $attributes['ids'] ) && is_array( $attributes['ids'] ) ? array_map( 'absint', $attributes['ids'] ) : array();
 	$category   = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
-	$count      = isset( $attributes['count'] ) ? absint( $attributes['count'] ) : -1;
+	$count      = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : -1;
 	$orderby    = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'menu_order';
 	$layout     = isset( $attributes['layout'] ) ? sanitize_text_field( $attributes['layout'] ) : 'columns';
 	$columns    = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 3;
@@ -752,7 +776,7 @@ function prospero_render_team_list_block( $attributes ) {
  */
 function prospero_render_projects_list_block( $attributes ) {
 	$category = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
-	$count = isset( $attributes['count'] ) ? absint( $attributes['count'] ) : -1;
+	$count = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : -1;
 	$orderby = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'date';
 	$slider = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
 	

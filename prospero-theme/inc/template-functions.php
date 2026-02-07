@@ -95,6 +95,49 @@ function prospero_body_classes( $classes ) {
 add_filter( 'body_class', 'prospero_body_classes' );
 
 /**
+ * Calculate relative luminance of a color for contrast calculations
+ *
+ * @param string $hex_color Hex color code.
+ * @return float Relative luminance (0-1).
+ */
+function prospero_get_luminance( $hex_color ) {
+	// Remove # if present
+	$hex = ltrim( $hex_color, '#' );
+	
+	// Handle shorthand hex (e.g., #fff)
+	if ( strlen( $hex ) === 3 ) {
+		$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+	}
+	
+	// Convert to RGB
+	$r = hexdec( substr( $hex, 0, 2 ) ) / 255;
+	$g = hexdec( substr( $hex, 2, 2 ) ) / 255;
+	$b = hexdec( substr( $hex, 4, 2 ) ) / 255;
+	
+	// Apply gamma correction
+	$r = $r <= 0.03928 ? $r / 12.92 : pow( ( $r + 0.055 ) / 1.055, 2.4 );
+	$g = $g <= 0.03928 ? $g / 12.92 : pow( ( $g + 0.055 ) / 1.055, 2.4 );
+	$b = $b <= 0.03928 ? $b / 12.92 : pow( ( $b + 0.055 ) / 1.055, 2.4 );
+	
+	// Calculate luminance
+	return 0.2126 * $r + 0.7152 * $g + 0.0722 * $b;
+}
+
+/**
+ * Get a contrasting text color (black or white) for a given background
+ *
+ * @param string $bg_color Background hex color.
+ * @return string '#1a1a1a' for light backgrounds, '#ffffff' for dark backgrounds.
+ */
+function prospero_get_contrast_text_color( $bg_color ) {
+	$luminance = prospero_get_luminance( $bg_color );
+	
+	// Use dark text for light backgrounds (luminance > 0.5)
+	// Use white text for dark backgrounds
+	return $luminance > 0.5 ? '#1a1a1a' : '#ffffff';
+}
+
+/**
  * Generate dynamic CSS from customizer settings
  */
 function prospero_dynamic_css() {
@@ -106,6 +149,9 @@ function prospero_dynamic_css() {
 	$highlight_color   = get_theme_mod( 'prospero_highlight_color', '#ffc107' );
 	$bg_color          = get_theme_mod( 'prospero_background_color', '#ffffff' );
 	$dark_bg_color     = get_theme_mod( 'prospero_dark_background_color', '#2b2a33' );
+	
+	// Calculate contrast text color for highlight (sticky label)
+	$highlight_text_color = prospero_get_contrast_text_color( $highlight_color );
 	
 	// PRIMARY BUTTON settings
 	$primary_style = get_theme_mod( 'prospero_primary_btn_style', 'flat' );
@@ -154,8 +200,9 @@ function prospero_dynamic_css() {
 	$css .= '--color-highlight: ' . esc_attr( $highlight_color ) . ';';
 	$css .= '--color-background: ' . esc_attr( $bg_color ) . ';';
 	$css .= '--color-background-dark: ' . esc_attr( $dark_bg_color ) . ';';
+	$css .= '--color-sticky-label-text: ' . esc_attr( $highlight_text_color ) . ';';
 	
-	// Prospero-prefixed variables for theme.json compatibility
+	// Prospero-prefixed variables
 	$css .= '--prospero-primary: ' . esc_attr( $primary_color ) . ';';
 	$css .= '--prospero-secondary: ' . esc_attr( $secondary_color ) . ';';
 	$css .= '--prospero-tertiary: ' . esc_attr( $tertiary_color ) . ';';
@@ -270,6 +317,18 @@ function prospero_dynamic_css() {
 	echo '<style type="text/css" id="prospero-dynamic-css">' . $css . '</style>';
 }
 add_action( 'wp_head', 'prospero_dynamic_css', 99 );
+
+/**
+ * Calculate reading time for content
+ *
+ * @param string $content The post content.
+ * @return int Reading time in minutes.
+ */
+function prospero_get_reading_time( $content ) {
+	$word_count = str_word_count( wp_strip_all_tags( $content ) );
+	$reading_time = ceil( $word_count / 200 ); // Average reading speed: 200 words per minute
+	return max( 1, $reading_time ); // Minimum 1 minute
+}
 
 /**
  * Custom excerpt length
