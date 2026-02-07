@@ -136,15 +136,16 @@
 								setAttributes( { layout: value } );
 							}
 						} ),
-						attributes.layout === 'columns' ?
+						( attributes.layout === 'columns' || attributes.slider ) ?
 							el( RangeControl, {
-								label: __( 'Columns', 'prospero-theme' ),
+								label: attributes.slider ? __( 'Items per View', 'prospero-theme' ) : __( 'Columns', 'prospero-theme' ),
 								value: attributes.columns,
 								onChange: function( value ) {
 									setAttributes( { columns: value } );
 								},
 								min: 2,
-								max: 6
+								max: 6,
+								help: attributes.slider ? __( 'Number of team members visible at once in slider mode', 'prospero-theme' ) : null
 							} ) : null,
 						el( SelectControl, {
 							label: __( 'Image Style', 'prospero-theme' ),

@@ -764,6 +764,130 @@ function prospero_customize_register( $wp_customize ) {
 		'type'        => 'textarea',
 	) );
 	
+	// ===== BLOG LAYOUT SECTION =====
+	$wp_customize->add_section( 'prospero_blog_layout', array(
+		'title'    => esc_html__( 'Blog Layout', 'prospero-theme' ),
+		'priority' => 35,
+	) );
+	
+	// Blog Layout Style
+	$wp_customize->add_setting( 'prospero_blog_layout', array(
+		'default'           => 'grid',
+		'sanitize_callback' => 'prospero_sanitize_blog_layout',
+	) );
+	$wp_customize->add_control( new Prospero_Radio_Image_Control( $wp_customize, 'prospero_blog_layout', array(
+		'label'   => esc_html__( 'Blog Layout', 'prospero-theme' ),
+		'section' => 'prospero_blog_layout',
+		'choices' => array(
+			'grid' => array(
+				'label' => esc_html__( 'Grid', 'prospero-theme' ),
+				'svg'   => 'width: 60px; height: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;',
+			),
+			'list' => array(
+				'label' => esc_html__( 'List', 'prospero-theme' ),
+				'svg'   => 'width: 60px; height: 40px; display: flex; flex-direction: column; gap: 4px;',
+			),
+		),
+	) ) );
+	
+	// Blog Grid Columns
+	$wp_customize->add_setting( 'prospero_blog_columns', array(
+		'default'           => '3',
+		'sanitize_callback' => 'prospero_sanitize_blog_columns',
+	) );
+	$wp_customize->add_control( 'prospero_blog_columns', array(
+		'label'       => esc_html__( 'Grid Columns', 'prospero-theme' ),
+		'description' => esc_html__( 'Number of columns in grid layout.', 'prospero-theme' ),
+		'section'     => 'prospero_blog_layout',
+		'type'        => 'select',
+		'choices'     => array(
+			'2' => esc_html__( '2 Columns', 'prospero-theme' ),
+			'3' => esc_html__( '3 Columns', 'prospero-theme' ),
+			'4' => esc_html__( '4 Columns', 'prospero-theme' ),
+		),
+	) );
+	
+	// Show Excerpt in Grid
+	$wp_customize->add_setting( 'prospero_blog_grid_excerpt', array(
+		'default'           => true,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_blog_grid_excerpt', array(
+		'label'       => esc_html__( 'Show Excerpt in Grid', 'prospero-theme' ),
+		'description' => esc_html__( 'Display post excerpt in grid view.', 'prospero-theme' ),
+		'section'     => 'prospero_blog_layout',
+		'type'        => 'checkbox',
+	) );
+	
+	// Single Post Heading
+	$wp_customize->add_setting( 'prospero_single_post_heading', array(
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new Prospero_Heading_Control( $wp_customize, 'prospero_single_post_heading', array(
+		'label'   => esc_html__( 'Single Post', 'prospero-theme' ),
+		'section' => 'prospero_blog_layout',
+	) ) );
+	
+	// Featured Image Position
+	$wp_customize->add_setting( 'prospero_single_featured_position', array(
+		'default'           => 'below',
+		'sanitize_callback' => 'prospero_sanitize_featured_position',
+	) );
+	$wp_customize->add_control( 'prospero_single_featured_position', array(
+		'label'       => esc_html__( 'Featured Image Position', 'prospero-theme' ),
+		'description' => esc_html__( 'Where to display the featured image on single posts.', 'prospero-theme' ),
+		'section'     => 'prospero_blog_layout',
+		'type'        => 'select',
+		'choices'     => array(
+			'above'  => esc_html__( 'Above title', 'prospero-theme' ),
+			'below'  => esc_html__( 'Below title and meta', 'prospero-theme' ),
+			'hidden' => esc_html__( 'Hidden', 'prospero-theme' ),
+		),
+	) );
+	
+	// ===== BREADCRUMBS SECTION =====
+	$wp_customize->add_section( 'prospero_breadcrumbs', array(
+		'title'       => esc_html__( 'Breadcrumbs', 'prospero-theme' ),
+		'description' => prospero_breadcrumbs_customizer_description(),
+		'priority'    => 36,
+	) );
+	
+	// Enable Breadcrumbs
+	$wp_customize->add_setting( 'prospero_enable_breadcrumbs', array(
+		'default'           => true,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_enable_breadcrumbs', array(
+		'label'       => esc_html__( 'Enable Breadcrumbs', 'prospero-theme' ),
+		'description' => esc_html__( 'Display breadcrumb navigation on pages and posts.', 'prospero-theme' ),
+		'section'     => 'prospero_breadcrumbs',
+		'type'        => 'checkbox',
+	) );
+	
+	// Breadcrumbs Home Text
+	$wp_customize->add_setting( 'prospero_breadcrumbs_home_text', array(
+		'default'           => __( 'Home', 'prospero-theme' ),
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'prospero_breadcrumbs_home_text', array(
+		'label'       => esc_html__( 'Home Link Text', 'prospero-theme' ),
+		'description' => esc_html__( 'Text for the home link in breadcrumbs.', 'prospero-theme' ),
+		'section'     => 'prospero_breadcrumbs',
+		'type'        => 'text',
+	) );
+	
+	// Breadcrumbs Separator
+	$wp_customize->add_setting( 'prospero_breadcrumbs_separator', array(
+		'default'           => '/',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'prospero_breadcrumbs_separator', array(
+		'label'       => esc_html__( 'Separator Character', 'prospero-theme' ),
+		'description' => esc_html__( 'Character or symbol between breadcrumb items.', 'prospero-theme' ),
+		'section'     => 'prospero_breadcrumbs',
+		'type'        => 'text',
+	) );
+	
 	// ===== FRONTEND LOGIN SECTION =====
 	$wp_customize->add_section( 'prospero_frontend_login', array(
 		'title'    => esc_html__( 'Frontend Login', 'prospero-theme' ),
@@ -821,6 +945,18 @@ function prospero_customize_register( $wp_customize ) {
 		'type'    => 'checkbox',
 	) );
 	
+	// Team Page (for breadcrumbs)
+	$wp_customize->add_setting( 'prospero_team_page', array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+	) );
+	$wp_customize->add_control( 'prospero_team_page', array(
+		'label'       => esc_html__( 'Team Page', 'prospero-theme' ),
+		'description' => esc_html__( 'Select the page that displays team members (used in breadcrumbs).', 'prospero-theme' ),
+		'section'     => 'prospero_post_types',
+		'type'        => 'dropdown-pages',
+	) );
+	
 	// Enable Projects
 	$wp_customize->add_setting( 'prospero_enable_projects', array(
 		'default'           => false,
@@ -830,6 +966,18 @@ function prospero_customize_register( $wp_customize ) {
 		'label'   => esc_html__( 'Enable Projects Post Type', 'prospero-theme' ),
 		'section' => 'prospero_post_types',
 		'type'    => 'checkbox',
+	) );
+	
+	// Projects Page (for breadcrumbs)
+	$wp_customize->add_setting( 'prospero_projects_page', array(
+		'default'           => 0,
+		'sanitize_callback' => 'absint',
+	) );
+	$wp_customize->add_control( 'prospero_projects_page', array(
+		'label'       => esc_html__( 'Projects Page', 'prospero-theme' ),
+		'description' => esc_html__( 'Select the page that displays projects (used in breadcrumbs).', 'prospero-theme' ),
+		'section'     => 'prospero_post_types',
+		'type'        => 'dropdown-pages',
 	) );
 	
 	// Enable FAQ
@@ -884,4 +1032,28 @@ function prospero_sanitize_button_font_style( $input ) {
 function prospero_sanitize_header_position( $input ) {
 	$valid = array( 'left', 'center', 'right' );
 	return in_array( $input, $valid, true ) ? $input : 'left';
+}
+
+/**
+ * Sanitize blog layout setting
+ */
+function prospero_sanitize_blog_layout( $input ) {
+	$valid = array( 'grid', 'list' );
+	return in_array( $input, $valid, true ) ? $input : 'grid';
+}
+
+/**
+ * Sanitize blog columns setting
+ */
+function prospero_sanitize_blog_columns( $input ) {
+	$valid = array( '2', '3', '4' );
+	return in_array( $input, $valid, true ) ? $input : '3';
+}
+
+/**
+ * Sanitize featured image position setting
+ */
+function prospero_sanitize_featured_position( $input ) {
+	$valid = array( 'above', 'below', 'hidden' );
+	return in_array( $input, $valid, true ) ? $input : 'below';
 }

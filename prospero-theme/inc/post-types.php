@@ -102,7 +102,7 @@ function prospero_register_partners() {
 		'has_archive'         => false,
 		'hierarchical'        => false,
 		'menu_position'       => 21,
-		'menu_icon'           => 'dashicons-groups',
+		'menu_icon'           => 'dashicons-heart',
 		'supports'            => array( 'title', 'editor', 'thumbnail', 'page-attributes' ),
 		'show_in_rest'        => true,
 	);
@@ -186,7 +186,7 @@ add_action( 'init', 'prospero_register_team' );
  * Register Projects Post Type
  */
 function prospero_register_projects() {
-	if ( ! get_theme_mod( 'prospero_enable_projects', true ) ) {
+	if ( ! get_theme_mod( 'prospero_enable_projects', false ) ) {
 		return;
 	}
 
@@ -211,9 +211,9 @@ function prospero_register_projects() {
 		'show_ui'             => true,
 		'show_in_menu'        => true,
 		'query_var'           => true,
-		'rewrite'             => array( 'slug' => 'projects' ),
+		'rewrite'             => array( 'slug' => 'project' ),
 		'capability_type'     => 'post',
-		'has_archive'         => true,
+		'has_archive'         => false,
 		'hierarchical'        => false,
 		'menu_position'       => 23,
 		'menu_icon'           => 'dashicons-portfolio',
@@ -223,7 +223,21 @@ function prospero_register_projects() {
 
 	register_post_type( 'project', $args );
 
-	// Register taxonomy
+	// Register category taxonomy
+	register_taxonomy( 'project_category', 'project', array(
+		'labels'            => array(
+			'name'          => esc_html__( 'Project Categories', 'prospero-theme' ),
+			'singular_name' => esc_html__( 'Project Category', 'prospero-theme' ),
+		),
+		'hierarchical'      => true,
+		'public'            => true,
+		'show_ui'           => true,
+		'show_admin_column' => true,
+		'show_in_rest'      => true,
+		'rewrite'           => array( 'slug' => 'project-category' ),
+	) );
+
+	// Register tag taxonomy
 	register_taxonomy( 'project_tag', 'project', array(
 		'labels'            => array(
 			'name'          => esc_html__( 'Project Tags', 'prospero-theme' ),
@@ -301,7 +315,7 @@ add_action( 'init', 'prospero_register_faq' );
  */
 function prospero_add_meta_boxes() {
 	// Testimonial display name
-	if ( get_theme_mod( 'prospero_enable_testimonials', false ) ) {
+	if ( get_theme_mod( 'prospero_enable_testimonials', true ) ) {
 		add_meta_box(
 			'prospero_testimonial_display_name',
 			esc_html__( 'Display Name', 'prospero-theme' ),
@@ -313,7 +327,7 @@ function prospero_add_meta_boxes() {
 	}
 
 	// Partner website URL
-	if ( get_theme_mod( 'prospero_enable_partners', false ) ) {
+	if ( get_theme_mod( 'prospero_enable_partners', true ) ) {
 		add_meta_box(
 			'prospero_partner_url',
 			esc_html__( 'Partner Website', 'prospero-theme' ),
@@ -325,7 +339,7 @@ function prospero_add_meta_boxes() {
 	}
 
 	// Team member fields
-	if ( get_theme_mod( 'prospero_enable_team', false ) ) {
+	if ( get_theme_mod( 'prospero_enable_team', true ) ) {
 		// Display name
 		add_meta_box(
 			'prospero_team_display_name',
@@ -378,7 +392,7 @@ function prospero_add_meta_boxes() {
 	}
 
 	// Project fields
-	if ( get_theme_mod( 'prospero_enable_projects', false ) ) {
+	if ( get_theme_mod( 'prospero_enable_projects', true ) ) {
 		// Project website URL
 		add_meta_box(
 			'prospero_project_url',
@@ -400,7 +414,7 @@ function prospero_add_meta_boxes() {
 		);
 
 		// Testimonial selection
-		if ( get_theme_mod( 'prospero_enable_testimonials', false ) ) {
+		if ( get_theme_mod( 'prospero_enable_testimonials', true ) ) {
 			add_meta_box(
 				'prospero_project_testimonial',
 				esc_html__( 'Related Testimonial', 'prospero-theme' ),
@@ -413,6 +427,62 @@ function prospero_add_meta_boxes() {
 	}
 }
 add_action( 'add_meta_boxes', 'prospero_add_meta_boxes' );
+
+/**
+ * Ensure meta boxes work with block editor by using proper save hooks
+ */
+function prospero_save_project_meta_on_rest( $post, $request, $creating ) {
+	// This is handled by the regular save_post hook when saving from block editor
+	// The block editor does trigger save_post, so our existing save function should work
+}
+
+/**
+ * Register meta fields for REST API (block editor compatibility)
+ */
+function prospero_register_project_meta() {
+	register_post_meta( 'project', '_prospero_project_url', array(
+		'show_in_rest'      => true,
+		'single'            => true,
+		'type'              => 'string',
+		'sanitize_callback' => 'esc_url_raw',
+		'auth_callback'     => function() {
+			return current_user_can( 'edit_posts' );
+		},
+	) );
+
+	register_post_meta( 'project', '_prospero_project_gallery', array(
+		'show_in_rest'      => array(
+			'schema' => array(
+				'type'  => 'array',
+				'items' => array(
+					'type' => 'integer',
+				),
+			),
+		),
+		'single'            => true,
+		'type'              => 'array',
+		'sanitize_callback' => function( $value ) {
+			if ( ! is_array( $value ) ) {
+				return array();
+			}
+			return array_map( 'absint', $value );
+		},
+		'auth_callback'     => function() {
+			return current_user_can( 'edit_posts' );
+		},
+	) );
+
+	register_post_meta( 'project', '_prospero_project_testimonial', array(
+		'show_in_rest'      => true,
+		'single'            => true,
+		'type'              => 'integer',
+		'sanitize_callback' => 'absint',
+		'auth_callback'     => function() {
+			return current_user_can( 'edit_posts' );
+		},
+	) );
+}
+add_action( 'init', 'prospero_register_project_meta' );
 
 /**
  * Testimonial display name callback
@@ -681,8 +751,13 @@ function prospero_save_meta_boxes( $post_id ) {
 	// Project gallery
 	if ( isset( $_POST['prospero_project_gallery_nonce'] ) && wp_verify_nonce( $_POST['prospero_project_gallery_nonce'], 'prospero_project_gallery_nonce' ) ) {
 		if ( isset( $_POST['prospero_project_gallery'] ) ) {
-			$gallery_ids = array_filter( array_map( 'absint', explode( ',', $_POST['prospero_project_gallery'] ) ) );
-			update_post_meta( $post_id, '_prospero_project_gallery', $gallery_ids );
+			$gallery_input = sanitize_text_field( $_POST['prospero_project_gallery'] );
+			if ( ! empty( $gallery_input ) ) {
+				$gallery_ids = array_filter( array_map( 'absint', explode( ',', $gallery_input ) ) );
+				update_post_meta( $post_id, '_prospero_project_gallery', $gallery_ids );
+			} else {
+				delete_post_meta( $post_id, '_prospero_project_gallery' );
+			}
 		}
 	}
 

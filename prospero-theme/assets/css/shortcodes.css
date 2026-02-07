@@ -15,6 +15,101 @@
 	margin: var(--spacing-lg) 0;
 }
 
+/* Slider Wrapper - contains the slider within content bounds */
+.prospero-slider-wrapper {
+	width: 100%;
+	max-width: 100%;
+	overflow: hidden;
+	margin: var(--spacing-lg) 0;
+	padding: 0 50px var(--spacing-lg) 50px; /* Space for arrows (left/right) and page dots (bottom) */
+}
+
+/* Clearfix for slider wrapper */
+.prospero-slider-wrapper::after {
+	content: '';
+	display: table;
+	clear: both;
+}
+
+/* Prospero Slider Containers (initialized by Flickity) */
+.prospero-testimonials.prospero-slider,
+.prospero-partners.prospero-slider,
+.prospero-team.prospero-slider,
+.prospero-projects.prospero-slider {
+	display: block;
+	margin: 0;
+}
+
+/* Slider cell sizing - widths are set dynamically via JavaScript based on columns */
+/* These are fallback values that will be overridden by JS */
+.prospero-testimonials.prospero-slider .testimonial-item {
+	min-width: 280px;
+}
+
+/* Multiple items per slide for partners */
+.prospero-partners.prospero-slider .partner-item {
+	min-width: 120px;
+}
+
+/* Multiple items per slide for team */
+.prospero-team.prospero-slider .team-item {
+	min-width: 200px;
+}
+
+/* Projects slider */
+.prospero-projects.prospero-slider .project-item {
+	min-width: 280px;
+}
+
+/* Flickity navigation buttons */
+.flickity-button {
+	background: var(--color-primary);
+	color: #fff;
+	transition: background-color 0.3s ease, opacity 0.3s ease;
+}
+
+.flickity-button:hover {
+	background: var(--color-secondary);
+}
+
+.flickity-button:disabled {
+	opacity: 0.3;
+}
+
+/* Position arrows outside the content area */
+.prospero-slider-wrapper .flickity-prev-next-button {
+	width: 40px;
+	height: 40px;
+}
+
+.prospero-slider-wrapper .flickity-prev-next-button.previous {
+	left: -50px;
+}
+
+.prospero-slider-wrapper .flickity-prev-next-button.next {
+	right: -50px;
+}
+
+/* Flickity page dots - override absolute positioning */
+.prospero-slider-wrapper .flickity-page-dots {
+	position: static;
+	width: 100%;
+	margin-top: var(--spacing-md);
+	padding: 0;
+	bottom: auto;
+}
+
+.flickity-page-dots .dot {
+	background: var(--color-secondary);
+	opacity: 0.5;
+	transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+.flickity-page-dots .dot.is-selected {
+	background: var(--color-primary);
+	opacity: 1;
+}
+
 .testimonial-item {
 	display: flex;
 	gap: var(--spacing-md);

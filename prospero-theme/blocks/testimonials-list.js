@@ -35,6 +35,10 @@
 				type: 'string',
 				default: 'date'
 			},
+			columns: {
+				type: 'number',
+				default: 1
+			},
 			slider: {
 				type: 'boolean',
 				default: false
@@ -142,7 +146,18 @@
 								setAttributes( { slider: value } );
 							},
 							help: __( 'Uses Flickity for smooth carousel navigation', 'prospero-theme' )
-						} )
+						} ),
+						attributes.slider ?
+							el( RangeControl, {
+								label: __( 'Items per View', 'prospero-theme' ),
+								value: attributes.columns,
+								onChange: function( value ) {
+									setAttributes( { columns: value } );
+								},
+								min: 1,
+								max: 4,
+								help: __( 'Number of testimonials visible at once in slider mode', 'prospero-theme' )
+							} ) : null
 					)
 				),
 				el( 'div', blockProps,

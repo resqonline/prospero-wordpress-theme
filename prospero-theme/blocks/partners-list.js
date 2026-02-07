@@ -32,6 +32,10 @@
 				type: 'string',
 				default: 'menu_order'
 			},
+			columns: {
+				type: 'number',
+				default: 4
+			},
 			slider: {
 				type: 'boolean',
 				default: false
@@ -131,7 +135,18 @@
 							onChange: function( value ) {
 								setAttributes( { slider: value } );
 							}
-						} )
+						} ),
+						attributes.slider ?
+							el( RangeControl, {
+								label: __( 'Items per View', 'prospero-theme' ),
+								value: attributes.columns,
+								onChange: function( value ) {
+									setAttributes( { columns: value } );
+								},
+								min: 2,
+								max: 8,
+								help: __( 'Number of partners visible at once in slider mode', 'prospero-theme' )
+							} ) : null
 					)
 				),
 				el( 'div', blockProps,

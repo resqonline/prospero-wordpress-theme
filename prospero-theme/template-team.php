@@ -11,6 +11,8 @@ get_header();
 ?>
 
 <main id="main-content" class="site-main team-template">
+	<?php prospero_breadcrumbs( array( 'wrapper_class' => 'breadcrumbs container' ) ); ?>
+
 	<div class="container">
 		<header class="page-header">
 			<h1 class="page-title"><?php echo esc_html( get_the_title() ); ?></h1>

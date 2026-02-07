@@ -8,41 +8,105 @@
 (function() {
 	'use strict';
 
+	/**
+	 * Calculate cell width based on columns and apply to slider items
+	 * @param {Element} slider - The slider container element
+	 * @param {number} columns - Number of items to show per view
+	 * @param {string} sliderType - Type of slider (testimonials, partners, team, etc.)
+	 */
+	function applyCellWidths(slider, columns, sliderType) {
+		let itemSelector = '';
+		let gap = 16; // Gap between items in pixels
+		
+		// Determine the item selector based on slider type
+		switch(sliderType) {
+			case 'testimonials':
+				itemSelector = '.testimonial-item';
+				gap = 20;
+				break;
+			case 'partners':
+				itemSelector = '.partner-item';
+				gap = 16;
+				break;
+			case 'team':
+				itemSelector = '.team-item';
+				gap = 20;
+				break;
+			case 'projects':
+				itemSelector = '.project-item';
+				gap = 20;
+				break;
+			default:
+				return;
+		}
+		
+		const items = slider.querySelectorAll(itemSelector);
+		if (items.length === 0) return;
+		
+		// Calculate width: (100% / columns) minus gaps
+		// Total gap space = gap * (columns - 1) for gaps between items
+		// Each item width = (100% - total gap space) / columns
+		const totalGapSpace = gap * (columns - 1);
+		const itemWidth = 'calc((100% - ' + totalGapSpace + 'px) / ' + columns + ')';
+		
+		items.forEach(function(item, index) {
+			item.style.width = itemWidth;
+			// Add margin-right to all except last visible item
+			item.style.marginRight = gap + 'px';
+			item.style.marginLeft = '0';
+		});
+	}
+
 	// Initialize Flickity sliders when DOM is ready
 	document.addEventListener('DOMContentLoaded', function() {
 		
 		// Initialize all Flickity sliders
-		const sliders = document.querySelectorAll('.flickity-slider');
+		const sliders = document.querySelectorAll('.prospero-slider');
 		
 		if (sliders.length === 0) {
 			return;
 		}
 
 		sliders.forEach(function(slider) {
-			// Get slider type from data attribute
+			// Get slider type and columns from data attributes
 			const sliderType = slider.dataset.sliderType || 'default';
+			const columns = parseInt(slider.dataset.columns, 10) || 1;
 			
-			// Base options
+			// Apply cell widths based on columns
+			applyCellWidths(slider, columns, sliderType);
+			
+			// Count items to determine if slider is needed
+			let itemSelector = '.flickity-cell';
+			switch(sliderType) {
+				case 'testimonials': itemSelector = '.testimonial-item'; break;
+				case 'partners': itemSelector = '.partner-item'; break;
+				case 'team': itemSelector = '.team-item'; break;
+				case 'projects': itemSelector = '.project-item'; break;
+			}
+			const itemCount = slider.querySelectorAll(itemSelector).length;
+			const needsSlider = itemCount > columns;
+			
+			// Base options - use left alignment for proper multi-item display
 			let options = {
 				cellAlign: 'left',
 				contain: true,
-				wrapAround: true,
+				wrapAround: needsSlider,
 				autoPlay: false,
-				prevNextButtons: true,
-				pageDots: true,
+				prevNextButtons: needsSlider,
+				pageDots: needsSlider,
 				accessibility: true,
 				setGallerySize: true,
 				imagesLoaded: true,
-				lazyLoad: 2
+				percentPosition: true,
+				draggable: needsSlider
 			};
 
 			// Type-specific options
 			switch(sliderType) {
 				case 'testimonials':
 					options = Object.assign(options, {
-						cellAlign: 'center',
-						autoPlay: 5000,
-						wrapAround: true,
+						cellAlign: columns === 1 ? 'center' : 'left',
+						autoPlay: needsSlider ? 5000 : false,
 						adaptiveHeight: true
 					});
 					break;
@@ -50,28 +114,19 @@
 				case 'partners':
 					options = Object.assign(options, {
 						cellAlign: 'left',
-						groupCells: true,
-						autoPlay: 4000,
-						wrapAround: true,
-						pageDots: false
+						autoPlay: needsSlider ? 4000 : false
 					});
 					break;
 
 				case 'team':
 					options = Object.assign(options, {
-						cellAlign: 'left',
-						groupCells: true,
-						wrapAround: false,
-						pageDots: true
+						cellAlign: 'left'
 					});
 					break;
 
 				case 'projects':
 					options = Object.assign(options, {
-						cellAlign: 'left',
-						wrapAround: false,
-						pageDots: true,
-						prevNextButtons: true
+						cellAlign: 'left'
 					});
 					break;
 
@@ -79,9 +134,7 @@
 					options = Object.assign(options, {
 						cellAlign: 'center',
 						contain: true,
-						wrapAround: true,
-						pageDots: false,
-						imagesLoaded: true
+						pageDots: false
 					});
 					break;
 			}
@@ -115,11 +168,12 @@
 					});
 				}
 
-				// Handle window resize
+				// Handle window resize - reapply widths and resize Flickity
 				let resizeTimer;
 				window.addEventListener('resize', function() {
 					clearTimeout(resizeTimer);
 					resizeTimer = setTimeout(function() {
+						applyCellWidths(slider, columns, sliderType);
 						flkty.resize();
 					}, 250);
 				});

@@ -1,0 +1,1106 @@
+# German (informal) translation for Prospero Theme
+# Copyright (C) 2024 Prospero Theme
+# This file is distributed under the same license as the Prospero Theme package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Prospero Theme 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-02-07 12:00+0000\n"
+"PO-Revision-Date: 2024-02-07 12:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: German\n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Prospero Theme"
+msgstr "Prospero Theme"
+
+msgid "Main Menu"
+msgstr "Hauptmenü"
+
+msgid "Footer Menu"
+msgstr "Fußzeilen-Menü"
+
+msgid "Social Menu"
+msgstr "Social Media Menü"
+
+msgid "Logged In Menu"
+msgstr "Eingeloggt-Menü"
+
+msgid "Menu"
+msgstr "Menü"
+
+msgid "Open submenu"
+msgstr "Untermenü öffnen"
+
+msgid "Skip to content"
+msgstr "Zum Inhalt springen"
+
+msgid "Login"
+msgstr "Anmelden"
+
+msgid "Logout"
+msgstr "Abmelden"
+
+msgid "Register"
+msgstr "Registrieren"
+
+msgid "My Account"
+msgstr "Mein Konto"
+
+msgid "Account Overview"
+msgstr "Kontoübersicht"
+
+msgid "Edit Profile"
+msgstr "Profil bearbeiten"
+
+msgid "Change Password"
+msgstr "Passwort ändern"
+
+msgid "Forgot Password"
+msgstr "Passwort vergessen"
+
+msgid "Username"
+msgstr "Benutzername"
+
+msgid "Username or Email"
+msgstr "Benutzername oder E-Mail"
+
+msgid "Email"
+msgstr "E-Mail"
+
+msgid "Email Address"
+msgstr "E-Mail-Adresse"
+
+msgid "Password"
+msgstr "Passwort"
+
+msgid "Current Password"
+msgstr "Aktuelles Passwort"
+
+msgid "New Password"
+msgstr "Neues Passwort"
+
+msgid "Confirm Password"
+msgstr "Passwort bestätigen"
+
+msgid "Confirm New Password"
+msgstr "Neues Passwort bestätigen"
+
+msgid "Remember Me"
+msgstr "Angemeldet bleiben"
+
+msgid "Log In"
+msgstr "Anmelden"
+
+msgid "Create Account"
+msgstr "Konto erstellen"
+
+msgid "Send Reset Link"
+msgstr "Link senden"
+
+msgid "Reset Password"
+msgstr "Passwort zurücksetzen"
+
+msgid "Update Profile"
+msgstr "Profil aktualisieren"
+
+msgid "First Name"
+msgstr "Vorname"
+
+msgid "Last Name"
+msgstr "Nachname"
+
+msgid "Display Name"
+msgstr "Anzeigename"
+
+msgid "Biographical Info"
+msgstr "Biografie"
+
+msgid "Profile Picture"
+msgstr "Profilbild"
+
+msgid "Upload Avatar"
+msgstr "Avatar hochladen"
+
+msgid "Remove Avatar"
+msgstr "Avatar entfernen"
+
+msgid "View Profile"
+msgstr "Profil ansehen"
+
+msgid "Login here"
+msgstr "Hier anmelden"
+
+msgid "Register here"
+msgstr "Hier registrieren"
+
+msgid "Forgot your password?"
+msgstr "Passwort vergessen?"
+
+msgid "Already have an account?"
+msgstr "Hast du schon ein Konto?"
+
+msgid "Go Back"
+msgstr "Zurück"
+
+msgid "Go back"
+msgstr "Zurück"
+
+msgid "← Back to Login"
+msgstr "← Zurück zur Anmeldung"
+
+msgid "You are already logged in."
+msgstr "Du bist bereits angemeldet."
+
+msgid "You are already registered and logged in."
+msgstr "Du bist bereits registriert und angemeldet."
+
+msgid "You must be logged in to view this page."
+msgstr "Du musst angemeldet sein, um diese Seite zu sehen."
+
+msgid "You must be logged in to upload an avatar."
+msgstr "Du musst angemeldet sein, um einen Avatar hochzuladen."
+
+msgid "You must be logged in to remove your avatar."
+msgstr "Du musst angemeldet sein, um deinen Avatar zu entfernen."
+
+msgid "You must be logged in to update your profile."
+msgstr "Du musst angemeldet sein, um dein Profil zu aktualisieren."
+
+msgid "You must be logged in to change your password."
+msgstr "Du musst angemeldet sein, um dein Passwort zu ändern."
+
+msgid "Security verification failed."
+msgstr "Sicherheitsüberprüfung fehlgeschlagen."
+
+msgid "Username is required."
+msgstr "Benutzername ist erforderlich."
+
+msgid "Username already exists."
+msgstr "Benutzername existiert bereits."
+
+msgid "Invalid username."
+msgstr "Ungültiger Benutzername."
+
+msgid "Valid email is required."
+msgstr "Gültige E-Mail-Adresse erforderlich."
+
+msgid "Email already registered."
+msgstr "E-Mail bereits registriert."
+
+msgid "This email is already registered to another user."
+msgstr "Diese E-Mail ist bereits für einen anderen Benutzer registriert."
+
+msgid "Password must be at least 8 characters."
+msgstr "Passwort muss mindestens 8 Zeichen lang sein."
+
+msgid "Passwords do not match."
+msgstr "Passwörter stimmen nicht überein."
+
+msgid "You must accept the terms and conditions."
+msgstr "Du musst die Nutzungsbedingungen akzeptieren."
+
+msgid "Current password is incorrect."
+msgstr "Aktuelles Passwort ist falsch."
+
+msgid "New password must be at least 8 characters."
+msgstr "Neues Passwort muss mindestens 8 Zeichen lang sein."
+
+msgid "Display name is required."
+msgstr "Anzeigename ist erforderlich."
+
+msgid "No user found with that email address."
+msgstr "Kein Benutzer mit dieser E-Mail-Adresse gefunden."
+
+msgid "Invalid or expired reset link."
+msgstr "Ungültiger oder abgelaufener Link."
+
+msgid "Profile updated successfully!"
+msgstr "Profil erfolgreich aktualisiert!"
+
+msgid "Password changed successfully!"
+msgstr "Passwort erfolgreich geändert!"
+
+msgid "Avatar updated successfully!"
+msgstr "Avatar erfolgreich aktualisiert!"
+
+msgid "Avatar removed successfully!"
+msgstr "Avatar erfolgreich entfernt!"
+
+msgid "Password reset email sent! Please check your inbox."
+msgstr "E-Mail zum Zurücksetzen gesendet! Bitte prüfe deinen Posteingang."
+
+msgid "Password reset successfully! You can now log in."
+msgstr "Passwort erfolgreich zurückgesetzt! Du kannst dich jetzt anmelden."
+
+msgid "Please select an image to upload."
+msgstr "Bitte wähle ein Bild zum Hochladen aus."
+
+msgid "Invalid file type. Please upload a JPG, PNG, GIF, or WebP image."
+msgstr "Ungültiger Dateityp. Bitte lade ein JPG, PNG, GIF oder WebP Bild hoch."
+
+msgid "File size too large. Maximum size is 2MB."
+msgstr "Datei zu groß. Maximale Größe ist 2MB."
+
+msgid "JPG, PNG, GIF or WebP. Max 2MB."
+msgstr "JPG, PNG, GIF oder WebP. Max 2MB."
+
+msgid "Letters, numbers, and underscores only."
+msgstr "Nur Buchstaben, Zahlen und Unterstriche."
+
+msgid "Must be at least 8 characters long."
+msgstr "Muss mindestens 8 Zeichen lang sein."
+
+msgid "Username:"
+msgstr "Benutzername:"
+
+msgid "Email:"
+msgstr "E-Mail:"
+
+msgid "Display Name:"
+msgstr "Anzeigename:"
+
+msgid "Member Since:"
+msgstr "Mitglied seit:"
+
+msgid "Phone:"
+msgstr "Telefon:"
+
+msgid "Member Benefits"
+msgstr "Mitgliedervorteile"
+
+msgid "Member-Only Content"
+msgstr "Exklusiver Inhalt"
+
+msgid "Access to exclusive member content"
+msgstr "Zugang zu exklusiven Inhalten"
+
+msgid "Save and track your favorite content"
+msgstr "Speichere und verfolge deine Lieblingsinhalte"
+
+msgid "Personalized dashboard"
+msgstr "Persönliches Dashboard"
+
+msgid "Connect with our community"
+msgstr "Verbinde dich mit unserer Community"
+
+msgid "Subscribe to our newsletter"
+msgstr "Abonniere unseren Newsletter"
+
+msgid "Join our community and get access to exclusive content and features."
+msgstr "Werde Teil unserer Community und erhalte Zugang zu exklusiven Inhalten."
+
+msgid "Security Notice"
+msgstr "Sicherheitshinweis"
+
+msgid "For security reasons, we do not store your password"
+msgstr "Aus Sicherheitsgründen speichern wir dein Passwort nicht"
+
+msgid "The password reset link will expire in 24 hours"
+msgstr "Der Link zum Zurücksetzen läuft in 24 Stunden ab"
+
+msgid "Never share your password reset link with anyone"
+msgstr "Teile deinen Zurücksetzungslink niemals mit anderen"
+
+msgid "I agree to the Terms and Conditions"
+msgstr "Ich stimme den Nutzungsbedingungen zu"
+
+msgid "I agree to the <a href=\"%s\" target=\"_blank\">Terms and Conditions</a>"
+msgstr "Ich stimme den <a href=\"%s\" target=\"_blank\">Nutzungsbedingungen</a> zu"
+
+msgid "Blog"
+msgstr "Blog"
+
+msgid "All"
+msgstr "Alle"
+
+msgid "Read More"
+msgstr "Weiterlesen"
+
+msgid "Read more"
+msgstr "Weiterlesen"
+
+msgid "Featured"
+msgstr "Empfohlen"
+
+msgid "Related Posts"
+msgstr "Ähnliche Beiträge"
+
+msgid "No posts found."
+msgstr "Keine Beiträge gefunden."
+
+msgid "&laquo; Previous"
+msgstr "&laquo; Zurück"
+
+msgid "Next &raquo;"
+msgstr "Weiter &raquo;"
+
+msgid "Previous"
+msgstr "Zurück"
+
+msgid "Next"
+msgstr "Weiter"
+
+msgid "by"
+msgstr "von"
+
+msgid "by %s"
+msgstr "von %s"
+
+msgid "Posted on %s"
+msgstr "Veröffentlicht am %s"
+
+msgid "Posts by %s"
+msgstr "Beiträge von %s"
+
+msgid "%d min read"
+msgid_plural "%d min read"
+msgstr[0] "%d Min. Lesezeit"
+msgstr[1] "%d Min. Lesezeit"
+
+msgid "Search"
+msgstr "Suche"
+
+msgid "Search Results for: %s"
+msgstr "Suchergebnisse für: %s"
+
+msgid "Search results for: %s"
+msgstr "Suchergebnisse für: %s"
+
+msgid "%d result found"
+msgid_plural "%d results found"
+msgstr[0] "%d Ergebnis gefunden"
+msgstr[1] "%d Ergebnisse gefunden"
+
+msgid "Page Not Found"
+msgstr "Seite nicht gefunden"
+
+msgid "Page not found"
+msgstr "Seite nicht gefunden"
+
+msgid "Nothing Found"
+msgstr "Nichts gefunden"
+
+msgid "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable."
+msgstr "Die gesuchte Seite wurde möglicherweise entfernt, umbenannt oder ist vorübergehend nicht verfügbar."
+
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr "Wir können leider nicht finden, wonach du suchst. Vielleicht hilft eine Suche weiter."
+
+msgid "Sorry, but nothing matched your search terms. Please try again with different keywords."
+msgstr "Leider wurden keine Ergebnisse gefunden. Bitte versuche es mit anderen Suchbegriffen."
+
+msgid "Suggestions"
+msgstr "Vorschläge"
+
+msgid "Check your spelling"
+msgstr "Überprüfe die Rechtschreibung"
+
+msgid "Try different keywords"
+msgstr "Verwende andere Suchbegriffe"
+
+msgid "Try more general keywords"
+msgstr "Verwende allgemeinere Begriffe"
+
+msgid "Try searching"
+msgstr "Versuche zu suchen"
+
+msgid "Or try these links"
+msgstr "Oder probiere diese Links"
+
+msgid "Home Page"
+msgstr "Startseite"
+
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr "Bereit für deinen ersten Beitrag? <a href=\"%1$s\">Leg hier los</a>."
+
+msgid "Breadcrumbs"
+msgstr "Brotkrümel-Navigation"
+
+msgid "Breadcrumb"
+msgstr "Brotkrümel"
+
+msgid "Home"
+msgstr "Start"
+
+msgid "Page"
+msgstr "Seite"
+
+msgid "Pages:"
+msgstr "Seiten:"
+
+msgid "Theme Colors"
+msgstr "Theme-Farben"
+
+msgid "Primary Color"
+msgstr "Primärfarbe"
+
+msgid "Secondary Color"
+msgstr "Sekundärfarbe"
+
+msgid "Tertiary Color"
+msgstr "Tertiärfarbe"
+
+msgid "Text Color"
+msgstr "Textfarbe"
+
+msgid "Background Color"
+msgstr "Hintergrundfarbe"
+
+msgid "Highlight Color"
+msgstr "Hervorhebungsfarbe"
+
+msgid "Dark Mode Settings"
+msgstr "Dunkelmodus-Einstellungen"
+
+msgid "Enable Dark Mode"
+msgstr "Dunkelmodus aktivieren"
+
+msgid "Allow visitors to switch between light and dark mode"
+msgstr "Ermöglicht Besuchern, zwischen hellem und dunklem Modus zu wechseln"
+
+msgid "Default Mode"
+msgstr "Standardmodus"
+
+msgid "Light"
+msgstr "Hell"
+
+msgid "Dark"
+msgstr "Dunkel"
+
+msgid "Auto (System Preference)"
+msgstr "Auto (Systemeinstellung)"
+
+msgid "Show Dark Mode Toggle in Header"
+msgstr "Dunkelmodus-Schalter im Header anzeigen"
+
+msgid "Dark Mode Logo"
+msgstr "Dunkelmodus-Logo"
+
+msgid "Upload a logo for dark mode. Falls back to logo-dark.svg if not set."
+msgstr "Lade ein Logo für den Dunkelmodus hoch. Verwendet logo-dark.svg falls nicht gesetzt."
+
+msgid "Dark Mode Text Color"
+msgstr "Textfarbe im Dunkelmodus"
+
+msgid "Dark Mode Background Color"
+msgstr "Hintergrundfarbe im Dunkelmodus"
+
+msgid "Dark Mode Text"
+msgstr "Dunkelmodus-Text"
+
+msgid "Dark Background"
+msgstr "Dunkler Hintergrund"
+
+msgid "Typography"
+msgstr "Typografie"
+
+msgid "Heading Font"
+msgstr "Überschriften-Schrift"
+
+msgid "Body Font"
+msgstr "Text-Schrift"
+
+msgid "Enter a Google Font name (will be downloaded locally) or \"system\" for system fonts"
+msgstr "Gib einen Google Font Namen ein (wird lokal heruntergeladen) oder \"system\" für Systemschriften"
+
+msgid "Header & Menu"
+msgstr "Header & Menü"
+
+msgid "Header Layout"
+msgstr "Header-Layout"
+
+msgid "Logo Position"
+msgstr "Logo-Position"
+
+msgid "Left"
+msgstr "Links"
+
+msgid "Center"
+msgstr "Mitte"
+
+msgid "Right"
+msgstr "Rechts"
+
+msgid "Menu Position (Desktop)"
+msgstr "Menü-Position (Desktop)"
+
+msgid "Menu Options"
+msgstr "Menü-Optionen"
+
+msgid "Enable Sticky Header"
+msgstr "Fixierten Header aktivieren"
+
+msgid "Always Show Mobile Menu"
+msgstr "Mobile Menü immer anzeigen"
+
+msgid "Display mobile menu on all screen sizes"
+msgstr "Zeigt das mobile Menü auf allen Bildschirmgrößen"
+
+msgid "Show Search in Header"
+msgstr "Suche im Header anzeigen"
+
+msgid "Display a search icon that opens a search overlay"
+msgstr "Zeigt ein Suchsymbol, das ein Such-Overlay öffnet"
+
+msgid "Enable Breadcrumbs"
+msgstr "Brotkrümel-Navigation aktivieren"
+
+msgid "Display breadcrumb navigation on pages and posts."
+msgstr "Zeigt die Brotkrümel-Navigation auf Seiten und Beiträgen."
+
+msgid "Home Link Text"
+msgstr "Start-Link-Text"
+
+msgid "Text for the home link in breadcrumbs."
+msgstr "Text für den Startseiten-Link in der Navigation."
+
+msgid "Separator Character"
+msgstr "Trennzeichen"
+
+msgid "Character or symbol between breadcrumb items."
+msgstr "Zeichen oder Symbol zwischen den Navigationselementen."
+
+msgid "Content Settings"
+msgstr "Inhalts-Einstellungen"
+
+msgid "Max Content Width"
+msgstr "Maximale Inhaltsbreite"
+
+msgid "E.g., 1200px, 80rem, 90vw"
+msgstr "Z.B. 1200px, 80rem, 90vw"
+
+msgid "Blog Layout"
+msgstr "Blog-Layout"
+
+msgid "Grid"
+msgstr "Raster"
+
+msgid "List"
+msgstr "Liste"
+
+msgid "Grid Columns"
+msgstr "Raster-Spalten"
+
+msgid "2 Columns"
+msgstr "2 Spalten"
+
+msgid "3 Columns"
+msgstr "3 Spalten"
+
+msgid "4 Columns"
+msgstr "4 Spalten"
+
+msgid "Number of columns in grid layout."
+msgstr "Anzahl der Spalten im Raster-Layout."
+
+msgid "Show Excerpt in Grid"
+msgstr "Auszug im Raster anzeigen"
+
+msgid "Display post excerpt in grid view."
+msgstr "Zeigt den Beitragsauszug in der Rasteransicht."
+
+msgid "Single Post"
+msgstr "Einzelner Beitrag"
+
+msgid "Featured Image Position"
+msgstr "Beitragsbild-Position"
+
+msgid "Above title"
+msgstr "Über dem Titel"
+
+msgid "Below title and meta"
+msgstr "Unter Titel und Meta"
+
+msgid "Hidden"
+msgstr "Versteckt"
+
+msgid "Where to display the featured image on single posts."
+msgstr "Position des Beitragsbilds in Einzelansichten."
+
+msgid "Product Placement Notice"
+msgstr "Produktplatzierungs-Hinweis"
+
+msgid "Text to display on posts with affiliate links or product placements"
+msgstr "Text für Beiträge mit Affiliate-Links oder Produktplatzierungen"
+
+msgid "Button Styles"
+msgstr "Button-Stile"
+
+msgid "Primary Button"
+msgstr "Primärer Button"
+
+msgid "Secondary Button"
+msgstr "Sekundärer Button"
+
+msgid "Tertiary Button"
+msgstr "Tertiärer Button"
+
+msgid "Primary"
+msgstr "Primär"
+
+msgid "Secondary"
+msgstr "Sekundär"
+
+msgid "Tertiary"
+msgstr "Tertiär"
+
+msgid "Style"
+msgstr "Stil"
+
+msgid "Background"
+msgstr "Hintergrund"
+
+msgid "Text"
+msgstr "Text"
+
+msgid "Hover Background"
+msgstr "Hover-Hintergrund"
+
+msgid "Hover Text Color"
+msgstr "Hover-Textfarbe"
+
+msgid "Leave empty for automatic"
+msgstr "Leer lassen für automatisch"
+
+msgid "Leave empty for automatic darker shade"
+msgstr "Leer lassen für automatisch dunkleren Farbton"
+
+msgid "Font Style"
+msgstr "Schriftstil"
+
+msgid "Border Radius"
+msgstr "Eckenradius"
+
+msgid "E.g., 0, 4px, 50px, 0.5em, 50%"
+msgstr "Z.B. 0, 4px, 50px, 0.5em, 50%"
+
+msgid "Post Types"
+msgstr "Beitragstypen"
+
+msgid "Enable Testimonials Post Type"
+msgstr "Testimonials-Beitragstyp aktivieren"
+
+msgid "Enable Partners Post Type"
+msgstr "Partner-Beitragstyp aktivieren"
+
+msgid "Enable Team Post Type"
+msgstr "Team-Beitragstyp aktivieren"
+
+msgid "Enable Projects Post Type"
+msgstr "Projekte-Beitragstyp aktivieren"
+
+msgid "Enable FAQ Post Type"
+msgstr "FAQ-Beitragstyp aktivieren"
+
+msgid "Team Page"
+msgstr "Team-Seite"
+
+msgid "Select the page that displays team members (used in breadcrumbs)."
+msgstr "Wähle die Seite, die Teammitglieder anzeigt (für Brotkrümel-Navigation)."
+
+msgid "Projects Page"
+msgstr "Projekte-Seite"
+
+msgid "Select the page that displays projects (used in breadcrumbs)."
+msgstr "Wähle die Seite, die Projekte anzeigt (für Brotkrümel-Navigation)."
+
+msgid "Frontend Login"
+msgstr "Frontend-Anmeldung"
+
+msgid "Use Frontend Login/Profile Editing"
+msgstr "Frontend-Anmeldung/Profilbearbeitung verwenden"
+
+msgid "Creates frontend pages for login, registration, password reset, and account management. Pages will be created automatically when enabled."
+msgstr "Erstellt Frontend-Seiten für Anmeldung, Registrierung, Passwort-Reset und Kontoverwaltung. Seiten werden automatisch erstellt."
+
+msgid "Pre-Footer"
+msgstr "Vor-Fußzeile"
+
+msgid "Widget area displayed above the footer. Uses a 3-column grid layout."
+msgstr "Widget-Bereich über der Fußzeile. Verwendet ein 3-Spalten-Raster."
+
+msgid "Testimonials"
+msgstr "Testimonials"
+
+msgid "Testimonial"
+msgstr "Testimonial"
+
+msgid "Add New Testimonial"
+msgstr "Neues Testimonial hinzufügen"
+
+msgid "Edit Testimonial"
+msgstr "Testimonial bearbeiten"
+
+msgid "New Testimonial"
+msgstr "Neues Testimonial"
+
+msgid "View Testimonial"
+msgstr "Testimonial ansehen"
+
+msgid "Search Testimonials"
+msgstr "Testimonials durchsuchen"
+
+msgid "No testimonials found"
+msgstr "Keine Testimonials gefunden"
+
+msgid "No testimonials found in trash"
+msgstr "Keine Testimonials im Papierkorb"
+
+msgid "Testimonial Categories"
+msgstr "Testimonial-Kategorien"
+
+msgid "Testimonial Category"
+msgstr "Testimonial-Kategorie"
+
+msgid "Please select a testimonial."
+msgstr "Bitte wähle ein Testimonial aus."
+
+msgid "Select a testimonial to display with this project."
+msgstr "Wähle ein Testimonial für dieses Projekt aus."
+
+msgid "Related Testimonial"
+msgstr "Zugehöriges Testimonial"
+
+msgid "Partners"
+msgstr "Partner"
+
+msgid "Partner"
+msgstr "Partner"
+
+msgid "Add New Partner"
+msgstr "Neuen Partner hinzufügen"
+
+msgid "Edit Partner"
+msgstr "Partner bearbeiten"
+
+msgid "New Partner"
+msgstr "Neuer Partner"
+
+msgid "View Partner"
+msgstr "Partner ansehen"
+
+msgid "Search Partners"
+msgstr "Partner durchsuchen"
+
+msgid "No partners found"
+msgstr "Keine Partner gefunden"
+
+msgid "No partners found in trash"
+msgstr "Keine Partner im Papierkorb"
+
+msgid "Partner Categories"
+msgstr "Partner-Kategorien"
+
+msgid "Partner Category"
+msgstr "Partner-Kategorie"
+
+msgid "Partner Website"
+msgstr "Partner-Website"
+
+msgid "Please select a partner."
+msgstr "Bitte wähle einen Partner aus."
+
+msgid "Team"
+msgstr "Team"
+
+msgid "Team Member"
+msgstr "Teammitglied"
+
+msgid "Add New Team Member"
+msgstr "Neues Teammitglied hinzufügen"
+
+msgid "Edit Team Member"
+msgstr "Teammitglied bearbeiten"
+
+msgid "New Team Member"
+msgstr "Neues Teammitglied"
+
+msgid "View Team Member"
+msgstr "Teammitglied ansehen"
+
+msgid "Search Team"
+msgstr "Team durchsuchen"
+
+msgid "No team members found"
+msgstr "Keine Teammitglieder gefunden"
+
+msgid "No team members found in trash"
+msgstr "Keine Teammitglieder im Papierkorb"
+
+msgid "Team Categories"
+msgstr "Team-Kategorien"
+
+msgid "Team Category"
+msgstr "Team-Kategorie"
+
+msgid "Please select a team member."
+msgstr "Bitte wähle ein Teammitglied aus."
+
+msgid "No team members found."
+msgstr "Keine Teammitglieder gefunden."
+
+msgid "Team custom post type is not enabled. Please enable it in the Customizer."
+msgstr "Team-Beitragstyp ist nicht aktiviert. Bitte im Customizer aktivieren."
+
+msgid "Team member details"
+msgstr "Teammitglied-Details"
+
+msgid "View details for %s"
+msgstr "Details für %s anzeigen"
+
+msgid "Contact Information"
+msgstr "Kontaktinformationen"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Social Links"
+msgstr "Social Links"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Job title or role (e.g., \"CEO\", \"Marketing Manager\")"
+msgstr "Jobtitel oder Rolle (z.B. \"CEO\", \"Marketing Manager\")"
+
+msgid "The name shown on the frontend (title is used for admin sorting)"
+msgstr "Der Name, der im Frontend angezeigt wird (Titel wird für Admin-Sortierung verwendet)"
+
+msgid "The name shown on the frontend (e.g., \"John D., CEO at Company\")"
+msgstr "Der Name, der im Frontend angezeigt wird (z.B. \"Max M., CEO bei Firma\")"
+
+msgid "Secondary Image (Hover)"
+msgstr "Zweites Bild (Hover)"
+
+msgid "Projects"
+msgstr "Projekte"
+
+msgid "Project"
+msgstr "Projekt"
+
+msgid "Add New Project"
+msgstr "Neues Projekt hinzufügen"
+
+msgid "Edit Project"
+msgstr "Projekt bearbeiten"
+
+msgid "New Project"
+msgstr "Neues Projekt"
+
+msgid "View Project"
+msgstr "Projekt ansehen"
+
+msgid "Search Projects"
+msgstr "Projekte durchsuchen"
+
+msgid "No projects found"
+msgstr "Keine Projekte gefunden"
+
+msgid "No projects found in trash"
+msgstr "Keine Projekte im Papierkorb"
+
+msgid "No projects found."
+msgstr "Keine Projekte gefunden."
+
+msgid "Project Categories"
+msgstr "Projekt-Kategorien"
+
+msgid "Project Category"
+msgstr "Projekt-Kategorie"
+
+msgid "Project Tags"
+msgstr "Projekt-Tags"
+
+msgid "Project Tag"
+msgstr "Projekt-Tag"
+
+msgid "Project Website"
+msgstr "Projekt-Website"
+
+msgid "Project Gallery"
+msgstr "Projekt-Galerie"
+
+msgid "Please select a project."
+msgstr "Bitte wähle ein Projekt aus."
+
+msgid "Projects custom post type is not enabled. Please enable it in the Customizer."
+msgstr "Projekte-Beitragstyp ist nicht aktiviert. Bitte im Customizer aktivieren."
+
+msgid "Related Projects"
+msgstr "Ähnliche Projekte"
+
+msgid "Visit Project Website"
+msgstr "Projekt-Website besuchen"
+
+msgid "Loading projects..."
+msgstr "Projekte werden geladen..."
+
+msgid "FAQs"
+msgstr "FAQs"
+
+msgid "FAQ"
+msgstr "FAQ"
+
+msgid "Add New FAQ"
+msgstr "Neue FAQ hinzufügen"
+
+msgid "Edit FAQ"
+msgstr "FAQ bearbeiten"
+
+msgid "New FAQ"
+msgstr "Neue FAQ"
+
+msgid "View FAQ"
+msgstr "FAQ ansehen"
+
+msgid "Search FAQs"
+msgstr "FAQs durchsuchen"
+
+msgid "No FAQs found"
+msgstr "Keine FAQs gefunden"
+
+msgid "No FAQs found in trash"
+msgstr "Keine FAQs im Papierkorb"
+
+msgid "No FAQs found."
+msgstr "Keine FAQs gefunden."
+
+msgid "FAQ Categories"
+msgstr "FAQ-Kategorien"
+
+msgid "FAQ Category"
+msgstr "FAQ-Kategorie"
+
+msgid "Please select an FAQ."
+msgstr "Bitte wähle eine FAQ aus."
+
+msgid "Add Gallery Images"
+msgstr "Galerie-Bilder hinzufügen"
+
+msgid "Add to gallery"
+msgstr "Zur Galerie hinzufügen"
+
+msgid "Add Images"
+msgstr "Bilder hinzufügen"
+
+msgid "Remove image"
+msgstr "Bild entfernen"
+
+msgid "Remove Image"
+msgstr "Bild entfernen"
+
+msgid "Select Image"
+msgstr "Bild auswählen"
+
+msgid "Use this image"
+msgstr "Dieses Bild verwenden"
+
+msgid "Upload Image"
+msgstr "Bild hochladen"
+
+msgid "Upload new avatar"
+msgstr "Neuen Avatar hochladen"
+
+msgid "Click to add images. Drag to reorder."
+msgstr "Klicke, um Bilder hinzuzufügen. Ziehen zum Sortieren."
+
+msgid "Image lightbox"
+msgstr "Bild-Lightbox"
+
+msgid "Close lightbox"
+msgstr "Lightbox schließen"
+
+msgid "Close dialog"
+msgstr "Dialog schließen"
+
+msgid "Previous image"
+msgstr "Vorheriges Bild"
+
+msgid "Next image"
+msgstr "Nächstes Bild"
+
+msgid "Prospero Blocks"
+msgstr "Prospero Blöcke"
+
+msgid "Please log in to view this content."
+msgstr "Bitte melde dich an, um diesen Inhalt zu sehen."
+
+msgid "You do not have permission to view this content."
+msgstr "Du hast keine Berechtigung, diesen Inhalt zu sehen."
+
+msgid "No embed code configured."
+msgstr "Kein Einbettungscode konfiguriert."
+
+msgid "Please configure the affiliate link."
+msgstr "Bitte konfiguriere den Affiliate-Link."
+
+msgid "Please enter a valid email address."
+msgstr "Bitte gib eine gültige E-Mail-Adresse ein."
+
+msgid "Request new link"
+msgstr "Neuen Link anfordern"
+
+msgid "Go to My Account"
+msgstr "Zu meinem Konto"
+
+msgid "Facebook"
+msgstr "Facebook"
+
+msgid "Instagram"
+msgstr "Instagram"
+
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+msgid "Xing"
+msgstr "Xing"
+
+msgid "YouTube"
+msgstr "YouTube"
+
+msgid "Column Span (Pre-Footer)"
+msgstr "Spaltenbreite (Vor-Fußzeile)"
+
+msgid "1 Column"
+msgstr "1 Spalte"
+
+msgid "3 Columns (Full Width)"
+msgstr "3 Spalten (Volle Breite)"
+
+msgid "This setting only applies when the widget is placed in the Pre-Footer area."
+msgstr "Diese Einstellung gilt nur für Widgets im Vor-Fußzeilen-Bereich."
+
+msgid "— None —"
+msgstr "— Keine —"
+
+msgid "&copy; %1$s %2$s. All rights reserved."
+msgstr "&copy; %1$s %2$s. Alle Rechte vorbehalten."
+
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+msgid "Edit <span class=\"screen-reader-text\">%s</span>"
+msgstr "Bearbeiten <span class=\"screen-reader-text\">%s</span>"
+
+msgid "Mystery Person"
+msgstr "Unbekannte Person"
+
+msgid "Blank"
+msgstr "Leer"
+
+msgid "Welcome, %s"
+msgstr "Willkommen, %s"
+
+msgid "Back"
+msgstr "Zurück"
+
+msgid "Highlight"
+msgstr "Hervorhebung"
+
+msgid "Filter posts by category"
+msgstr "Beiträge nach Kategorie filtern"
