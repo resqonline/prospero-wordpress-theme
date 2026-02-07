@@ -2,6 +2,22 @@
 
 A modern, accessible WordPress theme with dark mode support, Gutenberg blocks, and extensive customization options. Built for performance, SEO, GDPR compliance, and European Accessibility Act standards.
 
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Theme Structure](#theme-structure)
+- [Customization](#customization)
+- [Browser Support](#browser-support)
+- [Accessibility](#accessibility)
+- [GDPR Compliance](#gdpr-compliance)
+- [Security](#security)
+- [Credits](#credits)
+- [License](#license)
+- [Support](#support)
+- [Changelog](#changelog)
+- [Author](#author)
+
 ## Features
 
 ### Core Features
