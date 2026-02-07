@@ -113,33 +113,6 @@ When enabled in Customizer:
 ### Automatic Updates
 The theme includes automatic update functionality via GitHub releases. When a new version is released, you'll see an update notification in WordPress just like themes from WordPress.org.
 
-## Development Status
-
-### Completed
-- Core theme structure and architecture
-- Customizer with all color, typography, and layout settings
-- Dark mode / Light mode with user preference storage
-- Custom post types (Testimonials, Partners, Team, Projects)
-- Responsive design with CSS3 animations
-- Accessibility features (skip links, ARIA labels, keyboard navigation)
-- SEO optimizations (Schema.org markup, Open Graph tags)
-- Security measures (prepared queries, nonce verification, escaping)
-- All custom Gutenberg blocks (Text, CTA, Affiliate, Member, Testimonial, Partner, Team)
-- Flickity slider library integration (locally hosted)
-- All shortcodes for custom post types
-- All page templates (Startpage, Blog, Team, Projects, Login, Register, Forgot Password, My Account, Logged In)
-- Frontend login system with account management
-- Local avatar support (Gravatar disabled for GDPR)
-- Google Fonts local hosting with automatic download
-- Team member lightbox with contact/social info
-- Ajax filtering for projects
-- GitHub auto-update system
-
-### Remaining TODO
-- Social menu icon font integration
-- Team secondary image upload (hover effect)
-- Additional block variations (nice to have)
-
 ## Theme Structure
 
 ```
@@ -211,20 +184,6 @@ Navigate to Appearance → Customize → Post Types to enable/disable:
 Navigate to Appearance → Customize → Dark Mode Settings:
 - Enable/disable dark mode
 - Set default mode (Light, Dark, or Auto based on system preference)
-
-## WordPress.org Submission Guidelines
-
-This theme is being developed with WordPress.org theme directory submission in mind. To prepare for submission:
-
-1. Complete all TODO items
-2. Test with Theme Check plugin
-3. Test with Theme Unit Test data
-4. Ensure all strings are translatable
-5. Create proper screenshot.png (1200x900px)
-6. Review WordPress Theme Review requirements
-7. Test with accessibility tools
-8. Validate HTML/CSS
-9. Test across different browsers
 
 ## Browser Support
 
