@@ -240,3 +240,4 @@ require_once PROSPERO_THEME_DIR . '/inc/ajax-filters.php';
 require_once PROSPERO_THEME_DIR . '/inc/frontend-login.php';
 require_once PROSPERO_THEME_DIR . '/inc/security.php';
 require_once PROSPERO_THEME_DIR . '/inc/seo.php';
+require_once PROSPERO_THEME_DIR . '/inc/theme-updater.php';
