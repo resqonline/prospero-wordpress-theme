@@ -55,30 +55,31 @@ All post types can be enabled/disabled via Customizer:
 	- Fields: Title, Content, Image Gallery, Project Website, Testimonial link
 	- Custom order support
 
-### Custom Gutenberg Blocks (TODO)
-- Text Content Block
-- Call to Action Block (headline, text, button, images, layout options)
-- Affiliate Link Block (for scripts from affiliate programs)
-- Member Content Block (role-based visibility)
-- Testimonial Block (single/multiple, optional Flickity slider)
-- Partner Block (single/multiple, optional Flickity slider)
-- Team Block (multiple layouts: columns, list, grid, lightbox support)
+### Custom Gutenberg Blocks
+- **Text Content Block** - Styled text with alignment and width options
+- **Call to Action Block** - Headline, text, button, images, layout options
+- **Affiliate Link Block** - Styled external links with disclosure notice
+- **Member Content Block** - Role-based visibility for logged-in users
+- **Testimonial Block** - Grid or slider display with Flickity integration
+- **Partner Block** - Grid or slider display with Flickity integration
+- **Team Block** - Grid/slider layouts with lightbox support for contact info
 
-### Shortcodes (TODO)
-- `[testimonials category="" slider="yes"]`
-- `[partners category="" slider="yes"]`
-- `[team category="" layout="grid"]`
-- `[projects tags="" ajax_filter="yes"]`
+### Shortcodes
+- `[testimonials category="" slider="yes"]` - Display testimonials
+- `[partners category="" slider="yes"]` - Display partners
+- `[team category="" layout="grid"]` - Display team members
+- `[projects tags="" ajax_filter="yes"]` - Display projects with filtering
 
-### Page Templates (TODO)
-- Startpage (static home page)
-- Blog page
-- Team page
-- My Account (frontend login)
-- Register (frontend login)
-- Forgot Password (frontend login)
-- Logged In page (for restricted content)
-- Project page (with Ajax filtering)
+### Page Templates
+- **Startpage** - Static home page template
+- **Blog** - Blog listing page
+- **Team** - Team members display
+- **Projects** - Project portfolio with Ajax filtering
+- **Login** - Frontend login form
+- **Register** - Frontend registration form
+- **Forgot Password** - Password reset form
+- **My Account** - User profile and account management
+- **Logged In** - Restricted content for members
 
 ### Menu Locations
 - Main Menu
@@ -103,38 +104,41 @@ When enabled in Customizer:
 
 ## Installation
 
+### From GitHub
 1. Download or clone this repository
 2. Copy the `prospero-theme` folder to your WordPress installation's `/wp-content/themes/` directory
 3. Activate the theme through the WordPress admin panel
 4. Customize the theme via Appearance → Customize
 
+### Automatic Updates
+The theme includes automatic update functionality via GitHub releases. When a new version is released, you'll see an update notification in WordPress just like themes from WordPress.org.
+
 ## Development Status
 
 ### Completed
-✅ Core theme structure
-✅ Customizer with all settings
-✅ Dark mode / Light mode functionality
-✅ Custom post types (Testimonials, Partners, Team, Projects)
-✅ Responsive design with CSS3 animations
-✅ Accessibility features (skip links, ARIA labels, keyboard navigation)
-✅ SEO optimizations (structured data, Open Graph tags)
-✅ Security measures
-✅ Frontend login system basics
-✅ Menu locations
-✅ Basic template files
+- Core theme structure and architecture
+- Customizer with all color, typography, and layout settings
+- Dark mode / Light mode with user preference storage
+- Custom post types (Testimonials, Partners, Team, Projects)
+- Responsive design with CSS3 animations
+- Accessibility features (skip links, ARIA labels, keyboard navigation)
+- SEO optimizations (Schema.org markup, Open Graph tags)
+- Security measures (prepared queries, nonce verification, escaping)
+- All custom Gutenberg blocks (Text, CTA, Affiliate, Member, Testimonial, Partner, Team)
+- Flickity slider library integration (locally hosted)
+- All shortcodes for custom post types
+- All page templates (Startpage, Blog, Team, Projects, Login, Register, Forgot Password, My Account, Logged In)
+- Frontend login system with account management
+- Local avatar support (Gravatar disabled for GDPR)
+- Google Fonts local hosting with automatic download
+- Team member lightbox with contact/social info
+- Ajax filtering for projects
+- GitHub auto-update system
 
-### TODO
-- [ ] Custom Gutenberg blocks implementation
-- [ ] Flickity library integration
-- [ ] Complete shortcode implementations
-- [ ] Page templates (Startpage, Account, Register, etc.)
-- [ ] Ajax filtering for projects
-- [ ] Google Fonts local hosting implementation
-- [ ] Button style customizations in CSS
-- [ ] Complete frontend login pages
-- [ ] Team secondary image upload functionality
-- [ ] Lightbox implementation for team members
-- [ ] Complete testing and refinement
+### Remaining TODO
+- Social menu icon font integration
+- Team secondary image upload (hover effect)
+- Additional block variations (nice to have)
 
 ## Theme Structure
 
@@ -144,31 +148,43 @@ prospero-theme/
 │   ├── css/
 │   │   ├── main.css           # Main theme styles
 │   │   ├── dark-mode.css      # Dark mode specific styles
+│   │   ├── blocks.css         # Custom block styles
+│   │   ├── shortcodes.css     # Shortcode styles
 │   │   └── editor-style.css   # Gutenberg editor styles
 │   ├── js/
-│   │   ├── main.js            # Main JavaScript
-│   │   └── dark-mode.js       # Dark mode functionality
-│   └── fonts/                 # Local fonts directory
+│   │   ├── main.js            # Main JavaScript (menu, lightbox)
+│   │   ├── dark-mode.js       # Dark mode functionality
+│   │   ├── flickity-init.js   # Slider initialization
+│   │   ├── faq-accordion.js   # FAQ accordion functionality
+│   │   └── projects-filter.js # Ajax project filtering
+│   ├── fonts/                 # Local fonts (auto-downloaded)
+│   └── libs/
+│       └── flickity/          # Flickity slider library
 ├── blocks/                    # Custom Gutenberg blocks
 ├── inc/
+│   ├── ajax-filters.php       # Ajax filter handlers
+│   ├── blocks.php             # Block registration
 │   ├── customizer.php         # Theme Customizer settings
-│   ├── post-types.php         # Custom post types
-│   ├── template-functions.php # Template helper functions
-│   ├── gutenberg.php          # Gutenberg configuration
-│   ├── shortcodes.php         # Shortcode implementations
 │   ├── frontend-login.php     # Frontend login system
+│   ├── gutenberg.php          # Gutenberg configuration
+│   ├── post-types.php         # Custom post types
 │   ├── security.php           # Security functions
-│   └── seo.php                # SEO functions
+│   ├── seo.php                # SEO functions
+│   ├── shortcodes.php         # Shortcode implementations
+│   ├── template-functions.php # Template helper functions
+│   ├── theme-updater.php      # GitHub auto-updates
+│   ├── typography.php         # Google Fonts local hosting
+│   └── lib/
+│       └── plugin-update-checker/  # Update checker library
 ├── languages/                 # Translation files
-├── template-parts/
-│   ├── content.php            # Default post content template
-│   └── content-none.php       # No content found template
+├── template-parts/            # Reusable template components
 ├── functions.php              # Theme functions
-├── header.php                 # Header template
-├── footer.php                 # Footer template
-├── index.php                  # Main template
-├── style.css                  # Theme stylesheet with header
-└── logo.svg                   # Default logo file
+├── header.php / footer.php    # Header and footer templates
+├── index.php                  # Main template fallback
+├── template-*.php             # Page templates
+├── single-*.php               # Single post type templates
+├── archive-*.php              # Archive templates
+└── style.css                  # Theme stylesheet with header
 ```
 
 ## Customization
@@ -246,15 +262,9 @@ This theme follows the European Accessibility Act standards and WCAG 2.1 Level A
 ## Credits
 
 ### Libraries & Resources
-- Flickity (to be included) - https://flickity.metafizzy.co/
-- System fonts for performance
-
-### Inspiration
-Based on user's previous theme work and requirements from past projects including:
-- austrian arts sessions theme
-- BWG theme
-- ESI theme
-- And other custom client themes
+- **Flickity** (GPL v3) - https://flickity.metafizzy.co/ - Image carousels and sliders
+- **Plugin Update Checker** (MIT) - https://github.com/YahnisElsts/plugin-update-checker - GitHub auto-updates
+- **Google Fonts** (SIL Open Font License) - Downloaded and hosted locally for GDPR compliance
 
 ## License
 
@@ -267,15 +277,22 @@ For support, please open an issue in the GitHub repository.
 
 ## Changelog
 
-### Version 1.0.0 (Initial Development)
-- Initial theme structure
-- Customizer settings
-- Custom post types
-- Dark mode functionality
-- Responsive design
-- Accessibility features
-- SEO optimizations
-- Security implementations
+### Version 1.0.0
+- Complete theme structure and architecture
+- Full Customizer integration (colors, typography, layout, post types)
+- Dark mode / Light mode with preference storage
+- Four custom post types: Testimonials, Partners, Team, Projects
+- Seven custom Gutenberg blocks
+- All shortcodes for custom post types
+- Nine page templates including full frontend login system
+- Flickity slider integration
+- Google Fonts local hosting (GDPR compliant)
+- Team member lightbox functionality
+- Ajax project filtering
+- GitHub auto-update system
+- Accessibility features (European Accessibility Act compliant)
+- SEO optimizations (Schema.org, Open Graph)
+- Security hardening
 
 ## Author
 
