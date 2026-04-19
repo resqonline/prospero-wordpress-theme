@@ -31,15 +31,26 @@
 
 				question.addEventListener('click', function() {
 					const isExpanded = this.getAttribute('aria-expanded') === 'true';
-					
+
 					// Toggle current item
 					this.setAttribute('aria-expanded', !isExpanded);
 					answer.hidden = isExpanded;
-					
-					// Update toggle icon
+
+					// Swap the icon-font glyph on the toggle. The element
+					// carries `.icon-plus` when collapsed and `.icon-minus`
+					// when expanded; the matching CSS rules render the
+					// correct glyph via ::before. `aria-hidden` stays true
+					// on the toggle so the class swap is purely visual -
+					// the button's `aria-expanded` is the accessible state.
 					const toggle = this.querySelector('.faq-toggle');
 					if (toggle) {
-						toggle.textContent = isExpanded ? '+' : '−';
+						if (isExpanded) {
+							toggle.classList.remove('icon-minus');
+							toggle.classList.add('icon-plus');
+						} else {
+							toggle.classList.remove('icon-plus');
+							toggle.classList.add('icon-minus');
+						}
 					}
 				});
 

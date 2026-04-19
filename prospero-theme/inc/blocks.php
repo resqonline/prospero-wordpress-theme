@@ -34,6 +34,10 @@ function prospero_register_custom_blocks() {
 			'bgImageId'   => array( 'type' => 'number', 'default' => 0 ),
 			'bgImageUrl'  => array( 'type' => 'string', 'default' => '' ),
 			'bgColor'     => array( 'type' => 'string', 'default' => 'secondary' ),
+			'align'       => array( 'type' => 'string', 'default' => '' ),
+		),
+		'supports'        => array(
+			'align' => array( 'wide', 'full' ),
 		),
 		'render_callback' => 'prospero_render_cta_block',
 	) );
@@ -50,12 +54,17 @@ function prospero_register_custom_blocks() {
 	// Testimonials List Block
 	register_block_type( 'prospero/testimonials-list', array(
 		'attributes'      => array(
-			'ids'      => array( 'type' => 'array', 'default' => array() ),
-			'category' => array( 'type' => 'string', 'default' => '' ),
-			'count'    => array( 'type' => 'number', 'default' => 3 ),
-			'orderby'  => array( 'type' => 'string', 'default' => 'date' ),
-			'columns'  => array( 'type' => 'number', 'default' => 1 ),
-			'slider'   => array( 'type' => 'boolean', 'default' => false ),
+			'ids'         => array( 'type' => 'array', 'default' => array() ),
+			'category'    => array( 'type' => 'string', 'default' => '' ),
+			'count'       => array( 'type' => 'number', 'default' => 3 ),
+			'orderby'     => array( 'type' => 'string', 'default' => 'date' ),
+			'columns'     => array( 'type' => 'number', 'default' => 1 ),
+			'slider'      => array( 'type' => 'boolean', 'default' => false ),
+			'showRatings' => array( 'type' => 'boolean', 'default' => false ),
+			'align'       => array( 'type' => 'string', 'default' => '' ),
+		),
+		'supports'        => array(
+			'align' => array( 'wide', 'full' ),
 		),
 		'render_callback' => 'prospero_render_testimonials_list_block',
 	) );
@@ -116,6 +125,10 @@ function prospero_register_custom_blocks() {
 			'count'     => array( 'type' => 'number', 'default' => -1 ),
 			'orderby'   => array( 'type' => 'string', 'default' => 'menu_order' ),
 			'accordion' => array( 'type' => 'boolean', 'default' => true ),
+			'align'     => array( 'type' => 'string', 'default' => '' ),
+		),
+		'supports'        => array(
+			'align' => array( 'wide', 'full' ),
 		),
 		'render_callback' => 'prospero_render_faq_list_block',
 	) );
@@ -129,6 +142,10 @@ function prospero_register_custom_blocks() {
 			'orderby'  => array( 'type' => 'string', 'default' => 'menu_order' ),
 			'columns'  => array( 'type' => 'number', 'default' => 4 ),
 			'slider'   => array( 'type' => 'boolean', 'default' => false ),
+			'align'    => array( 'type' => 'string', 'default' => '' ),
+		),
+		'supports'        => array(
+			'align' => array( 'wide', 'full' ),
 		),
 		'render_callback' => 'prospero_render_partners_list_block',
 	) );
@@ -136,15 +153,21 @@ function prospero_register_custom_blocks() {
 	// Team List Block
 	register_block_type( 'prospero/team-list', array(
 		'attributes'      => array(
-			'ids'        => array( 'type' => 'array', 'default' => array() ),
-			'category'   => array( 'type' => 'string', 'default' => '' ),
-			'count'      => array( 'type' => 'number', 'default' => -1 ),
-			'orderby'    => array( 'type' => 'string', 'default' => 'menu_order' ),
-			'layout'     => array( 'type' => 'string', 'default' => 'columns' ),
-			'columns'    => array( 'type' => 'number', 'default' => 3 ),
-			'imageStyle' => array( 'type' => 'string', 'default' => 'square' ),
-			'lightbox'   => array( 'type' => 'boolean', 'default' => false ),
-			'slider'     => array( 'type' => 'boolean', 'default' => false ),
+			'ids'         => array( 'type' => 'array', 'default' => array() ),
+			'category'    => array( 'type' => 'string', 'default' => '' ),
+			'count'       => array( 'type' => 'number', 'default' => -1 ),
+			'orderby'     => array( 'type' => 'string', 'default' => 'menu_order' ),
+			'layout'      => array( 'type' => 'string', 'default' => 'columns' ),
+			'columns'     => array( 'type' => 'number', 'default' => 3 ),
+			'imageStyle'  => array( 'type' => 'string', 'default' => 'square' ),
+			'lightbox'    => array( 'type' => 'boolean', 'default' => false ),
+			'slider'      => array( 'type' => 'boolean', 'default' => false ),
+			'showContact' => array( 'type' => 'boolean', 'default' => true ),
+			'showSocial'  => array( 'type' => 'boolean', 'default' => true ),
+			'align'       => array( 'type' => 'string', 'default' => '' ),
+		),
+		'supports'        => array(
+			'align' => array( 'wide', 'full' ),
 		),
 		'render_callback' => 'prospero_render_team_list_block',
 	) );
@@ -179,8 +202,12 @@ function prospero_register_custom_blocks() {
 	// Partner Single Block
 	register_block_type( 'prospero/partner-single', array(
 		'attributes'      => array(
-			'partnerId' => array( 'type' => 'number', 'default' => 0 ),
-			'showLogo'  => array( 'type' => 'boolean', 'default' => true ),
+			'partnerId'       => array( 'type' => 'number', 'default' => 0 ),
+			'showLogo'        => array( 'type' => 'boolean', 'default' => true ),
+			'logoPosition'    => array( 'type' => 'string', 'default' => 'left' ),
+			'showVisitLink'   => array( 'type' => 'boolean', 'default' => false ),
+			'visitLinkText'   => array( 'type' => 'string', 'default' => '' ),
+			'visitLinkStyle'  => array( 'type' => 'string', 'default' => 'secondary' ),
 		),
 		'render_callback' => 'prospero_render_partner_single_block',
 	) );
@@ -210,9 +237,13 @@ function prospero_render_cta_block( $attributes ) {
 	$image_url    = ! empty( $attributes['imageUrl'] ) ? $attributes['imageUrl'] : '';
 	$bg_image_url = ! empty( $attributes['bgImageUrl'] ) ? $attributes['bgImageUrl'] : '';
 	$bg_color     = ! empty( $attributes['bgColor'] ) ? $attributes['bgColor'] : 'secondary';
+	$align        = ! empty( $attributes['align'] ) ? $attributes['align'] : '';
 	
 	// Build wrapper classes
 	$wrapper_classes = array( 'prospero-cta', 'prospero-cta-' . esc_attr( $layout ) );
+	if ( $align ) {
+		$wrapper_classes[] = 'align' . esc_attr( $align );
+	}
 	if ( $bg_color ) {
 		$wrapper_classes[] = 'has-' . esc_attr( $bg_color ) . '-background-color';
 	}
@@ -243,36 +274,38 @@ function prospero_render_cta_block( $attributes ) {
 			<div class="prospero-cta-overlay"></div>
 		<?php endif; ?>
 		
-		<?php if ( $image_url && $layout !== 'center' ) : ?>
-			<div class="prospero-cta-image">
-				<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy" />
-			</div>
-		<?php endif; ?>
-		
-		<div class="prospero-cta-content <?php echo esc_attr( $text_color_class ); ?>">
-			<?php if ( $image_url && $layout === 'center' ) : ?>
-				<div class="prospero-cta-image prospero-cta-image-center">
+		<div class="prospero-cta-inner">
+			<?php if ( $image_url && $layout !== 'center' ) : ?>
+				<div class="prospero-cta-image">
 					<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy" />
 				</div>
 			<?php endif; ?>
 			
-			<?php if ( $heading ) : ?>
-				<h2 class="prospero-cta-heading"><?php echo esc_html( $heading ); ?></h2>
-			<?php endif; ?>
-			
-			<?php if ( $content ) : ?>
-				<div class="prospero-cta-text">
-					<?php echo wp_kses_post( wpautop( $content ) ); ?>
-				</div>
-			<?php endif; ?>
-			
-			<?php if ( $button_url && $button_text ) : ?>
-				<div class="prospero-cta-button">
-					<a href="<?php echo esc_url( $button_url ); ?>" class="button button-<?php echo esc_attr( $button_style ); ?>">
-						<?php echo esc_html( $button_text ); ?>
-					</a>
-				</div>
-			<?php endif; ?>
+			<div class="prospero-cta-content <?php echo esc_attr( $text_color_class ); ?>">
+				<?php if ( $image_url && $layout === 'center' ) : ?>
+					<div class="prospero-cta-image prospero-cta-image-center">
+						<img src="<?php echo esc_url( $image_url ); ?>" alt="" loading="lazy" />
+					</div>
+				<?php endif; ?>
+				
+				<?php if ( $heading ) : ?>
+					<h2 class="prospero-cta-heading"><?php echo esc_html( $heading ); ?></h2>
+				<?php endif; ?>
+				
+				<?php if ( $content ) : ?>
+					<div class="prospero-cta-text">
+						<?php echo wp_kses_post( wpautop( $content ) ); ?>
+					</div>
+				<?php endif; ?>
+				
+				<?php if ( $button_url && $button_text ) : ?>
+					<div class="prospero-cta-button">
+						<a href="<?php echo esc_url( $button_url ); ?>" class="button button-<?php echo esc_attr( $button_style ); ?>">
+							<?php echo esc_html( $button_text ); ?>
+						</a>
+					</div>
+				<?php endif; ?>
+			</div>
 		</div>
 	</div>
 	<?php
@@ -319,23 +352,33 @@ function prospero_render_testimonial_single_block( $attributes ) {
  * Render Testimonials List Block
  */
 function prospero_render_testimonials_list_block( $attributes ) {
-	$ids      = isset( $attributes['ids'] ) && is_array( $attributes['ids'] ) ? array_map( 'absint', $attributes['ids'] ) : array();
-	$category = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
-	$count    = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : 3;
-	$orderby  = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'date';
-	$columns  = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 1;
-	$slider   = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
+	$ids          = isset( $attributes['ids'] ) && is_array( $attributes['ids'] ) ? array_map( 'absint', $attributes['ids'] ) : array();
+	$category     = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
+	$count        = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : 3;
+	$orderby      = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'date';
+	$columns      = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 1;
+	$slider       = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
+	$show_ratings = isset( $attributes['showRatings'] ) && $attributes['showRatings'] ? 'yes' : 'no';
+	$align        = ! empty( $attributes['align'] ) ? $attributes['align'] : '';
 	
-	// Use the shortcode function
-	return prospero_testimonials_shortcode( array(
-		'ids'      => ! empty( $ids ) ? implode( ',', $ids ) : '',
-		'category' => $category,
-		'count'    => $count,
-		'orderby'  => $orderby,
-		'order'    => 'DESC',
-		'columns'  => $columns,
-		'slider'   => $slider,
+	// Get shortcode output
+	$output = prospero_testimonials_shortcode( array(
+		'ids'          => ! empty( $ids ) ? implode( ',', $ids ) : '',
+		'category'     => $category,
+		'count'        => $count,
+		'orderby'      => $orderby,
+		'order'        => 'DESC',
+		'columns'      => $columns,
+		'slider'       => $slider,
+		'show_ratings' => $show_ratings,
 	) );
+	
+	// Wrap with alignment class if set
+	if ( $align ) {
+		$output = '<div class="align' . esc_attr( $align ) . '">' . $output . '</div>';
+	}
+	
+	return $output;
 }
 
 /**
@@ -664,6 +707,7 @@ function prospero_render_faq_list_block( $attributes ) {
 	$count = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : -1;
 	$orderby = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'menu_order';
 	$accordion = isset( $attributes['accordion'] ) && $attributes['accordion'] ? true : false;
+	$align = ! empty( $attributes['align'] ) ? $attributes['align'] : '';
 	
 	$args = array(
 		'post_type'      => 'faq',
@@ -681,6 +725,20 @@ function prospero_render_faq_list_block( $attributes ) {
 				'terms'    => $category,
 			),
 		);
+	} elseif ( function_exists( 'prospero_get_hidden_faq_category_ids' ) ) {
+		// "All categories" mode - exclude faq_category terms flagged
+		// "Hide from all-FAQs view" (plus their descendants).
+		$hidden_ids = prospero_get_hidden_faq_category_ids();
+		if ( ! empty( $hidden_ids ) ) {
+			$args['tax_query'] = array(
+				array(
+					'taxonomy' => 'faq_category',
+					'field'    => 'term_id',
+					'terms'    => $hidden_ids,
+					'operator' => 'NOT IN',
+				),
+			);
+		}
 	}
 	
 	$faqs = get_posts( $args );
@@ -689,31 +747,78 @@ function prospero_render_faq_list_block( $attributes ) {
 		return '<p>' . esc_html__( 'No FAQs found.', 'prospero-theme' ) . '</p>';
 	}
 	
+	// Build wrapper classes for the outer FAQPage container. When we
+	// group by category below, each group gets its own inner
+	// `.faq-accordion` (or no wrapper for flat lists) - so the outer
+	// element stops carrying `.faq-accordion` to keep selectors clean.
+	$wrapper_classes   = array( 'prospero-faq-list' );
+	$should_group      = empty( $category ) && function_exists( 'prospero_group_faqs_by_category' );
+	$inline_accordion  = $accordion && ! $should_group;
+	if ( $inline_accordion ) {
+		$wrapper_classes[] = 'faq-accordion';
+	}
+	if ( $align ) {
+		$wrapper_classes[] = 'align' . esc_attr( $align );
+	}
+
+	// Helper that renders a single FAQ item in either the accordion or
+	// flat presentation.
+	$render_faq_item = function ( $faq ) use ( $accordion ) {
+		?>
+		<div class="faq-item<?php echo $accordion ? ' faq-accordion-item' : ''; ?>" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+			<?php if ( $accordion ) : ?>
+				<button class="faq-question" aria-expanded="false" itemprop="name">
+					<span class="faq-question-text"><?php echo esc_html( $faq->post_title ); ?></span>
+					<span class="faq-toggle icon-plus" aria-hidden="true"></span>
+				</button>
+				<div class="faq-answer" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+					<div itemprop="text">
+						<?php echo wp_kses_post( apply_filters( 'the_content', $faq->post_content ) ); ?>
+					</div>
+				</div>
+			<?php else : ?>
+				<h3 class="faq-question" itemprop="name"><?php echo esc_html( $faq->post_title ); ?></h3>
+				<div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+					<div itemprop="text">
+						<?php echo wp_kses_post( apply_filters( 'the_content', $faq->post_content ) ); ?>
+					</div>
+				</div>
+			<?php endif; ?>
+		</div>
+		<?php
+	};
+
 	ob_start();
 	?>
-	<div class="prospero-faq-list<?php echo $accordion ? ' faq-accordion' : ''; ?>" itemscope itemtype="https://schema.org/FAQPage">
-		<?php foreach ( $faqs as $faq ) : ?>
-			<div class="faq-item<?php echo $accordion ? ' faq-accordion-item' : ''; ?>" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" itemscope itemtype="https://schema.org/FAQPage">
+		<?php if ( $should_group ) : ?>
+			<?php
+			$groups        = prospero_group_faqs_by_category( $faqs );
+			$show_headings = count( $groups ) > 1;
+			?>
+			<?php foreach ( $groups as $group ) : ?>
+				<?php if ( $show_headings ) : ?>
+					<h3 class="faq-group-title">
+						<?php
+						if ( $group['term'] ) {
+							echo esc_html( $group['term']->name );
+						} else {
+							esc_html_e( 'Uncategorised', 'prospero-theme' );
+						}
+						?>
+					</h3>
+				<?php endif; ?>
 				<?php if ( $accordion ) : ?>
-					<button class="faq-question" aria-expanded="false" itemprop="name">
-						<?php echo esc_html( $faq->post_title ); ?>
-						<span class="faq-toggle" aria-hidden="true">+</span>
-					</button>
-					<div class="faq-answer" hidden itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-						<div itemprop="text">
-							<?php echo wp_kses_post( apply_filters( 'the_content', $faq->post_content ) ); ?>
-						</div>
+					<div class="faq-accordion">
+						<?php foreach ( $group['posts'] as $faq ) { $render_faq_item( $faq ); } ?>
 					</div>
 				<?php else : ?>
-					<h3 class="faq-question" itemprop="name"><?php echo esc_html( $faq->post_title ); ?></h3>
-					<div class="faq-answer" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-						<div itemprop="text">
-							<?php echo wp_kses_post( apply_filters( 'the_content', $faq->post_content ) ); ?>
-						</div>
-					</div>
+					<?php foreach ( $group['posts'] as $faq ) { $render_faq_item( $faq ); } ?>
 				<?php endif; ?>
-			</div>
-		<?php endforeach; ?>
+			<?php endforeach; ?>
+		<?php else : ?>
+			<?php foreach ( $faqs as $faq ) { $render_faq_item( $faq ); } ?>
+		<?php endif; ?>
 	</div>
 	<?php
 	return ob_get_clean();
@@ -729,9 +834,10 @@ function prospero_render_partners_list_block( $attributes ) {
 	$orderby  = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'menu_order';
 	$columns  = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 4;
 	$slider   = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
+	$align    = ! empty( $attributes['align'] ) ? $attributes['align'] : '';
 	
-	// Use the shortcode function
-	return prospero_partners_shortcode( array(
+	// Get shortcode output
+	$output = prospero_partners_shortcode( array(
 		'ids'      => ! empty( $ids ) ? implode( ',', $ids ) : '',
 		'category' => $category,
 		'count'    => $count,
@@ -740,35 +846,54 @@ function prospero_render_partners_list_block( $attributes ) {
 		'columns'  => $columns,
 		'slider'   => $slider,
 	) );
+	
+	// Wrap with alignment class if set
+	if ( $align ) {
+		$output = '<div class="align' . esc_attr( $align ) . '">' . $output . '</div>';
+	}
+	
+	return $output;
 }
 
 /**
  * Render Team List Block
  */
 function prospero_render_team_list_block( $attributes ) {
-	$ids        = isset( $attributes['ids'] ) && is_array( $attributes['ids'] ) ? array_map( 'absint', $attributes['ids'] ) : array();
-	$category   = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
-	$count      = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : -1;
-	$orderby    = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'menu_order';
-	$layout     = isset( $attributes['layout'] ) ? sanitize_text_field( $attributes['layout'] ) : 'columns';
-	$columns    = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 3;
-	$imageStyle = isset( $attributes['imageStyle'] ) ? sanitize_text_field( $attributes['imageStyle'] ) : 'square';
-	$lightbox   = isset( $attributes['lightbox'] ) && $attributes['lightbox'] ? 'yes' : 'no';
-	$slider     = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
+	$ids         = isset( $attributes['ids'] ) && is_array( $attributes['ids'] ) ? array_map( 'absint', $attributes['ids'] ) : array();
+	$category    = isset( $attributes['category'] ) ? sanitize_text_field( $attributes['category'] ) : '';
+	$count       = isset( $attributes['count'] ) ? intval( $attributes['count'] ) : -1;
+	$orderby     = isset( $attributes['orderby'] ) ? sanitize_text_field( $attributes['orderby'] ) : 'menu_order';
+	$layout      = isset( $attributes['layout'] ) ? sanitize_text_field( $attributes['layout'] ) : 'columns';
+	$columns     = isset( $attributes['columns'] ) ? absint( $attributes['columns'] ) : 3;
+	$imageStyle  = isset( $attributes['imageStyle'] ) ? sanitize_text_field( $attributes['imageStyle'] ) : 'square';
+	$lightbox    = isset( $attributes['lightbox'] ) && $attributes['lightbox'] ? 'yes' : 'no';
+	$slider      = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
+	$showContact = isset( $attributes['showContact'] ) && $attributes['showContact'] ? 'yes' : 'no';
+	$showSocial  = isset( $attributes['showSocial'] ) && $attributes['showSocial'] ? 'yes' : 'no';
+	$align       = ! empty( $attributes['align'] ) ? $attributes['align'] : '';
 	
-	// Use the shortcode function
-	return prospero_team_shortcode( array(
-		'ids'         => ! empty( $ids ) ? implode( ',', $ids ) : '',
-		'category'    => $category,
-		'count'       => $count,
-		'orderby'     => $orderby,
-		'order'       => 'ASC',
-		'layout'      => $layout,
-		'columns'     => $columns,
-		'image_style' => $imageStyle,
-		'lightbox'    => $lightbox,
-		'slider'      => $slider,
+	// Get shortcode output
+	$output = prospero_team_shortcode( array(
+		'ids'          => ! empty( $ids ) ? implode( ',', $ids ) : '',
+		'category'     => $category,
+		'count'        => $count,
+		'orderby'      => $orderby,
+		'order'        => 'ASC',
+		'layout'       => $layout,
+		'columns'      => $columns,
+		'image_style'  => $imageStyle,
+		'lightbox'     => $lightbox,
+		'slider'       => $slider,
+		'show_contact' => $showContact,
+		'show_social'  => $showSocial,
 	) );
+	
+	// Wrap with alignment class if set
+	if ( $align ) {
+		$output = '<div class="align' . esc_attr( $align ) . '">' . $output . '</div>';
+	}
+	
+	return $output;
 }
 
 /**
@@ -918,27 +1043,61 @@ function prospero_render_affiliate_link_block( $attributes ) {
 
 /**
  * Render Partner Single Block
+ *
+ * Layout: logo and content sit side-by-side (flex row). `logoPosition`
+ * picks which side the logo is on (`left` default, `right` reverses the
+ * row). The logo is automatically wrapped in a link to the partner's
+ * external URL (post meta `_prospero_partner_url`) whenever one is set,
+ * matching the behaviour of the partners list / content-partner.php.
+ * An optional "Visit website" button can be shown under the content for
+ * an explicit CTA, styled via the existing button system.
  */
 function prospero_render_partner_single_block( $attributes ) {
-	$partner_id = isset( $attributes['partnerId'] ) ? absint( $attributes['partnerId'] ) : 0;
-	$show_logo = isset( $attributes['showLogo'] ) ? (bool) $attributes['showLogo'] : true;
-	
+	$partner_id        = isset( $attributes['partnerId'] ) ? absint( $attributes['partnerId'] ) : 0;
+	$show_logo         = isset( $attributes['showLogo'] ) ? (bool) $attributes['showLogo'] : true;
+	$logo_position     = isset( $attributes['logoPosition'] ) && in_array( $attributes['logoPosition'], array( 'left', 'right' ), true )
+		? $attributes['logoPosition']
+		: 'left';
+	$show_visit_link   = ! empty( $attributes['showVisitLink'] );
+	$visit_link_text   = isset( $attributes['visitLinkText'] ) ? trim( (string) $attributes['visitLinkText'] ) : '';
+	$visit_link_style  = isset( $attributes['visitLinkStyle'] ) && in_array( $attributes['visitLinkStyle'], array( 'primary', 'secondary', 'tertiary' ), true )
+		? $attributes['visitLinkStyle']
+		: 'secondary';
+
 	if ( ! $partner_id ) {
 		return '<p>' . esc_html__( 'Please select a partner.', 'prospero-theme' ) . '</p>';
 	}
-	
+
 	$partner = get_post( $partner_id );
-	
+
 	if ( ! $partner || $partner->post_type !== 'partner' ) {
 		return '';
 	}
-	
+
+	$partner_url     = get_post_meta( $partner_id, '_prospero_partner_url', true );
+	$wrapper_classes = array(
+		'prospero-partner-single',
+		'partner-single-logo-' . $logo_position,
+	);
+	if ( ! ( $show_logo && has_post_thumbnail( $partner_id ) ) ) {
+		$wrapper_classes[] = 'partner-single-no-logo';
+	}
+
 	ob_start();
 	?>
-	<div class="prospero-partner-single">
+	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>">
 		<?php if ( $show_logo && has_post_thumbnail( $partner_id ) ) : ?>
 			<div class="partner-logo">
-				<?php echo get_the_post_thumbnail( $partner_id, 'medium', array( 'class' => 'partner-thumbnail' ) ); ?>
+				<?php
+				$thumbnail = get_the_post_thumbnail( $partner_id, 'medium', array( 'class' => 'partner-thumbnail' ) );
+				if ( $partner_url ) :
+					?>
+					<a href="<?php echo esc_url( $partner_url ); ?>" target="_blank" rel="noopener" title="<?php echo esc_attr( $partner->post_title ); ?>">
+						<?php echo $thumbnail; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_the_post_thumbnail returns safe HTML ?>
+					</a>
+				<?php else : ?>
+					<?php echo $thumbnail; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_the_post_thumbnail returns safe HTML ?>
+				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 		<div class="partner-content">
@@ -946,6 +1105,23 @@ function prospero_render_partner_single_block( $attributes ) {
 			<div class="partner-description">
 				<?php echo wp_kses_post( apply_filters( 'the_content', $partner->post_content ) ); ?>
 			</div>
+			<?php if ( $show_visit_link && $partner_url ) :
+				if ( '' === $visit_link_text ) {
+					/* translators: Default text for the "Visit website" button on the partner single block. */
+					$visit_link_text = __( 'Visit website', 'prospero-theme' );
+				}
+				?>
+				<p class="partner-visit">
+					<a
+						href="<?php echo esc_url( $partner_url ); ?>"
+						target="_blank"
+						rel="noopener"
+						class="button button-<?php echo esc_attr( $visit_link_style ); ?> no-external-icon"
+					>
+						<?php echo esc_html( $visit_link_text ); ?>
+					</a>
+				</p>
+			<?php endif; ?>
 		</div>
 	</div>
 	<?php

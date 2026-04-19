@@ -199,36 +199,71 @@ function prospero_download_google_font( $font ) {
 }
 
 /**
+ * Get the list of configured (non-system) fonts to load.
+ *
+ * @return array Associative array of type => font name.
+ */
+function prospero_get_configured_fonts() {
+	$heading_font = get_theme_mod( 'prospero_heading_font', 'system' );
+	$body_font    = get_theme_mod( 'prospero_body_font', 'system' );
+
+	$fonts_to_load = array();
+
+	// Add heading font if not system
+	if ( $heading_font !== 'system' && ! empty( $heading_font ) ) {
+		$fonts_to_load['heading'] = prospero_sanitize_font_name( $heading_font );
+	}
+
+	// Add body font if not system and different from heading
+	if ( $body_font !== 'system' && ! empty( $body_font ) && $body_font !== $heading_font ) {
+		$fonts_to_load['body'] = prospero_sanitize_font_name( $body_font );
+	}
+
+	return $fonts_to_load;
+}
+
+/**
+ * Ensure all configured fonts are downloaded locally.
+ *
+ * Attempts to download any missing fonts. Returns an array of fonts
+ * that could not be downloaded (still missing after the attempt).
+ *
+ * @return array List of font names that failed to download.
+ */
+function prospero_ensure_fonts_downloaded() {
+	$fonts  = prospero_get_configured_fonts();
+	$failed = array();
+
+	foreach ( $fonts as $font ) {
+		if ( prospero_is_font_local( $font ) ) {
+			continue;
+		}
+
+		prospero_download_google_font( $font );
+
+		if ( ! prospero_is_font_local( $font ) ) {
+			$failed[] = $font;
+		}
+	}
+
+	return $failed;
+}
+
+/**
  * Enqueue Google Fonts (locally hosted)
  */
 function prospero_enqueue_fonts() {
-	$heading_font = get_theme_mod( 'prospero_heading_font', 'system' );
-	$body_font = get_theme_mod( 'prospero_body_font', 'system' );
-	
-	$fonts_to_load = array();
-	
-	// Add heading font if not system
-	if ( $heading_font !== 'system' && ! empty( $heading_font ) ) {
-		$fonts_to_load['heading'] = $heading_font;
-	}
-	
-	// Add body font if not system and different from heading
-	if ( $body_font !== 'system' && ! empty( $body_font ) && $body_font !== $heading_font ) {
-		$fonts_to_load['body'] = $body_font;
-	}
-	
+	$fonts_to_load = prospero_get_configured_fonts();
+
 	// Load each font
 	foreach ( $fonts_to_load as $type => $font ) {
-		$font = prospero_sanitize_font_name( $font );
-		
 		// Check if font is already local, if not, try to download it
 		if ( ! prospero_is_font_local( $font ) ) {
 			prospero_download_google_font( $font );
 		}
-		
+
 		// Enqueue the font if it exists locally
 		if ( prospero_is_font_local( $font ) ) {
-			$font_slug = sanitize_title( $font );
 			wp_enqueue_style(
 				"prospero-font-{$type}",
 				prospero_get_local_font_url( $font ),
@@ -240,6 +275,25 @@ function prospero_enqueue_fonts() {
 }
 add_action( 'wp_enqueue_scripts', 'prospero_enqueue_fonts', 5 );
 add_action( 'enqueue_block_editor_assets', 'prospero_enqueue_fonts', 5 );
+
+/**
+ * Trigger font download in the admin area as well.
+ *
+ * Without this, fonts are only downloaded when the frontend or the
+ * block editor is loaded, which causes the admin notice to persist
+ * indefinitely for admins who do not visit those contexts.
+ */
+function prospero_admin_ensure_fonts_downloaded() {
+	prospero_ensure_fonts_downloaded();
+}
+add_action( 'admin_init', 'prospero_admin_ensure_fonts_downloaded' );
+
+/**
+ * Trigger font download immediately after the Customizer saves, so
+ * the admin notice disappears on the next page load once the user
+ * picks a new font.
+ */
+add_action( 'customize_save_after', 'prospero_admin_ensure_fonts_downloaded' );
 
 /**
  * Add font family CSS variables
@@ -295,42 +349,36 @@ function prospero_get_font_stack( $font ) {
 }
 
 /**
- * Admin notice to inform about font download on first use
+ * Admin notice to inform about font download status.
+ *
+ * Only displays when one or more configured fonts could not be
+ * downloaded locally. Once fonts are present in /assets/fonts/, the
+ * notice disappears automatically.
  */
 function prospero_font_download_notice() {
-	$heading_font = get_theme_mod( 'prospero_heading_font', 'system' );
-	$body_font = get_theme_mod( 'prospero_body_font', 'system' );
-	
-	$fonts_to_check = array();
-	if ( $heading_font !== 'system' ) {
-		$fonts_to_check[] = $heading_font;
-	}
-	if ( $body_font !== 'system' && $body_font !== $heading_font ) {
-		$fonts_to_check[] = $body_font;
-	}
-	
 	$pending_fonts = array();
-	foreach ( $fonts_to_check as $font ) {
+	foreach ( prospero_get_configured_fonts() as $font ) {
 		if ( ! prospero_is_font_local( $font ) ) {
 			$pending_fonts[] = $font;
 		}
 	}
-	
-	if ( ! empty( $pending_fonts ) ) {
-		?>
-		<div class="notice notice-info is-dismissible">
-			<p>
-				<strong><?php esc_html_e( 'Prospero Theme:', 'prospero-theme' ); ?></strong>
-				<?php
-				printf(
-					/* translators: %s: list of font names */
-					esc_html__( 'Google Fonts will be downloaded locally on the next page load: %s', 'prospero-theme' ),
-					esc_html( implode( ', ', $pending_fonts ) )
-				);
-				?>
-			</p>
-		</div>
-		<?php
+
+	if ( empty( $pending_fonts ) ) {
+		return;
 	}
+	?>
+	<div class="notice notice-warning is-dismissible">
+		<p>
+			<strong><?php esc_html_e( 'Prospero Theme:', 'prospero-theme' ); ?></strong>
+			<?php
+			printf(
+				/* translators: %s: list of font names */
+				esc_html__( 'The following Google Fonts could not be downloaded locally yet: %s. They will be retried on the next admin or frontend page load.', 'prospero-theme' ),
+				esc_html( implode( ', ', $pending_fonts ) )
+			);
+			?>
+		</p>
+	</div>
+	<?php
 }
 add_action( 'admin_notices', 'prospero_font_download_notice' );

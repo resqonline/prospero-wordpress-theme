@@ -324,6 +324,16 @@ function prospero_add_meta_boxes() {
 			'normal',
 			'high'
 		);
+		
+		// Star ratings
+		add_meta_box(
+			'prospero_testimonial_ratings',
+			esc_html__( 'Star Ratings', 'prospero-theme' ),
+			'prospero_testimonial_ratings_callback',
+			'testimonial',
+			'normal',
+			'default'
+		);
 	}
 
 	// Partner website URL
@@ -492,6 +502,92 @@ function prospero_testimonial_display_name_callback( $post ) {
 	$value = get_post_meta( $post->ID, '_prospero_testimonial_display_name', true );
 	echo '<p class="description">' . esc_html__( 'The name shown on the frontend (e.g., "John D., CEO at Company")', 'prospero-theme' ) . '</p>';
 	echo '<input type="text" name="prospero_testimonial_display_name" value="' . esc_attr( $value ) . '" class="widefat" />';
+}
+
+/**
+ * Testimonial star ratings callback
+ */
+function prospero_testimonial_ratings_callback( $post ) {
+	wp_nonce_field( 'prospero_testimonial_ratings_nonce', 'prospero_testimonial_ratings_nonce' );
+	$ratings = get_post_meta( $post->ID, '_prospero_testimonial_ratings', true );
+	$ratings = is_array( $ratings ) ? $ratings : array();
+	
+	// Get default rating labels from Customizer
+	$default_labels = get_theme_mod( 'prospero_testimonial_rating_labels', '' );
+	$default_labels_array = array_filter( array_map( 'trim', explode( "\n", $default_labels ) ) );
+	?>
+	<p class="description">
+		<?php esc_html_e( 'Add one or more star ratings. Each rating can have an optional label (e.g., "Service", "Quality", "Price").', 'prospero-theme' ); ?>
+	</p>
+	
+	<div id="prospero-ratings-container">
+		<?php
+		if ( ! empty( $ratings ) ) {
+			foreach ( $ratings as $index => $rating ) {
+				prospero_render_rating_row( $index, $rating );
+			}
+		}
+		?>
+	</div>
+	
+	<p>
+		<button type="button" class="button" id="prospero-add-rating">
+			<?php esc_html_e( 'Add Rating', 'prospero-theme' ); ?>
+		</button>
+		<?php if ( ! empty( $default_labels_array ) ) : ?>
+			<button type="button" class="button" id="prospero-add-default-ratings" style="margin-left: 10px;">
+				<?php esc_html_e( 'Add Default Ratings', 'prospero-theme' ); ?>
+			</button>
+		<?php endif; ?>
+	</p>
+	
+	<script type="text/template" id="prospero-rating-template">
+		<?php prospero_render_rating_row( '{{INDEX}}', array( 'label' => '', 'value' => 5 ) ); ?>
+	</script>
+	
+	<?php if ( ! empty( $default_labels_array ) ) : ?>
+	<script type="text/javascript">
+		var prosperoDefaultRatingLabels = <?php echo wp_json_encode( $default_labels_array ); ?>;
+	</script>
+	<?php endif; ?>
+	<?php
+}
+
+/**
+ * Render a single rating row
+ */
+function prospero_render_rating_row( $index, $rating ) {
+	$label = isset( $rating['label'] ) ? $rating['label'] : '';
+	$value = isset( $rating['value'] ) ? intval( $rating['value'] ) : 5;
+	?>
+	<div class="prospero-rating-row" style="display: flex; gap: 10px; align-items: center; margin-bottom: 10px; padding: 10px; background: #f9f9f9; border: 1px solid #ddd;">
+		<input 
+			type="text" 
+			name="prospero_testimonial_ratings[<?php echo esc_attr( $index ); ?>][label]" 
+			value="<?php echo esc_attr( $label ); ?>" 
+			placeholder="<?php esc_attr_e( 'Label (optional)', 'prospero-theme' ); ?>"
+			style="flex: 1; min-width: 150px;"
+		/>
+		<select 
+			name="prospero_testimonial_ratings[<?php echo esc_attr( $index ); ?>][value]" 
+			style="width: 80px;"
+		>
+			<?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+				<option value="<?php echo esc_attr( $i ); ?>" <?php selected( $value, $i ); ?>>
+					<?php echo esc_html( $i ); ?> <?php echo esc_html( _n( 'Star', 'Stars', $i, 'prospero-theme' ) ); ?>
+				</option>
+			<?php endfor; ?>
+		</select>
+		<div class="prospero-rating-preview" style="display: flex; gap: 2px; color: #f5a623;">
+			<?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+				<span class="dashicons <?php echo $i <= $value ? 'dashicons-star-filled' : 'dashicons-star-empty'; ?>"></span>
+			<?php endfor; ?>
+		</div>
+		<button type="button" class="button prospero-remove-rating" aria-label="<?php esc_attr_e( 'Remove rating', 'prospero-theme' ); ?>">
+			<span class="dashicons dashicons-no-alt"></span>
+		</button>
+	</div>
+	<?php
 }
 
 /**
@@ -683,6 +779,41 @@ function prospero_save_meta_boxes( $post_id ) {
 			update_post_meta( $post_id, '_prospero_testimonial_display_name', sanitize_text_field( $_POST['prospero_testimonial_display_name'] ) );
 		}
 	}
+	
+	// Testimonial ratings
+	if ( isset( $_POST['prospero_testimonial_ratings_nonce'] ) && wp_verify_nonce( $_POST['prospero_testimonial_ratings_nonce'], 'prospero_testimonial_ratings_nonce' ) ) {
+		if ( isset( $_POST['prospero_testimonial_ratings'] ) && is_array( $_POST['prospero_testimonial_ratings'] ) ) {
+			$ratings    = array();
+			$raw_rows   = wp_unslash( $_POST['prospero_testimonial_ratings'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Each row field is individually sanitized below.
+
+			foreach ( $raw_rows as $rating ) {
+				// Defensive: the row must itself be an array of field values.
+				if ( ! is_array( $rating ) ) {
+					continue;
+				}
+
+				$value = isset( $rating['value'] ) ? intval( $rating['value'] ) : 0;
+				if ( $value < 1 || $value > 5 ) {
+					// Skip rows with no / out-of-range star value so we don't
+					// silently coerce to 1 or 5.
+					continue;
+				}
+
+				$ratings[] = array(
+					'label' => isset( $rating['label'] ) ? sanitize_text_field( $rating['label'] ) : '',
+					'value' => $value,
+				);
+			}
+
+			if ( ! empty( $ratings ) ) {
+				update_post_meta( $post_id, '_prospero_testimonial_ratings', $ratings );
+			} else {
+				delete_post_meta( $post_id, '_prospero_testimonial_ratings' );
+			}
+		} else {
+			delete_post_meta( $post_id, '_prospero_testimonial_ratings' );
+		}
+	}
 
 	// Partner URL
 	if ( isset( $_POST['prospero_partner_url_nonce'] ) && wp_verify_nonce( $_POST['prospero_partner_url_nonce'], 'prospero_partner_url_nonce' ) ) {
@@ -834,13 +965,19 @@ function prospero_admin_enqueue_scripts( $hook ) {
 		true
 	);
 	
+	// Get default rating labels from Customizer
+	$rating_labels_raw = get_theme_mod( 'prospero_testimonial_rating_labels', '' );
+	$rating_labels = array_filter( array_map( 'trim', explode( "\n", $rating_labels_raw ) ) );
+	
 	// Localize script
 	wp_localize_script( 'prospero-admin-meta-boxes', 'prosperoAdmin', array(
-		'uploadImageTitle'  => esc_html__( 'Select Image', 'prospero-theme' ),
-		'useImageText'      => esc_html__( 'Use this image', 'prospero-theme' ),
-		'addGalleryTitle'   => esc_html__( 'Add Gallery Images', 'prospero-theme' ),
-		'addToGalleryText'  => esc_html__( 'Add to gallery', 'prospero-theme' ),
-		'removeImageLabel'  => esc_html__( 'Remove image', 'prospero-theme' ),
+		'uploadImageTitle'      => esc_html__( 'Select Image', 'prospero-theme' ),
+		'useImageText'          => esc_html__( 'Use this image', 'prospero-theme' ),
+		'addGalleryTitle'       => esc_html__( 'Add Gallery Images', 'prospero-theme' ),
+		'addToGalleryText'      => esc_html__( 'Add to gallery', 'prospero-theme' ),
+		'removeImageLabel'      => esc_html__( 'Remove image', 'prospero-theme' ),
+		'defaultRatingLabels'   => $rating_labels,
+		'noDefaultLabels'       => esc_html__( 'No default labels configured. Add them in Customizer > Post Types.', 'prospero-theme' ),
 	) );
 }
 add_action( 'admin_enqueue_scripts', 'prospero_admin_enqueue_scripts' );

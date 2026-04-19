@@ -1,0 +1,88 @@
+/**
+ * Admin styles scoped to Appearance -> Menus
+ *
+ * Adds a compact info-icon + popover so long field descriptions (e.g.
+ * the "Display as CTA button" helper text) no longer squish into the
+ * same row as their label. The description lives in the DOM - hidden
+ * by CSS and surfaced on hover/focus of the info button - so screen
+ * readers still find it via `aria-describedby` from the button.
+ */
+
+.field-prospero-menu-cta {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+
+.field-prospero-menu-cta > label {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+	flex: 0 1 auto;
+}
+
+.prospero-menu-help-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	background: transparent;
+	border: none;
+	border-radius: 50%;
+	color: #646970;
+	cursor: help;
+	line-height: 1;
+	transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.prospero-menu-help-toggle:hover,
+.prospero-menu-help-toggle:focus {
+	color: #2271b1;
+	background-color: rgba(34, 113, 177, 0.08);
+}
+
+.prospero-menu-help-toggle:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 1px;
+}
+
+.prospero-menu-help-toggle .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+.prospero-menu-help-tooltip {
+	position: absolute;
+	top: calc(100% + 6px);
+	left: 0;
+	z-index: 1000;
+	max-width: min(360px, calc(100% - 12px));
+	padding: 10px 12px;
+	background: #1e1e1e;
+	color: #fff;
+	font-size: 12px;
+	font-weight: 400;
+	font-style: normal;
+	line-height: 1.45;
+	border-radius: 4px;
+	box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.prospero-menu-help-toggle:hover + .prospero-menu-help-tooltip,
+.prospero-menu-help-toggle:focus + .prospero-menu-help-tooltip,
+.prospero-menu-help-toggle:focus-visible + .prospero-menu-help-tooltip,
+.prospero-menu-help-tooltip:hover {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}

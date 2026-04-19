@@ -82,9 +82,22 @@
 					}
 				}
 
-				// Scroll to top of posts
+				// Scroll to top of posts, clearing any fixed chrome above
+				// the archive. When the sticky header is active the top bar
+				// is pinned too (`--prospero-top-bar-height` is set by
+				// main.js), so we subtract both heights plus a small
+				// breathing-room buffer — otherwise the filter lands behind
+				// the pinned bars.
 				const headerHeight = document.querySelector('.site-header')?.offsetHeight || 0;
-				const filterTop = filterContainer.getBoundingClientRect().top + window.scrollY - headerHeight - 20;
+				const topBarVar = getComputedStyle(document.documentElement)
+					.getPropertyValue('--prospero-top-bar-height')
+					.trim();
+				const topBarHeight = parseInt(topBarVar, 10) || 0;
+				const filterTop = filterContainer.getBoundingClientRect().top
+					+ window.scrollY
+					- headerHeight
+					- topBarHeight
+					- 20;
 				window.scrollTo({
 					top: filterTop,
 					behavior: 'smooth'

@@ -58,17 +58,26 @@ if ( class_exists( 'WP_Customize_Control' ) ) {
 							<?php checked( $this->value(), $value ); ?>
 							style="position: absolute; opacity: 0; width: 0; height: 0;"
 						/>
+						<?php
+						// Only render the preview swatch when the choice supplies
+						// one; choices that are label-only (e.g. font style Normal
+						// vs UPPERCASE) render just the padded label, saving the
+						// ~34px of empty space the preview block would occupy.
+						$has_preview = ! empty( $args['svg'] );
+						?>
 						<div style="
-							padding: 8px;
+							padding: <?php echo $has_preview ? '8px' : '6px 10px'; ?>;
 							border: 2px solid #ddd;
 							border-radius: 4px;
 							transition: all 0.2s;
 							background: #fff;
 							text-align: center;
-							min-width: 70px;
+							min-width: <?php echo $has_preview ? '70px' : '60px'; ?>;
 							<?php echo $this->value() === $value ? 'border-color: #0073aa; box-shadow: 0 0 0 1px #0073aa;' : ''; ?>
 						">
-							<div style="<?php echo esc_attr( $args['svg'] ); ?> margin-bottom: 4px;"></div>
+							<?php if ( $has_preview ) : ?>
+								<div style="<?php echo esc_attr( $args['svg'] ); ?> margin-bottom: 4px;"></div>
+							<?php endif; ?>
 							<span style="font-size: 11px; display: block; color: #555;"><?php echo esc_html( $args['label'] ); ?></span>
 						</div>
 					</label>
@@ -181,8 +190,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_primary_color', array(
-		'label'   => esc_html__( 'Primary Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Primary Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Main brand / accent color. Used for primary buttons, the sticky post indicator, link color in the editor palette, and focus outlines.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// Secondary Color
@@ -192,8 +202,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_secondary_color', array(
-		'label'   => esc_html__( 'Secondary Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Secondary Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Supporting accent color. Used for secondary buttons (including the read-more button) and for inline link hover states.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// Tertiary Color
@@ -203,8 +214,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_tertiary_color', array(
-		'label'   => esc_html__( 'Tertiary Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Tertiary Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Third accent color. Used only for the optional tertiary button style.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// Text Color
@@ -214,8 +226,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_text_color', array(
-		'label'   => esc_html__( 'Text Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Text Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Default body text color in light mode. Used for paragraphs, headings, post excerpts, post meta (muted), and breadcrumb text.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// Dark Mode Text Color
@@ -225,8 +238,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_dark_text_color', array(
-		'label'   => esc_html__( 'Dark Mode Text Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Dark Mode Text Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Default body text color when dark mode is active.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// Highlight Color
@@ -236,8 +250,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_highlight_color', array(
-		'label'   => esc_html__( 'Highlight Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Highlight Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Attention color. Used for the sticky post label and other emphasised markers.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// Background Color
@@ -247,8 +262,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_background_color', array(
-		'label'   => esc_html__( 'Background Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Background Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Page background in light mode. Card and footer backgrounds are automatically derived from this (slightly darker shade).', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// Dark Mode Background Color
@@ -258,8 +274,9 @@ function prospero_customize_register( $wp_customize ) {
 		'transport'         => 'refresh',
 	) );
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_dark_background_color', array(
-		'label'   => esc_html__( 'Dark Mode Background Color', 'prospero-theme' ),
-		'section' => 'prospero_colors',
+		'label'       => esc_html__( 'Dark Mode Background Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Page background when dark mode is active. Card and footer backgrounds are automatically derived from this (slightly lifted shade).', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
 	) ) );
 	
 	// ===== DARK MODE SECTION =====
@@ -312,7 +329,34 @@ function prospero_customize_register( $wp_customize ) {
 		'title'    => esc_html__( 'Button Styles', 'prospero-theme' ),
 		'priority' => 32,
 	) );
-	
+
+	// --- ACCESSIBILITY ---
+	// Opt-in strict WCAG 1.4.11 (3:1) contrast check for button colors
+	// against the page background. When off (default), the theme only
+	// substitutes the button accent if the configured color is nearly
+	// indistinguishable from the page background (1.5:1) - this preserves
+	// intentional design choices like a muted red on a dark slate bg,
+	// which fall below the strict WCAG threshold but are still visibly
+	// distinct. When on, the full 3:1 WCAG AA check is enforced.
+	$wp_customize->add_setting( 'prospero_button_accessibility_heading', array(
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new Prospero_Heading_Control( $wp_customize, 'prospero_button_accessibility_heading', array(
+		'label'   => esc_html__( 'Accessibility', 'prospero-theme' ),
+		'section' => 'prospero_buttons',
+	) ) );
+
+	$wp_customize->add_setting( 'prospero_button_enforce_wcag_contrast', array(
+		'default'           => false,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_button_enforce_wcag_contrast', array(
+		'label'       => esc_html__( 'Enforce WCAG AA button contrast (3:1)', 'prospero-theme' ),
+		'description' => esc_html__( 'When checked, any button background whose contrast against the page background falls below the WCAG 1.4.11 3:1 threshold is automatically swapped for the page text color so the button stays readable. Recommended for accessibility-first sites. Leave unchecked to preserve designer-picked colors that are visibly distinct but fall below the strict 3:1 ratio (the theme still substitutes the accent when the button would otherwise be nearly invisible against the page).', 'prospero-theme' ),
+		'section'     => 'prospero_buttons',
+		'type'        => 'checkbox',
+	) );
+
 	// --- PRIMARY BUTTON ---
 	$wp_customize->add_setting( 'prospero_primary_button_heading', array(
 		'sanitize_callback' => 'sanitize_text_field',
@@ -409,14 +453,8 @@ function prospero_customize_register( $wp_customize ) {
 		'label'   => esc_html__( 'Font Style', 'prospero-theme' ),
 		'section' => 'prospero_buttons',
 		'choices' => array(
-			'none'      => array(
-				'label' => 'Normal',
-				'svg'   => 'width: 50px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #555; font-weight: normal;',
-			),
-			'uppercase' => array(
-				'label' => 'UPPERCASE',
-				'svg'   => 'width: 50px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #555; font-weight: 600; letter-spacing: 0.5px;',
-			),
+			'none'      => array( 'label' => esc_html__( 'Normal', 'prospero-theme' ) ),
+			'uppercase' => array( 'label' => esc_html__( 'UPPERCASE', 'prospero-theme' ) ),
 		),
 	) ) );
 	
@@ -511,8 +549,8 @@ function prospero_customize_register( $wp_customize ) {
 		'label'   => esc_html__( 'Font Style', 'prospero-theme' ),
 		'section' => 'prospero_buttons',
 		'choices' => array(
-			'none'      => array( 'label' => 'Normal', 'svg' => 'width: 50px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #555; font-weight: normal;' ),
-			'uppercase' => array( 'label' => 'UPPERCASE', 'svg' => 'width: 50px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #555; font-weight: 600; letter-spacing: 0.5px;' ),
+			'none'      => array( 'label' => esc_html__( 'Normal', 'prospero-theme' ) ),
+			'uppercase' => array( 'label' => esc_html__( 'UPPERCASE', 'prospero-theme' ) ),
 		),
 	) ) );
 	
@@ -607,15 +645,204 @@ function prospero_customize_register( $wp_customize ) {
 		'label'   => esc_html__( 'Font Style', 'prospero-theme' ),
 		'section' => 'prospero_buttons',
 		'choices' => array(
-			'none'      => array( 'label' => 'Normal', 'svg' => 'width: 50px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #555; font-weight: normal;' ),
-			'uppercase' => array( 'label' => 'UPPERCASE', 'svg' => 'width: 50px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #555; font-weight: 600; letter-spacing: 0.5px;' ),
+			'none'      => array( 'label' => esc_html__( 'Normal', 'prospero-theme' ) ),
+			'uppercase' => array( 'label' => esc_html__( 'UPPERCASE', 'prospero-theme' ) ),
+		),
+	) ) );
+
+	// --- MENU CTA BUTTON ---
+	// Styles applied to navigation-menu items flagged as a CTA (via the
+	// checkbox in Appearance -> Menus). Kept distinct from primary /
+	// secondary / tertiary so the menu CTA can look different from any
+	// button that appears inside the page content.
+	$wp_customize->add_setting( 'prospero_menu_cta_button_heading', array(
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new Prospero_Heading_Control( $wp_customize, 'prospero_menu_cta_button_heading', array(
+		'label'   => esc_html__( 'Menu CTA Button', 'prospero-theme' ),
+		'section' => 'prospero_buttons',
+	) ) );
+
+	// Menu CTA Button Style
+	$wp_customize->add_setting( 'prospero_menu-cta_btn_style', array(
+		'default'           => 'flat',
+		'sanitize_callback' => 'prospero_sanitize_button_style',
+	) );
+	$wp_customize->add_control( new Prospero_Radio_Image_Control( $wp_customize, 'prospero_menu-cta_btn_style', array(
+		'label'       => esc_html__( 'Style', 'prospero-theme' ),
+		'description' => esc_html__( 'Used for menu items flagged as "Display as CTA button" in Appearance → Menus.', 'prospero-theme' ),
+		'section'     => 'prospero_buttons',
+		'choices'     => array(
+			'flat'    => array( 'label' => 'Flat', 'svg' => 'width: 50px; height: 30px; background: #0073aa;' ),
+			'outline' => array( 'label' => 'Outline', 'svg' => 'width: 50px; height: 30px; background: transparent; border: 2px solid #0073aa;' ),
+		),
+	) ) );
+
+	// Menu CTA Button Border Radius
+	$wp_customize->add_setting( 'prospero_menu-cta_btn_radius', array(
+		'default'           => '4px',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'prospero_menu-cta_btn_radius', array(
+		'label'       => esc_html__( 'Border Radius', 'prospero-theme' ),
+		'description' => esc_html__( 'E.g., 0, 4px, 50px, 0.5em, 50%', 'prospero-theme' ),
+		'section'     => 'prospero_buttons',
+		'type'        => 'text',
+	) );
+
+	// Menu CTA Button Background Color
+	$wp_customize->add_setting( 'prospero_menu-cta_btn_bg', array(
+		'default'           => 'rgba(0, 123, 255, 1)',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_menu-cta_btn_bg', array(
+		'label'   => esc_html__( 'Background Color', 'prospero-theme' ),
+		'section' => 'prospero_buttons',
+		'mode'    => 'rgba',
+	) ) );
+
+	// Menu CTA Button Text Color
+	$wp_customize->add_setting( 'prospero_menu-cta_btn_text', array(
+		'default'           => 'rgba(255, 255, 255, 1)',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_menu-cta_btn_text', array(
+		'label'   => esc_html__( 'Text Color', 'prospero-theme' ),
+		'section' => 'prospero_buttons',
+		'mode'    => 'rgba',
+	) ) );
+
+	// Menu CTA Button Hover Background
+	$wp_customize->add_setting( 'prospero_menu-cta_btn_hover_bg', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_menu-cta_btn_hover_bg', array(
+		'label'       => esc_html__( 'Hover Background', 'prospero-theme' ),
+		'description' => esc_html__( 'Leave empty for automatic darker shade', 'prospero-theme' ),
+		'section'     => 'prospero_buttons',
+		'mode'        => 'rgba',
+	) ) );
+
+	// Menu CTA Button Hover Text Color
+	$wp_customize->add_setting( 'prospero_menu-cta_btn_hover_text', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_menu-cta_btn_hover_text', array(
+		'label'       => esc_html__( 'Hover Text Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Leave empty for automatic', 'prospero-theme' ),
+		'section'     => 'prospero_buttons',
+		'mode'        => 'rgba',
+	) ) );
+
+	// Menu CTA Button Font Style
+	$wp_customize->add_setting( 'prospero_menu-cta_btn_font_style', array(
+		'default'           => 'none',
+		'sanitize_callback' => 'prospero_sanitize_button_font_style',
+	) );
+	$wp_customize->add_control( new Prospero_Radio_Image_Control( $wp_customize, 'prospero_menu-cta_btn_font_style', array(
+		'label'   => esc_html__( 'Font Style', 'prospero-theme' ),
+		'section' => 'prospero_buttons',
+		'choices' => array(
+			'none'      => array( 'label' => esc_html__( 'Normal', 'prospero-theme' ) ),
+			'uppercase' => array( 'label' => esc_html__( 'UPPERCASE', 'prospero-theme' ) ),
 		),
 	) ) );
 	
+	// ===== TOP BAR SECTION =====
+	$wp_customize->add_section( 'prospero_top_bar', array(
+		'title'       => esc_html__( 'Top Bar', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional contact bar shown above the header. Leave phone and email empty to hide the bar. On mobile screens only the icons are shown to save space.', 'prospero-theme' ),
+		'priority'    => 33,
+	) );
+
+	// Enable Top Bar
+	$wp_customize->add_setting( 'prospero_top_bar_enable', array(
+		'default'           => false,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_top_bar_enable', array(
+		'label'       => esc_html__( 'Enable Top Bar', 'prospero-theme' ),
+		'description' => esc_html__( 'Show a thin contact bar above the site header.', 'prospero-theme' ),
+		'section'     => 'prospero_top_bar',
+		'type'        => 'checkbox',
+	) );
+
+	// Phone heading
+	$wp_customize->add_setting( 'prospero_top_bar_phone_heading', array(
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new Prospero_Heading_Control( $wp_customize, 'prospero_top_bar_phone_heading', array(
+		'label'   => esc_html__( 'Phone', 'prospero-theme' ),
+		'section' => 'prospero_top_bar',
+	) ) );
+
+	// Phone number
+	$wp_customize->add_setting( 'prospero_top_bar_phone', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'prospero_top_bar_phone', array(
+		'label'       => esc_html__( 'Phone Number', 'prospero-theme' ),
+		'description' => esc_html__( 'Displayed as entered; the tel: link strips formatting automatically. Leave empty to hide.', 'prospero-theme' ),
+		'section'     => 'prospero_top_bar',
+		'type'        => 'text',
+		'input_attrs' => array(
+			'placeholder' => '+43 1 234 56 78',
+			'inputmode'   => 'tel',
+		),
+	) );
+
+	// Phone prefix / label text
+	$wp_customize->add_setting( 'prospero_top_bar_phone_prefix', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'prospero_top_bar_phone_prefix', array(
+		'label'       => esc_html__( 'Phone Prefix Text', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional short text shown before the number on desktop (e.g. "Call us:"). Hidden on mobile.', 'prospero-theme' ),
+		'section'     => 'prospero_top_bar',
+		'type'        => 'text',
+	) );
+
+	// Email heading
+	$wp_customize->add_setting( 'prospero_top_bar_email_heading', array(
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( new Prospero_Heading_Control( $wp_customize, 'prospero_top_bar_email_heading', array(
+		'label'   => esc_html__( 'Email', 'prospero-theme' ),
+		'section' => 'prospero_top_bar',
+	) ) );
+
+	// Email address
+	$wp_customize->add_setting( 'prospero_top_bar_email', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_email',
+	) );
+	$wp_customize->add_control( 'prospero_top_bar_email', array(
+		'label'       => esc_html__( 'Email Address', 'prospero-theme' ),
+		'description' => esc_html__( 'Rendered as a mailto: link (obfuscated with WordPress antispambot). Leave empty to hide.', 'prospero-theme' ),
+		'section'     => 'prospero_top_bar',
+		'type'        => 'email',
+	) );
+
+	// Email prefix / label text
+	$wp_customize->add_setting( 'prospero_top_bar_email_prefix', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'prospero_top_bar_email_prefix', array(
+		'label'       => esc_html__( 'Email Prefix Text', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional short text shown before the address on desktop (e.g. "Write to:"). Hidden on mobile.', 'prospero-theme' ),
+		'section'     => 'prospero_top_bar',
+		'type'        => 'text',
+	) );
+
 	// ===== HEADER & MENU SETTINGS SECTION =====
 	$wp_customize->add_section( 'prospero_menu_settings', array(
 		'title'    => esc_html__( 'Header & Menu', 'prospero-theme' ),
-		'priority' => 33,
+		'priority' => 34,
 	) );
 
 	// Header Layout Heading
@@ -706,7 +933,7 @@ function prospero_customize_register( $wp_customize ) {
 	// ===== TYPOGRAPHY SECTION =====
 	$wp_customize->add_section( 'prospero_typography', array(
 		'title'    => esc_html__( 'Typography', 'prospero-theme' ),
-		'priority' => 34,
+		'priority' => 35,
 	) );
 	
 	// Heading Font
@@ -736,7 +963,7 @@ function prospero_customize_register( $wp_customize ) {
 	// ===== CONTENT SETTINGS SECTION =====
 	$wp_customize->add_section( 'prospero_content', array(
 		'title'    => esc_html__( 'Content Settings', 'prospero-theme' ),
-		'priority' => 35,
+		'priority' => 36,
 	) );
 	
 	// Max Content Width
@@ -767,7 +994,7 @@ function prospero_customize_register( $wp_customize ) {
 	// ===== BLOG LAYOUT SECTION =====
 	$wp_customize->add_section( 'prospero_blog_layout', array(
 		'title'    => esc_html__( 'Blog Layout', 'prospero-theme' ),
-		'priority' => 35,
+		'priority' => 37,
 	) );
 	
 	// Blog Layout Style
@@ -923,6 +1150,18 @@ function prospero_customize_register( $wp_customize ) {
 		'type'    => 'checkbox',
 	) );
 	
+	// Testimonial Default Rating Labels
+	$wp_customize->add_setting( 'prospero_testimonial_rating_labels', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_textarea_field',
+	) );
+	$wp_customize->add_control( 'prospero_testimonial_rating_labels', array(
+		'label'       => esc_html__( 'Default Rating Labels', 'prospero-theme' ),
+		'description' => esc_html__( 'Enter default rating labels for testimonials, one per line. These will be available as quick-add options when editing testimonials.', 'prospero-theme' ),
+		'section'     => 'prospero_post_types',
+		'type'        => 'textarea',
+	) );
+	
 	// Enable Partners
 	$wp_customize->add_setting( 'prospero_enable_partners', array(
 		'default'           => false,
@@ -955,6 +1194,23 @@ function prospero_customize_register( $wp_customize ) {
 		'description' => esc_html__( 'Select the page that displays team members (used in breadcrumbs).', 'prospero-theme' ),
 		'section'     => 'prospero_post_types',
 		'type'        => 'dropdown-pages',
+	) );
+
+	// Team Image Style
+	$wp_customize->add_setting( 'prospero_team_image_style', array(
+		'default'           => 'square',
+		'sanitize_callback' => 'prospero_sanitize_team_image_style',
+	) );
+	$wp_customize->add_control( 'prospero_team_image_style', array(
+		'label'       => esc_html__( 'Team Member Image Style', 'prospero-theme' ),
+		'description' => esc_html__( 'Image shape used on single team member pages.', 'prospero-theme' ),
+		'section'     => 'prospero_post_types',
+		'type'        => 'select',
+		'choices'     => array(
+			'square'   => esc_html__( 'Square', 'prospero-theme' ),
+			'round'    => esc_html__( 'Round', 'prospero-theme' ),
+			'portrait' => esc_html__( 'Portrait', 'prospero-theme' ),
+		),
 	) );
 	
 	// Enable Projects
@@ -989,6 +1245,32 @@ function prospero_customize_register( $wp_customize ) {
 		'label'   => esc_html__( 'Enable FAQ Post Type', 'prospero-theme' ),
 		'section' => 'prospero_post_types',
 		'type'    => 'checkbox',
+	) );
+
+	// FAQ archive title - shown as the <h1> on the FAQ archive page.
+	// Empty falls back to the translated default "Frequently Asked Questions".
+	$wp_customize->add_setting( 'prospero_faq_archive_title', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_text_field',
+	) );
+	$wp_customize->add_control( 'prospero_faq_archive_title', array(
+		'label'       => esc_html__( 'FAQ Archive Title', 'prospero-theme' ),
+		'description' => esc_html__( 'Heading shown on the FAQ archive page. Leave empty to use the default "Frequently Asked Questions".', 'prospero-theme' ),
+		'section'     => 'prospero_post_types',
+		'type'        => 'text',
+	) );
+
+	// FAQ archive description - shown under the archive heading. Supports
+	// the basic KSES-safe HTML subset so users can add links / paragraphs.
+	$wp_customize->add_setting( 'prospero_faq_archive_description', array(
+		'default'           => '',
+		'sanitize_callback' => 'wp_kses_post',
+	) );
+	$wp_customize->add_control( 'prospero_faq_archive_description', array(
+		'label'       => esc_html__( 'FAQ Archive Description', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional intro paragraph shown under the FAQ archive heading. Leave empty to hide.', 'prospero-theme' ),
+		'section'     => 'prospero_post_types',
+		'type'        => 'textarea',
 	) );
 	
 }
@@ -1040,6 +1322,14 @@ function prospero_sanitize_header_position( $input ) {
 function prospero_sanitize_blog_layout( $input ) {
 	$valid = array( 'grid', 'list' );
 	return in_array( $input, $valid, true ) ? $input : 'grid';
+}
+
+/**
+ * Sanitize team image style setting
+ */
+function prospero_sanitize_team_image_style( $input ) {
+	$valid = array( 'square', 'round', 'portrait' );
+	return in_array( $input, $valid, true ) ? $input : 'square';
 }
 
 /**

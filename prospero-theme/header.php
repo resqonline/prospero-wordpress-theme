@@ -39,6 +39,7 @@ if ( get_theme_mod( 'prospero_hamburger_menu', false ) ) {
 }
 ?>
 <div id="page" class="site">
+	<?php get_template_part( 'template-parts/top-bar' ); ?>
 	<header id="masthead" class="<?php echo esc_attr( implode( ' ', $header_classes ) ); ?>" role="banner">
 		<div class="container header-inner">
 			<div class="site-branding">

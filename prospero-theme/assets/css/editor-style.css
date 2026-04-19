@@ -25,3 +25,212 @@
 	border-radius: 4px;
 	padding: 0.75rem 1.5rem;
 }
+
+/* ==========================================================================
+   CTA Block Editor Styles
+   ========================================================================== */
+
+.editor-styles-wrapper .prospero-cta {
+	position: relative;
+	padding: 3rem 1.5rem;
+	margin: 2rem 0;
+	border-radius: 8px;
+	background-size: cover;
+	background-position: center;
+	overflow: hidden;
+}
+
+/* Background color variations */
+.editor-styles-wrapper .prospero-cta.has-primary-background-color {
+	background-color: var(--wp--preset--color--primary, #007bff);
+}
+
+.editor-styles-wrapper .prospero-cta.has-secondary-background-color {
+	background-color: var(--wp--preset--color--secondary, #6c757d);
+}
+
+.editor-styles-wrapper .prospero-cta.has-tertiary-background-color {
+	background-color: var(--wp--preset--color--tertiary, #28a745);
+}
+
+.editor-styles-wrapper .prospero-cta.has-highlight-background-color {
+	background-color: var(--wp--preset--color--highlight, #ffc107);
+}
+
+/* Background image overlay */
+.editor-styles-wrapper .prospero-cta-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 1;
+}
+
+.editor-styles-wrapper .prospero-cta.has-background-image .prospero-cta-content,
+.editor-styles-wrapper .prospero-cta.has-background-image .prospero-cta-image {
+	position: relative;
+	z-index: 2;
+}
+
+.editor-styles-wrapper .prospero-cta.has-background-image .prospero-cta-heading,
+.editor-styles-wrapper .prospero-cta.has-background-image .prospero-cta-text {
+	color: #ffffff;
+}
+
+/* Light text for dark backgrounds */
+.editor-styles-wrapper .prospero-cta.has-primary-background-color .prospero-cta-heading,
+.editor-styles-wrapper .prospero-cta.has-primary-background-color .prospero-cta-text,
+.editor-styles-wrapper .prospero-cta.has-secondary-background-color .prospero-cta-heading,
+.editor-styles-wrapper .prospero-cta.has-secondary-background-color .prospero-cta-text,
+.editor-styles-wrapper .prospero-cta.has-tertiary-background-color .prospero-cta-heading,
+.editor-styles-wrapper .prospero-cta.has-tertiary-background-color .prospero-cta-text {
+	color: #ffffff;
+}
+
+/* Inner wrapper */
+.editor-styles-wrapper .prospero-cta-inner {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 1rem;
+	position: relative;
+	z-index: 2;
+}
+
+/* Center layout (default) */
+.editor-styles-wrapper .prospero-cta-center {
+	text-align: center;
+}
+
+.editor-styles-wrapper .prospero-cta-center .prospero-cta-content {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.editor-styles-wrapper .prospero-cta-center .prospero-cta-image-center {
+	margin-bottom: 1.5rem;
+}
+
+.editor-styles-wrapper .prospero-cta-center .prospero-cta-image-center img {
+	max-width: 300px;
+	height: auto;
+	border-radius: 8px;
+	margin: 0 auto;
+	display: block;
+}
+
+/* Left layout (image left, text right) */
+.editor-styles-wrapper .prospero-cta-left .prospero-cta-inner {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+}
+
+.editor-styles-wrapper .prospero-cta-left .prospero-cta-image {
+	flex: 0 0 40%;
+	max-width: 40%;
+}
+
+.editor-styles-wrapper .prospero-cta-left .prospero-cta-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 8px;
+	display: block;
+}
+
+.editor-styles-wrapper .prospero-cta-left .prospero-cta-content {
+	flex: 1;
+	text-align: left;
+}
+
+/* Right layout (image right, text left) */
+.editor-styles-wrapper .prospero-cta-right .prospero-cta-inner {
+	display: flex;
+	align-items: center;
+	flex-direction: row-reverse;
+	gap: 2rem;
+}
+
+.editor-styles-wrapper .prospero-cta-right .prospero-cta-image {
+	flex: 0 0 40%;
+	max-width: 40%;
+}
+
+.editor-styles-wrapper .prospero-cta-right .prospero-cta-image img {
+	width: 100%;
+	height: auto;
+	border-radius: 8px;
+	display: block;
+}
+
+.editor-styles-wrapper .prospero-cta-right .prospero-cta-content {
+	flex: 1;
+	text-align: left;
+}
+
+/* CTA content styles */
+.editor-styles-wrapper .prospero-cta-heading {
+	margin: 0 0 1rem;
+	font-size: 2rem;
+	line-height: 1.2;
+}
+
+.editor-styles-wrapper .prospero-cta-text {
+	margin-bottom: 1rem;
+	font-size: 1.1rem;
+	line-height: 1.6;
+}
+
+.editor-styles-wrapper .prospero-cta-button {
+	margin-top: 1rem;
+}
+
+/*
+ * Button styles in editor
+ *
+ * Uses the --prospero-btn-*-* CSS custom properties populated by
+ * prospero_editor_custom_properties() (see inc/gutenberg.php) so the
+ * editor reflects the current Customizer settings (flat / outline,
+ * colors, radius, uppercase, hover). Fallbacks reference the
+ * theme.json palette so previews still work if the inline variables
+ * haven't loaded yet.
+ */
+.editor-styles-wrapper .prospero-cta .button,
+.editor-styles-wrapper .prospero-cta .button-primary {
+	display: inline-block;
+	padding: 0.75rem 1.5rem;
+	text-decoration: none;
+	font-weight: 500;
+	cursor: pointer;
+	background-color: var(--prospero-btn-primary-bg, var(--wp--preset--color--primary, #007bff));
+	color: var(--prospero-btn-primary-text, #ffffff);
+	border: 2px solid var(--prospero-btn-primary-border, var(--wp--preset--color--primary, #007bff));
+	border-radius: var(--prospero-btn-primary-radius, 4px);
+	text-transform: var(--prospero-btn-primary-text-transform, none);
+	letter-spacing: var(--prospero-btn-primary-letter-spacing, normal);
+}
+
+.editor-styles-wrapper .prospero-cta .button-secondary {
+	background-color: var(--prospero-btn-secondary-bg, var(--wp--preset--color--secondary, #6c757d));
+	color: var(--prospero-btn-secondary-text, #ffffff);
+	border: 2px solid var(--prospero-btn-secondary-border, var(--wp--preset--color--secondary, #6c757d));
+	border-radius: var(--prospero-btn-secondary-radius, 4px);
+	text-transform: var(--prospero-btn-secondary-text-transform, none);
+	letter-spacing: var(--prospero-btn-secondary-letter-spacing, normal);
+}
+
+.editor-styles-wrapper .prospero-cta .button-tertiary {
+	background-color: var(--prospero-btn-tertiary-bg, var(--wp--preset--color--tertiary, #28a745));
+	color: var(--prospero-btn-tertiary-text, #ffffff);
+	border: 2px solid var(--prospero-btn-tertiary-border, var(--wp--preset--color--tertiary, #28a745));
+	border-radius: var(--prospero-btn-tertiary-radius, 4px);
+	text-transform: var(--prospero-btn-tertiary-text-transform, none);
+	letter-spacing: var(--prospero-btn-tertiary-letter-spacing, normal);
+}
+
+/* Editor placeholder styles */
+.editor-styles-wrapper .prospero-cta .prospero-placeholder {
+	opacity: 0.5;
+	font-style: italic;
+}

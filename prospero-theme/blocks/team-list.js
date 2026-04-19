@@ -51,6 +51,14 @@
 			slider: {
 				type: 'boolean',
 				default: false
+			},
+			showContact: {
+				type: 'boolean',
+				default: true
+			},
+			showSocial: {
+				type: 'boolean',
+				default: true
 			}
 		},
 		supports: {
@@ -191,17 +199,33 @@
 								setAttributes( { slider: value } );
 							}
 						} ),
-						el( ToggleControl, {
-							label: __( 'Open in Lightbox', 'prospero-theme' ),
-							checked: attributes.lightbox,
-							onChange: function( value ) {
-								setAttributes( { lightbox: value } );
-							},
-							help: attributes.lightbox ?
-								__( 'Content opens in lightbox overlay', 'prospero-theme' ) :
-								__( 'Links to single page', 'prospero-theme' )
-						} )
-					)
+					el( ToggleControl, {
+						label: __( 'Open in Lightbox', 'prospero-theme' ),
+						checked: attributes.lightbox,
+						onChange: function( value ) {
+							setAttributes( { lightbox: value } );
+						},
+						help: attributes.lightbox ?
+							__( 'Content opens in lightbox overlay', 'prospero-theme' ) :
+							__( 'Links to single page', 'prospero-theme' )
+					} ),
+					el( ToggleControl, {
+						label: __( 'Show Contact Icons', 'prospero-theme' ),
+						checked: attributes.showContact,
+						onChange: function( value ) {
+							setAttributes( { showContact: value } );
+						},
+						help: __( 'Display email and phone icons', 'prospero-theme' )
+					} ),
+					el( ToggleControl, {
+						label: __( 'Show Social Icons', 'prospero-theme' ),
+						checked: attributes.showSocial,
+						onChange: function( value ) {
+							setAttributes( { showSocial: value } );
+						},
+						help: __( 'Display social media icons', 'prospero-theme' )
+					} )
+				)
 				),
 				el( 'div', blockProps,
 					el( 'div', {

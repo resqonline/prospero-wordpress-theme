@@ -13,17 +13,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Testimonials shortcode
- * Usage: [testimonials ids="" category="" count="-1" orderby="date" order="DESC" columns="1" slider="no"]
+ * Usage: [testimonials ids="" category="" count="-1" orderby="date" order="DESC" columns="1" slider="no" show_ratings="no"]
  */
 function prospero_testimonials_shortcode( $atts ) {
 	$atts = shortcode_atts( array(
-		'ids'      => '',
-		'category' => '',
-		'count'    => -1,
-		'orderby'  => 'date',
-		'order'    => 'DESC',
-		'columns'  => 1,
-		'slider'   => 'no',
+		'ids'          => '',
+		'category'     => '',
+		'count'        => -1,
+		'orderby'      => 'date',
+		'order'        => 'DESC',
+		'columns'      => 1,
+		'slider'       => 'no',
+		'show_ratings' => 'no',
 	), $atts, 'testimonials' );
 	
 	// Sanitize attributes
@@ -34,6 +35,7 @@ function prospero_testimonials_shortcode( $atts ) {
 	$order = sanitize_text_field( $atts['order'] );
 	$columns = max( 1, min( 4, intval( $atts['columns'] ) ) ); // Limit 1-4 columns
 	$slider = ( $atts['slider'] === 'yes' ) ? true : false;
+	$show_ratings = ( $atts['show_ratings'] === 'yes' ) ? true : false;
 	
 	// Build query args
 	$args = array(
@@ -81,7 +83,10 @@ function prospero_testimonials_shortcode( $atts ) {
 			<?php
 			while ( $query->have_posts() ) :
 				$query->the_post();
-				get_template_part( 'template-parts/content', 'testimonial', array( 'slider' => $slider ) );
+				get_template_part( 'template-parts/content', 'testimonial', array(
+					'slider'       => $slider,
+					'show_ratings' => $show_ratings,
+				) );
 			endwhile;
 			?>
 		</div>
@@ -175,22 +180,24 @@ add_shortcode( 'partners', 'prospero_partners_shortcode' );
 
 /**
  * Team shortcode
- * Usage: [team ids="" category="" count="-1" layout="columns" columns="3" image_style="square" lightbox="no" slider="no"]
+ * Usage: [team ids="" category="" count="-1" layout="columns" columns="3" image_style="square" lightbox="no" slider="no" show_contact="yes" show_social="yes"]
  * Layouts: columns, list
  * Image styles: square, round, portrait
  */
 function prospero_team_shortcode( $atts ) {
 	$atts = shortcode_atts( array(
-		'ids'         => '',
-		'category'    => '',
-		'count'       => -1,
-		'layout'      => 'columns',
-		'columns'     => 3,
-		'image_style' => 'square',
-		'lightbox'    => 'no',
-		'orderby'     => 'menu_order',
-		'order'       => 'ASC',
-		'slider'      => 'no',
+		'ids'          => '',
+		'category'     => '',
+		'count'        => -1,
+		'layout'       => 'columns',
+		'columns'      => 3,
+		'image_style'  => 'square',
+		'lightbox'     => 'no',
+		'orderby'      => 'menu_order',
+		'order'        => 'ASC',
+		'slider'       => 'no',
+		'show_contact' => 'yes',
+		'show_social'  => 'yes',
 	), $atts, 'team' );
 	
 	// Sanitize attributes
@@ -204,6 +211,8 @@ function prospero_team_shortcode( $atts ) {
 	$orderby = sanitize_text_field( $atts['orderby'] );
 	$order = sanitize_text_field( $atts['order'] );
 	$slider = ( $atts['slider'] === 'yes' ) ? true : false;
+	$show_contact = ( $atts['show_contact'] === 'yes' ) ? true : false;
+	$show_social = ( $atts['show_social'] === 'yes' ) ? true : false;
 	
 	// Build query args
 	$args = array(
@@ -264,8 +273,9 @@ function prospero_team_shortcode( $atts ) {
 					'slider'       => $slider,
 					'lightbox'     => $lightbox,
 					'layout'       => $layout,
-					'show_contact' => false,
-					'show_social'  => false,
+					'image_style'  => $image_style,
+					'show_contact' => $show_contact,
+					'show_social'  => $show_social,
 					'show_link'    => false,
 				) );
 			endwhile;

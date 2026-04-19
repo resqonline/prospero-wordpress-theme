@@ -42,6 +42,10 @@
 			slider: {
 				type: 'boolean',
 				default: false
+			},
+			showRatings: {
+				type: 'boolean',
+				default: false
 			}
 		},
 		supports: {
@@ -157,7 +161,15 @@
 								min: 1,
 								max: 4,
 								help: __( 'Number of testimonials visible at once in slider mode', 'prospero-theme' )
-							} ) : null
+							} ) : null,
+						el( ToggleControl, {
+							label: __( 'Show Star Ratings', 'prospero-theme' ),
+							checked: attributes.showRatings,
+							onChange: function( value ) {
+								setAttributes( { showRatings: value } );
+							},
+							help: __( 'Display star ratings if testimonials have rating data', 'prospero-theme' )
+						} )
 					)
 				),
 				el( 'div', blockProps,
@@ -182,6 +194,10 @@
 						attributes.slider ?
 							el( 'p', { style: { margin: '5px 0 0 0', fontSize: '12px', color: '#0073aa' } },
 								__( 'Slider mode enabled', 'prospero-theme' )
+							) : null,
+						attributes.showRatings ?
+							el( 'p', { style: { margin: '5px 0 0 0', fontSize: '12px', color: '#0073aa' } },
+								__( 'Star ratings enabled', 'prospero-theme' )
 							) : null
 					)
 				)

@@ -33,6 +33,7 @@
 		},
 		supports: {
 			html: false,
+			align: [ 'wide', 'full' ]
 		},
 		edit: function( props ) {
 			var category = props.attributes.category;
@@ -96,7 +97,7 @@
 						} 
 					},
 						el( 'p', { style: { margin: 0, fontWeight: 'bold' } }, 
-							__( '❓ FAQ List', 'prospero-theme' )
+							__( 'FAQ List', 'prospero-theme' )
 						),
 						el( 'p', { style: { margin: '10px 0 0 0', fontSize: '14px', color: '#666' } }, 
 							accordion ? 
