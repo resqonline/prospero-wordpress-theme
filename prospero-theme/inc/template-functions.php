@@ -131,14 +131,286 @@ function prospero_get_luminance( $hex_color ) {
  */
 function prospero_get_contrast_text_color( $bg_color ) {
 	$luminance = prospero_get_luminance( $bg_color );
-	
+
 	// Use dark text for light backgrounds (luminance > 0.5)
 	// Use white text for dark backgrounds
 	return $luminance > 0.5 ? '#1a1a1a' : '#ffffff';
 }
 
 /**
- * Generate dynamic CSS from customizer settings
+ * Parse any CSS color string the Customizer might hand us (hex like
+ * `#fff` / `#ffffff`, or rgb/rgba like `rgba(0, 0, 0, 1)`) into a
+ * 0-255 RGB triplet. Returns null if the color cannot be parsed (e.g.
+ * `transparent`, `currentColor`, named colors).
+ *
+ * @param string $color Color string.
+ * @return int[]|null [ r, g, b ] or null.
+ */
+function prospero_parse_color_to_rgb( $color ) {
+	$color = trim( (string) $color );
+
+	if ( '' === $color || 'transparent' === strtolower( $color ) ) {
+		return null;
+	}
+
+	// Hex: #abc or #aabbcc
+	if ( preg_match( '/^#([a-f0-9]{3}|[a-f0-9]{6})$/i', $color, $m ) ) {
+		$hex = $m[1];
+		if ( strlen( $hex ) === 3 ) {
+			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
+		}
+
+		return array(
+			(int) hexdec( substr( $hex, 0, 2 ) ),
+			(int) hexdec( substr( $hex, 2, 2 ) ),
+			(int) hexdec( substr( $hex, 4, 2 ) ),
+		);
+	}
+
+	// rgb() / rgba()
+	if ( preg_match( '/rgba?\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i', $color, $m ) ) {
+		return array( (int) $m[1], (int) $m[2], (int) $m[3] );
+	}
+
+	return null;
+}
+
+/**
+ * Calculate the WCAG 2.1 contrast ratio between two colors.
+ *
+ * If either color cannot be parsed (or is transparent), returns the
+ * maximum ratio (21) so downstream checks treat the pairing as "safe"
+ * and do not apply a fallback.
+ *
+ * @param string $color_a First color.
+ * @param string $color_b Second color.
+ * @return float Ratio in the range 1.0 to 21.0.
+ */
+function prospero_contrast_ratio( $color_a, $color_b ) {
+	$rgb_a = prospero_parse_color_to_rgb( $color_a );
+	$rgb_b = prospero_parse_color_to_rgb( $color_b );
+
+	if ( ! $rgb_a || ! $rgb_b ) {
+		return 21.0;
+	}
+
+	$luminance = function ( $rgb ) {
+		$channels = array();
+		foreach ( $rgb as $c ) {
+			$c = $c / 255;
+			$channels[] = $c <= 0.03928 ? $c / 12.92 : pow( ( $c + 0.055 ) / 1.055, 2.4 );
+		}
+
+		return 0.2126 * $channels[0] + 0.7152 * $channels[1] + 0.0722 * $channels[2];
+	};
+
+	$l_a     = $luminance( $rgb_a );
+	$l_b     = $luminance( $rgb_b );
+	$lighter = max( $l_a, $l_b );
+	$darker  = min( $l_a, $l_b );
+
+	return ( $lighter + 0.05 ) / ( $darker + 0.05 );
+}
+
+/**
+ * The contrast-ratio threshold below which the button's configured
+ * accent is considered "too close" to the target page background and
+ * the safety-net fallback kicks in.
+ *
+ * Two tiers:
+ *
+ * - Default (designer-friendly): 1.5:1. Only swap when the button
+ *   color is nearly indistinguishable from the page background. This
+ *   lets a designer pick colors that don't meet WCAG 1.4.11's strict
+ *   3:1 non-text-UI threshold but are still visually obviously
+ *   different from the page (e.g. a muted red on a dark slate bg).
+ *
+ * - Strict WCAG AA: 3.0:1. Enforces WCAG 1.4.11 (Non-text Contrast)
+ *   for any accessibility-first site. Opt-in via the Customizer
+ *   setting `prospero_button_enforce_wcag_contrast`.
+ *
+ * Exposed through the `prospero_button_contrast_threshold` filter
+ * so a child theme can force an exact value if neither preset fits.
+ *
+ * @return float Contrast ratio threshold (1.0 – 21.0).
+ */
+function prospero_get_button_contrast_threshold() {
+	$strict = (bool) get_theme_mod( 'prospero_button_enforce_wcag_contrast', false );
+	$value  = $strict ? 3.0 : 1.5;
+
+	/**
+	 * Filters the contrast-ratio threshold for the button safety net.
+	 *
+	 * @param float $value  Current threshold (1.5 default, 3.0 with WCAG mode on).
+	 * @param bool  $strict Whether WCAG strict mode is enabled.
+	 */
+	return (float) apply_filters( 'prospero_button_contrast_threshold', $value, $strict );
+}
+
+/**
+ * Build the map of button CSS custom properties for a single button role
+ * (primary / secondary / tertiary / menu-cta) based on the current
+ * Customizer settings.
+ *
+ * Outline buttons get a transparent background and borrow the configured
+ * background color for text and border, which produces a border-only
+ * appearance until hover.
+ *
+ * Accessibility safety net: if the user picks a button color whose
+ * contrast against the target mode's page background is below
+ * `prospero_get_button_contrast_threshold()` (1.5:1 by default, 3:1
+ * with WCAG AA mode enabled), the button's visible accent (border/text
+ * for outline; background for flat) is swapped for the mode's page
+ * text color so the button stays readable. This is applied per-mode,
+ * so a color that works in light mode is untouched in light mode and
+ * only substituted in dark mode (or vice-versa).
+ *
+ * @param string $prefix Variable prefix (primary|secondary|tertiary|menu-cta).
+ * @param string $mode   Target page mode (`light` or `dark`). Default `light`.
+ * @return array Map of CSS custom property name => value.
+ */
+function prospero_get_button_css_vars_for( $prefix, $mode = 'light' ) {
+	// Per-role defaults mirror the values declared in inc/customizer.php.
+	$defaults = array(
+		'primary'   => array(
+			'style' => 'flat',
+			'bg'    => 'rgba(0, 123, 255, 1)',
+			'text'  => 'rgba(255, 255, 255, 1)',
+		),
+		'secondary' => array(
+			'style' => 'outline',
+			'bg'    => 'rgba(108, 117, 125, 1)',
+			'text'  => 'rgba(255, 255, 255, 1)',
+		),
+		'tertiary'  => array(
+			'style' => 'flat',
+			'bg'    => 'rgba(40, 167, 69, 1)',
+			'text'  => 'rgba(255, 255, 255, 1)',
+		),
+		'menu-cta'  => array(
+			'style' => 'flat',
+			'bg'    => 'rgba(0, 123, 255, 1)',
+			'text'  => 'rgba(255, 255, 255, 1)',
+		),
+	);
+
+	if ( ! isset( $defaults[ $prefix ] ) ) {
+		return array();
+	}
+
+	$style      = get_theme_mod( "prospero_{$prefix}_btn_style", $defaults[ $prefix ]['style'] );
+	$bg         = get_theme_mod( "prospero_{$prefix}_btn_bg", $defaults[ $prefix ]['bg'] );
+	$text       = get_theme_mod( "prospero_{$prefix}_btn_text", $defaults[ $prefix ]['text'] );
+	$hover_bg   = get_theme_mod( "prospero_{$prefix}_btn_hover_bg", '' );
+	$hover_text = get_theme_mod( "prospero_{$prefix}_btn_hover_text", '' );
+	$font_style = get_theme_mod( "prospero_{$prefix}_btn_font_style", 'none' );
+	$radius     = get_theme_mod( "prospero_{$prefix}_btn_radius", '4px' );
+
+	// Page background / text colors for the requested mode, used as the
+	// contrast reference and as the safe-fallback accent.
+	$page_bg = 'dark' === $mode
+		? get_theme_mod( 'prospero_dark_background_color', '#2b2a33' )
+		: get_theme_mod( 'prospero_background_color', '#ffffff' );
+	$page_text = 'dark' === $mode
+		? get_theme_mod( 'prospero_dark_text_color', '#f7f7f7' )
+		: get_theme_mod( 'prospero_text_color', '#333333' );
+
+	$too_close = prospero_contrast_ratio( $bg, $page_bg ) < prospero_get_button_contrast_threshold();
+
+	if ( 'outline' === $style ) {
+		$resolved_bg         = 'transparent';
+		$resolved_text       = $bg;
+		$resolved_border     = $bg;
+		$resolved_hover_bg   = ! empty( $hover_bg ) ? $hover_bg : $bg;
+		$resolved_hover_text = ! empty( $hover_text ) ? $hover_text : $text;
+
+		if ( $too_close ) {
+			// The outline accent would disappear against the page bg in
+			// this mode. Substitute the mode's page text color so the
+			// button stays readable and keeps its "outline" silhouette.
+			$resolved_text   = $page_text;
+			$resolved_border = $page_text;
+
+			if ( empty( $hover_bg ) ) {
+				$resolved_hover_bg = $page_text;
+			}
+			if ( empty( $hover_text ) ) {
+				// Inverse of the hover bg for legible hover text.
+				$resolved_hover_text = $page_bg;
+			}
+		}
+	} else {
+		$resolved_bg         = $bg;
+		$resolved_text       = $text;
+		$resolved_border     = $bg;
+		$resolved_hover_bg   = ! empty( $hover_bg )
+			? $hover_bg
+			: 'color-mix(in srgb, ' . $bg . ' 80%, black)';
+		$resolved_hover_text = ! empty( $hover_text ) ? $hover_text : $text;
+
+		if ( $too_close ) {
+			// Flat button matches the page - the whole button would
+			// vanish except for its text. Swap to page text color so
+			// the fill is visible, with page bg as the text color.
+			$resolved_bg         = $page_text;
+			$resolved_border     = $page_text;
+			$resolved_text       = $page_bg;
+			if ( empty( $hover_bg ) ) {
+				$resolved_hover_bg = 'color-mix(in srgb, ' . $page_text . ' 80%, black)';
+			}
+			if ( empty( $hover_text ) ) {
+				$resolved_hover_text = $page_bg;
+			}
+		}
+	}
+
+	$text_transform = $font_style === 'uppercase' ? 'uppercase' : 'none';
+	$letter_spacing = $font_style === 'uppercase' ? '0.5px' : 'normal';
+
+	return array(
+		"--prospero-btn-{$prefix}-bg"              => $resolved_bg,
+		"--prospero-btn-{$prefix}-text"            => $resolved_text,
+		"--prospero-btn-{$prefix}-border"          => $resolved_border,
+		"--prospero-btn-{$prefix}-radius"          => $radius,
+		"--prospero-btn-{$prefix}-hover-bg"        => $resolved_hover_bg,
+		"--prospero-btn-{$prefix}-hover-text"      => $resolved_hover_text,
+		"--prospero-btn-{$prefix}-text-transform"  => $text_transform,
+		"--prospero-btn-{$prefix}-letter-spacing"  => $letter_spacing,
+	);
+}
+
+/**
+ * Build the combined map of all button CSS custom properties for the
+ * given page mode.
+ *
+ * @param string $mode `light` (default) or `dark`.
+ * @return array Map of CSS custom property name => value.
+ */
+function prospero_get_button_css_vars( $mode = 'light' ) {
+	return array_merge(
+		prospero_get_button_css_vars_for( 'primary', $mode ),
+		prospero_get_button_css_vars_for( 'secondary', $mode ),
+		prospero_get_button_css_vars_for( 'tertiary', $mode ),
+		prospero_get_button_css_vars_for( 'menu-cta', $mode )
+	);
+}
+
+/**
+ * Render a set of :root CSS custom properties as a CSS string.
+ *
+ * @param array $vars Map of variable name => value.
+ * @return string CSS declarations (without surrounding `:root { }`).
+ */
+function prospero_render_css_vars( $vars ) {
+	$out = '';
+	foreach ( $vars as $var_name => $var_value ) {
+		$out .= $var_name . ': ' . esc_attr( $var_value ) . ';';
+	}
+	return $out;
+}
+
+/**
+ * Generate dynamic CSS from customizer settings (frontend).
  */
 function prospero_dynamic_css() {
 	$primary_color     = get_theme_mod( 'prospero_primary_color', '#007bff' );
@@ -149,47 +421,14 @@ function prospero_dynamic_css() {
 	$highlight_color   = get_theme_mod( 'prospero_highlight_color', '#ffc107' );
 	$bg_color          = get_theme_mod( 'prospero_background_color', '#ffffff' );
 	$dark_bg_color     = get_theme_mod( 'prospero_dark_background_color', '#2b2a33' );
-	
+
 	// Calculate contrast text color for highlight (sticky label)
 	$highlight_text_color = prospero_get_contrast_text_color( $highlight_color );
-	
-	// PRIMARY BUTTON settings
-	$primary_style = get_theme_mod( 'prospero_primary_btn_style', 'flat' );
-	$primary_bg = get_theme_mod( 'prospero_primary_btn_bg', 'rgba(0, 123, 255, 1)' );
-	$primary_text = get_theme_mod( 'prospero_primary_btn_text', 'rgba(255, 255, 255, 1)' );
-	$primary_hover_bg = get_theme_mod( 'prospero_primary_btn_hover_bg', '' );
-	$primary_hover_text = get_theme_mod( 'prospero_primary_btn_hover_text', '' );
-	$primary_font_style = get_theme_mod( 'prospero_primary_btn_font_style', 'none' );
-	$primary_radius = get_theme_mod( 'prospero_primary_btn_radius', '4px' );
-	
-	// SECONDARY BUTTON settings
-	$secondary_style = get_theme_mod( 'prospero_secondary_btn_style', 'outline' );
-	$secondary_bg = get_theme_mod( 'prospero_secondary_btn_bg', 'rgba(108, 117, 125, 1)' );
-	$secondary_text = get_theme_mod( 'prospero_secondary_btn_text', 'rgba(255, 255, 255, 1)' );
-	$secondary_hover_bg = get_theme_mod( 'prospero_secondary_btn_hover_bg', '' );
-	$secondary_hover_text = get_theme_mod( 'prospero_secondary_btn_hover_text', '' );
-	$secondary_font_style = get_theme_mod( 'prospero_secondary_btn_font_style', 'none' );
-	$secondary_radius = get_theme_mod( 'prospero_secondary_btn_radius', '4px' );
-	
-	// TERTIARY BUTTON settings
-	$tertiary_style = get_theme_mod( 'prospero_tertiary_btn_style', 'flat' );
-	$tertiary_bg = get_theme_mod( 'prospero_tertiary_btn_bg', 'rgba(40, 167, 69, 1)' );
-	$tertiary_text = get_theme_mod( 'prospero_tertiary_btn_text', 'rgba(255, 255, 255, 1)' );
-	$tertiary_hover_bg = get_theme_mod( 'prospero_tertiary_btn_hover_bg', '' );
-	$tertiary_hover_text = get_theme_mod( 'prospero_tertiary_btn_hover_text', '' );
-	$tertiary_font_style = get_theme_mod( 'prospero_tertiary_btn_font_style', 'none' );
-	$tertiary_radius = get_theme_mod( 'prospero_tertiary_btn_radius', '4px' );
-	
-	// Calculate auto-hover colors if not set
-	$primary_hover_bg_auto = ! empty( $primary_hover_bg ) ? $primary_hover_bg : 'color-mix(in srgb, ' . esc_attr( $primary_bg ) . ' 80%, black)';
-	$secondary_hover_bg_auto = ! empty( $secondary_hover_bg ) ? $secondary_hover_bg : 'color-mix(in srgb, ' . esc_attr( $secondary_bg ) . ' 80%, black)';
-	$tertiary_hover_bg_auto = ! empty( $tertiary_hover_bg ) ? $tertiary_hover_bg : 'color-mix(in srgb, ' . esc_attr( $tertiary_bg ) . ' 80%, black)';
-	
+
 	// Layout
 	$content_width = get_theme_mod( 'prospero_content_width', '1200px' );
-	
-	$css = ':root {';
-	// Layout
+
+	$css  = ':root {';
 	$css .= '--content-width: ' . esc_attr( $content_width ) . ';';
 	// Theme colors
 	$css .= '--color-primary: ' . esc_attr( $primary_color ) . ';';
@@ -201,119 +440,35 @@ function prospero_dynamic_css() {
 	$css .= '--color-background: ' . esc_attr( $bg_color ) . ';';
 	$css .= '--color-background-dark: ' . esc_attr( $dark_bg_color ) . ';';
 	$css .= '--color-sticky-label-text: ' . esc_attr( $highlight_text_color ) . ';';
-	
-	// Prospero-prefixed variables
+
+	// Prospero-prefixed aliases (kept for backwards compatibility / theme.json).
 	$css .= '--prospero-primary: ' . esc_attr( $primary_color ) . ';';
 	$css .= '--prospero-secondary: ' . esc_attr( $secondary_color ) . ';';
 	$css .= '--prospero-tertiary: ' . esc_attr( $tertiary_color ) . ';';
-	
-	// Primary button CSS custom properties (used by theme.json)
-	$css .= '--prospero-btn-primary-bg: ' . esc_attr( $primary_style === 'outline' ? 'transparent' : $primary_bg ) . ';';
-	$css .= '--prospero-btn-primary-text: ' . esc_attr( $primary_style === 'outline' ? $primary_bg : $primary_text ) . ';';
-	$css .= '--prospero-btn-primary-radius: ' . esc_attr( $primary_radius ) . ';';
-	$css .= '--prospero-btn-primary-hover-bg: ' . $primary_hover_bg_auto . ';';
-	$css .= '--prospero-btn-primary-hover-text: ' . esc_attr( ! empty( $primary_hover_text ) ? $primary_hover_text : $primary_text ) . ';';
-	
-	// Secondary button CSS custom properties
-	$css .= '--prospero-btn-secondary-bg: ' . esc_attr( $secondary_style === 'outline' ? 'transparent' : $secondary_bg ) . ';';
-	$css .= '--prospero-btn-secondary-text: ' . esc_attr( $secondary_style === 'outline' ? $secondary_bg : $secondary_text ) . ';';
-	$css .= '--prospero-btn-secondary-radius: ' . esc_attr( $secondary_radius ) . ';';
-	$css .= '--prospero-btn-secondary-hover-bg: ' . $secondary_hover_bg_auto . ';';
-	$css .= '--prospero-btn-secondary-hover-text: ' . esc_attr( ! empty( $secondary_hover_text ) ? $secondary_hover_text : $secondary_text ) . ';';
-	
-	// Tertiary button CSS custom properties
-	$css .= '--prospero-btn-tertiary-bg: ' . esc_attr( $tertiary_style === 'outline' ? 'transparent' : $tertiary_bg ) . ';';
-	$css .= '--prospero-btn-tertiary-text: ' . esc_attr( $tertiary_style === 'outline' ? $tertiary_bg : $tertiary_text ) . ';';
-	$css .= '--prospero-btn-tertiary-radius: ' . esc_attr( $tertiary_radius ) . ';';
-	$css .= '--prospero-btn-tertiary-hover-bg: ' . $tertiary_hover_bg_auto . ';';
-	$css .= '--prospero-btn-tertiary-hover-text: ' . esc_attr( ! empty( $tertiary_hover_text ) ? $tertiary_hover_text : $tertiary_text ) . ';';
-	
+
+	// Button CSS custom properties (light-mode flavour) shared with the
+	// block editor.
+	$light_button_vars = prospero_get_button_css_vars( 'light' );
+	$css .= prospero_render_css_vars( $light_button_vars );
+
 	$css .= '}';
-	
-	// Helper function to generate button CSS
-	$generate_button_css = function( $class, $style, $bg_color, $text_color, $font_style, $radius, $hover_bg = '', $hover_text = '' ) use ( &$css ) {
-		$css .= $class . ' {';
-		
-		// Style (flat or outline)
-		if ( $style === 'outline' ) {
-			$css .= 'background-color: transparent;';
-			$css .= 'color: ' . esc_attr( $bg_color ) . ';';
-			$css .= 'border: 2px solid ' . esc_attr( $bg_color ) . ';';
-		} else {
-			$css .= 'background-color: ' . esc_attr( $bg_color ) . ';';
-			$css .= 'color: ' . esc_attr( $text_color ) . ';';
-			$css .= 'border: 2px solid ' . esc_attr( $bg_color ) . ';';
+
+	// Emit dark-mode overrides only for button variables that actually
+	// differ from light mode (i.e. the contrast fallback kicked in for
+	// one of the roles). Keeps the output minimal when everything's fine.
+	$dark_button_vars  = prospero_get_button_css_vars( 'dark' );
+	$dark_overrides    = array();
+	foreach ( $dark_button_vars as $var_name => $var_value ) {
+		if ( ! array_key_exists( $var_name, $light_button_vars ) || $light_button_vars[ $var_name ] !== $var_value ) {
+			$dark_overrides[ $var_name ] = $var_value;
 		}
-		
-		// Border radius
-		$css .= 'border-radius: ' . esc_attr( $radius ) . ';';
-		
-		// Font style
-		if ( $font_style === 'uppercase' ) {
-			$css .= 'text-transform: uppercase;';
-			$css .= 'letter-spacing: 0.5px;';
-		}
-		
+	}
+	if ( ! empty( $dark_overrides ) ) {
+		$css .= 'body.dark-mode {';
+		$css .= prospero_render_css_vars( $dark_overrides );
 		$css .= '}';
-		
-		// Hover state
-		$css .= $class . ':hover, ' . $class . ':focus {';
-		if ( ! empty( $hover_bg ) ) {
-			// Use custom hover background if provided
-			$css .= 'background-color: ' . esc_attr( $hover_bg ) . ';';
-		} elseif ( $style === 'outline' ) {
-			$css .= 'background-color: ' . esc_attr( $bg_color ) . ';';
-		} else {
-			// Auto-darken for flat buttons
-			$css .= 'background-color: color-mix(in srgb, ' . esc_attr( $bg_color ) . ' 80%, black);';
-		}
-		
-		if ( ! empty( $hover_text ) ) {
-			// Use custom hover text color if provided
-			$css .= 'color: ' . esc_attr( $hover_text ) . ';';
-		} elseif ( $style === 'outline' ) {
-			$css .= 'color: ' . esc_attr( $text_color ) . ';';
-		}
-		
-		$css .= '}';
-	};
-	
-	// Primary button (includes submit buttons by default)
-	$generate_button_css(
-		'.button-primary, .wp-block-button.is-style-primary .wp-block-button__link, input[type="submit"], button[type="submit"], .wp-block-button__link',
-		$primary_style,
-		$primary_bg,
-		$primary_text,
-		$primary_font_style,
-		$primary_radius,
-		$primary_hover_bg,
-		$primary_hover_text
-	);
-	
-	// Secondary button
-	$generate_button_css(
-		'.button-secondary, .wp-block-button.is-style-secondary .wp-block-button__link',
-		$secondary_style,
-		$secondary_bg,
-		$secondary_text,
-		$secondary_font_style,
-		$secondary_radius,
-		$secondary_hover_bg,
-		$secondary_hover_text
-	);
-	
-	// Tertiary button
-	$generate_button_css(
-		'.button-tertiary, .wp-block-button.is-style-tertiary .wp-block-button__link',
-		$tertiary_style,
-		$tertiary_bg,
-		$tertiary_text,
-		$tertiary_font_style,
-		$tertiary_radius,
-		$tertiary_hover_bg,
-		$tertiary_hover_text
-	);
-	
+	}
+
 	echo '<style type="text/css" id="prospero-dynamic-css">' . $css . '</style>';
 }
 add_action( 'wp_head', 'prospero_dynamic_css', 99 );
@@ -331,10 +486,88 @@ function prospero_get_reading_time( $content ) {
 }
 
 /**
- * Custom excerpt length
+ * Group FAQ posts by their primary `faq_category` term.
+ *
+ * Each FAQ with one or more terms is placed under its first term
+ * (WP's natural menu_order / alphabetical pick). FAQs without a
+ * category fall into a final "uncategorised" group that is rendered
+ * under the "Uncategorised" heading. Non-empty groups are returned
+ * in alphabetical order of their term name.
+ *
+ * The returned shape keeps term objects available so the caller can
+ * render links back to the taxonomy page for each group.
+ *
+ * @param WP_Post[] $faqs Array of FAQ posts.
+ * @return array<int, array{term:WP_Term|null, posts:WP_Post[]}>
+ */
+function prospero_group_faqs_by_category( $faqs ) {
+	$groups        = array();
+	$uncategorised = array();
+
+	foreach ( $faqs as $faq ) {
+		$terms = get_the_terms( $faq->ID, 'faq_category' );
+
+		if ( $terms && ! is_wp_error( $terms ) ) {
+			// Use the alphabetically-first term as the "primary" bucket
+			// so grouping is stable even when get_the_terms() order varies.
+			usort( $terms, static function ( $a, $b ) {
+				return strcasecmp( $a->name, $b->name );
+			} );
+			$primary = $terms[0];
+
+			if ( ! isset( $groups[ $primary->term_id ] ) ) {
+				$groups[ $primary->term_id ] = array(
+					'term'  => $primary,
+					'posts' => array(),
+				);
+			}
+			$groups[ $primary->term_id ]['posts'][] = $faq;
+		} else {
+			$uncategorised[] = $faq;
+		}
+	}
+
+	// Stable alphabetical order for the category groups.
+	$groups = array_values( $groups );
+	usort( $groups, static function ( $a, $b ) {
+		return strcasecmp( $a['term']->name, $b['term']->name );
+	} );
+
+	if ( ! empty( $uncategorised ) ) {
+		$groups[] = array(
+			'term'  => null,
+			'posts' => $uncategorised,
+		);
+	}
+
+	return $groups;
+}
+
+/**
+ * The theme's configured auto-excerpt length in words.
+ *
+ * Exposed through a dedicated filter (`prospero_excerpt_length`) so
+ * child themes can override the value in a single place and both
+ * the frontend archive and the AJAX blog-filter response stay in sync.
+ *
+ * @return int Word count cap for auto-generated excerpts.
+ */
+function prospero_get_excerpt_length() {
+	$length = 30;
+
+	/**
+	 * Filters the theme's auto-excerpt word count.
+	 *
+	 * @param int $length Default 30.
+	 */
+	return (int) apply_filters( 'prospero_excerpt_length', $length );
+}
+
+/**
+ * WordPress `excerpt_length` filter callback.
  */
 function prospero_excerpt_length( $length ) {
-	return 30;
+	return prospero_get_excerpt_length();
 }
 add_filter( 'excerpt_length', 'prospero_excerpt_length' );
 

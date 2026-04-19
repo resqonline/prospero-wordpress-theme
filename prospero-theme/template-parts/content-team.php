@@ -10,6 +10,7 @@
  *     @type bool   $slider       Whether the item is displayed in a slider. Default false.
  *     @type bool   $lightbox     Whether to use lightbox instead of links. Default false.
  *     @type string $layout       Layout style: 'columns' or 'list'. Default 'columns'.
+ *     @type string $image_style  Image shape: 'square', 'round', 'portrait'. Default 'square'.
  *     @type bool   $show_contact Whether to show contact info. Default true.
  *     @type bool   $show_social  Whether to show social links. Default true.
  *     @type bool   $show_excerpt Whether to show excerpt. Default false (true for list layout).
@@ -26,6 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $slider       = isset( $args['slider'] ) ? $args['slider'] : false;
 $lightbox     = isset( $args['lightbox'] ) ? $args['lightbox'] : false;
 $layout       = isset( $args['layout'] ) ? $args['layout'] : 'columns';
+$image_style  = isset( $args['image_style'] ) ? $args['image_style'] : 'square';
 $show_contact = isset( $args['show_contact'] ) ? $args['show_contact'] : true;
 $show_social  = isset( $args['show_social'] ) ? $args['show_social'] : true;
 $show_excerpt = isset( $args['show_excerpt'] ) ? $args['show_excerpt'] : ( $layout === 'list' );
@@ -38,40 +40,62 @@ $position     = get_post_meta( get_the_ID(), '_prospero_team_position', true );
 $email        = get_post_meta( get_the_ID(), '_prospero_team_email', true );
 $phone        = get_post_meta( get_the_ID(), '_prospero_team_phone', true );
 
-// Social links
+// Social links with their icon classes
 $social_links = array(
-	'linkedin'  => get_post_meta( get_the_ID(), '_prospero_team_linkedin', true ),
-	'youtube'   => get_post_meta( get_the_ID(), '_prospero_team_youtube', true ),
-	'instagram' => get_post_meta( get_the_ID(), '_prospero_team_instagram', true ),
-	'facebook'  => get_post_meta( get_the_ID(), '_prospero_team_facebook', true ),
-	'xing'      => get_post_meta( get_the_ID(), '_prospero_team_xing', true ),
+	'linkedin'  => array(
+		'url'  => get_post_meta( get_the_ID(), '_prospero_team_linkedin', true ),
+		'icon' => 'icon-linkedin',
+	),
+	'youtube'   => array(
+		'url'  => get_post_meta( get_the_ID(), '_prospero_team_youtube', true ),
+		'icon' => 'icon-youtube',
+	),
+	'instagram' => array(
+		'url'  => get_post_meta( get_the_ID(), '_prospero_team_instagram', true ),
+		'icon' => 'icon-instagram',
+	),
+	'facebook'  => array(
+		'url'  => get_post_meta( get_the_ID(), '_prospero_team_facebook', true ),
+		'icon' => 'icon-facebook',
+	),
+	'xing'      => array(
+		'url'  => get_post_meta( get_the_ID(), '_prospero_team_xing', true ),
+		'icon' => 'icon-xing',
+	),
 );
 
 // Check if there are any social links
 $has_social = false;
 foreach ( $social_links as $link ) {
-	if ( ! empty( $link ) ) {
+	if ( ! empty( $link['url'] ) ) {
 		$has_social = true;
 		break;
 	}
 }
+
+// Determine image size based on style
+$image_size = ( $image_style === 'portrait' ) ? 'medium_large' : 'medium';
 ?>
-<div class="team-member<?php echo $slider ? ' flickity-cell' : ''; ?>"<?php echo $lightbox ? ' data-team-id="' . get_the_ID() . '"' : ''; ?>>
+<div class="team-item<?php echo $slider ? ' flickity-cell' : ''; ?>"<?php echo $lightbox ? ' data-team-id="' . get_the_ID() . '"' : ''; ?>>
 	<div class="team-member-card">
 		<?php if ( has_post_thumbnail() ) : ?>
-			<div class="team-member-image">
+			<div class="team-image team-image-<?php echo esc_attr( $image_style ); ?>">
 				<?php if ( $lightbox ) : ?>
 					<button type="button" class="team-lightbox-trigger" aria-label="<?php echo esc_attr( sprintf( __( 'View details for %s', 'prospero-theme' ), $name_output ) ); ?>">
-						<?php the_post_thumbnail( 'medium', array( 'class' => 'team-thumbnail' ) ); ?>
+						<span class="team-image-container">
+							<?php the_post_thumbnail( $image_size, array( 'class' => 'team-thumbnail' ) ); ?>
+						</span>
 					</button>
 				<?php else : ?>
-					<?php the_post_thumbnail( 'medium' ); ?>
+					<span class="team-image-container">
+						<?php the_post_thumbnail( $image_size ); ?>
+					</span>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 		
-		<div class="team-member-content">
-			<h3 class="team-member-name">
+		<div class="team-content">
+			<h3 class="team-name">
 				<?php if ( $lightbox ) : ?>
 					<button type="button" class="team-lightbox-trigger"><?php echo esc_html( $name_output ); ?></button>
 				<?php else : ?>
@@ -80,38 +104,39 @@ foreach ( $social_links as $link ) {
 			</h3>
 			
 			<?php if ( $position ) : ?>
-				<p class="team-member-position"><?php echo esc_html( $position ); ?></p>
+				<p class="team-position"><?php echo esc_html( $position ); ?></p>
 			<?php endif; ?>
 			
 			<?php if ( $show_excerpt && has_excerpt() ) : ?>
-				<div class="team-member-excerpt">
+				<div class="team-excerpt">
 					<?php the_excerpt(); ?>
 				</div>
 			<?php endif; ?>
 			
 			<?php if ( $show_contact && ( $email || $phone ) ) : ?>
-				<div class="team-member-contact">
+				<div class="team-contact">
 					<?php if ( $email ) : ?>
-						<a href="mailto:<?php echo esc_attr( $email ); ?>" class="team-contact-link email" aria-label="<?php esc_attr_e( 'Email', 'prospero-theme' ); ?>">
-							<span class="screen-reader-text"><?php esc_html_e( 'Email:', 'prospero-theme' ); ?></span>
-							<?php echo esc_html( $email ); ?>
+						<a href="<?php echo antispambot( 'mailto:' . $email ); ?>" class="team-contact-link team-contact-email">
+							<span class="icon-mail" aria-hidden="true"></span>
+							<span class="team-contact-text"><?php echo antispambot( $email ); ?></span>
 						</a>
 					<?php endif; ?>
 					
 					<?php if ( $phone ) : ?>
-						<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $phone ) ); ?>" class="team-contact-link phone" aria-label="<?php esc_attr_e( 'Phone', 'prospero-theme' ); ?>">
-							<span class="screen-reader-text"><?php esc_html_e( 'Phone:', 'prospero-theme' ); ?></span>
-							<?php echo esc_html( $phone ); ?>
+						<a href="<?php echo antispambot( 'tel:' . preg_replace( '/[^0-9+]/', '', $phone ) ); ?>" class="team-contact-link team-contact-phone">
+							<span class="icon-phone" aria-hidden="true"></span>
+							<span class="team-contact-text"><?php echo antispambot( $phone ); ?></span>
 						</a>
 					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 			
 			<?php if ( $show_social && $has_social ) : ?>
-				<div class="team-member-social">
-					<?php foreach ( $social_links as $network => $url ) : ?>
-						<?php if ( ! empty( $url ) ) : ?>
-							<a href="<?php echo esc_url( $url ); ?>" class="social-link <?php echo esc_attr( $network ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( ucfirst( $network ) ); ?>">
+				<div class="team-social">
+					<?php foreach ( $social_links as $network => $data ) : ?>
+						<?php if ( ! empty( $data['url'] ) ) : ?>
+							<a href="<?php echo esc_url( $data['url'] ); ?>" class="team-social-link team-social-<?php echo esc_attr( $network ); ?>" target="_blank" rel="noopener noreferrer" title="<?php echo esc_attr( ucfirst( $network ) ); ?>">
+								<span class="<?php echo esc_attr( $data['icon'] ); ?>" aria-hidden="true"></span>
 								<span class="screen-reader-text"><?php echo esc_html( ucfirst( $network ) ); ?></span>
 							</a>
 						<?php endif; ?>
@@ -120,7 +145,7 @@ foreach ( $social_links as $link ) {
 			<?php endif; ?>
 			
 			<?php if ( $show_link && ! $lightbox ) : ?>
-				<a href="<?php the_permalink(); ?>" class="team-member-link button button-secondary">
+				<a href="<?php the_permalink(); ?>" class="team-link button button-secondary">
 					<?php esc_html_e( 'View Profile', 'prospero-theme' ); ?>
 				</a>
 			<?php endif; ?>
@@ -128,22 +153,10 @@ foreach ( $social_links as $link ) {
 
 		<?php if ( $lightbox ) : ?>
 			<div class="team-lightbox-content" hidden>
-				<div class="team-lightbox-inner">
-					<?php if ( has_post_thumbnail() ) : ?>
-						<div class="team-lightbox-image">
-							<?php the_post_thumbnail( 'large', array( 'class' => 'team-thumbnail-large' ) ); ?>
-						</div>
-					<?php endif; ?>
-					<div class="team-lightbox-details">
-						<h2 class="team-lightbox-name"><?php echo esc_html( $name_output ); ?></h2>
-						<?php if ( $position ) : ?>
-							<p class="team-lightbox-position"><?php echo esc_html( $position ); ?></p>
-						<?php endif; ?>
-						<div class="team-lightbox-bio">
-							<?php the_content(); ?>
-						</div>
-					</div>
-				</div>
+				<?php get_template_part( 'template-parts/content-team-detail', null, array(
+					'image_style' => $image_style,
+					'heading_tag' => 'h2',
+				) ); ?>
 			</div>
 		<?php endif; ?>
 	</div>

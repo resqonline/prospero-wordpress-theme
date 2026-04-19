@@ -259,6 +259,19 @@
 
 	/**
 	 * Sticky header functionality
+	 *
+	 * The threshold is the header's own height PLUS the distance from the
+	 * top of the document to the header's top edge. That distance is 0
+	 * when no top bar is present and equal to the top bar's height when
+	 * one is rendered, so the sticky activation preserves the same
+	 * "re-appears after being fully scrolled away" feel in both layouts.
+	 *
+	 * When a top bar is present, its height is also exposed as the
+	 * `--prospero-top-bar-height` CSS custom property on <html>. CSS uses
+	 * it to pin the top bar alongside the sticky header so the contact
+	 * info stays reachable while the user scrolls, and to reserve the
+	 * combined height on body.padding-top so content doesn't slip under
+	 * either bar.
 	 */
 	function initStickyHeader() {
 		const header = document.getElementById('masthead');
@@ -266,21 +279,42 @@
 			return;
 		}
 
-		let lastScroll = 0;
-		const headerHeight = header.offsetHeight;
+		const topBar = document.querySelector('.site-top-bar');
 
-		window.addEventListener('scroll', function() {
-			const currentScroll = window.pageYOffset;
+		function measureTopBarHeight() {
+			const h = topBar ? topBar.offsetHeight : 0;
+			document.documentElement.style.setProperty('--prospero-top-bar-height', h + 'px');
+			return h;
+		}
 
-			if (currentScroll > headerHeight) {
+		measureTopBarHeight();
+		let threshold = header.offsetTop + header.offsetHeight;
+
+		// Recalculate on resize because the top bar height can change
+		// when the viewport crosses the mobile breakpoint.
+		window.addEventListener('resize', function () {
+			// Temporarily undo sticky state so offsetTop reflects natural flow.
+			const wasSticky = header.classList.contains('is-sticky');
+			if (wasSticky) {
+				header.classList.remove('is-sticky');
+				document.body.classList.remove('header-is-stuck');
+			}
+			measureTopBarHeight();
+			threshold = header.offsetTop + header.offsetHeight;
+			if (wasSticky && window.pageYOffset > threshold) {
+				header.classList.add('is-sticky');
+				document.body.classList.add('header-is-stuck');
+			}
+		});
+
+		window.addEventListener('scroll', function () {
+			if (window.pageYOffset > threshold) {
 				header.classList.add('is-sticky');
 				document.body.classList.add('header-is-stuck');
 			} else {
 				header.classList.remove('is-sticky');
 				document.body.classList.remove('header-is-stuck');
 			}
-
-			lastScroll = currentScroll;
 		});
 	}
 

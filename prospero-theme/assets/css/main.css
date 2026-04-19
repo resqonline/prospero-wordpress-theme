@@ -36,6 +36,33 @@
 	/* Typography */
 	--font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 	--font-family-heading: var(--font-family-base);
+	
+	/*
+	 * Form fields (inputs, textareas, selects)
+	 *
+	 * Consumed by the shared form-field rules below. Dark-mode overrides
+	 * live in dark-mode.css. All values are derived from the Customizer
+	 * colors so changing the palette re-themes forms automatically.
+	 *
+	 * Accessibility targets (European Accessibility Act / WCAG 2.1):
+	 *   - Non-text UI boundaries (input border) >= 3:1 vs adjacent colors
+	 *     (WCAG 1.4.11). Mixing 55% of --color-text into --color-background
+	 *     produces roughly #8F on white (~3.2:1) or #9f on dark (~4:1).
+	 *   - Placeholder text (acts as informational text) >= 4.5:1 for WCAG
+	 *     AA. 65% text mix gives about 5.7:1 on white.
+	 *   - The input fill is slightly tinted against the page background so
+	 *     the field is clearly locatable even before the border is parsed.
+	 */
+	--prospero-input-bg: color-mix(in srgb, var(--color-background) 92%, var(--color-text));
+	--prospero-input-border: color-mix(in srgb, var(--color-text) 55%, var(--color-background));
+	--prospero-input-border-hover: color-mix(in srgb, var(--color-text) 75%, var(--color-background));
+	--prospero-input-border-focus: var(--color-primary);
+	--prospero-input-text: var(--color-text);
+	--prospero-input-placeholder: color-mix(in srgb, var(--color-text) 65%, var(--color-background));
+	--prospero-input-focus-ring: color-mix(in srgb, var(--color-primary) 30%, transparent);
+	--prospero-input-radius: 6px;
+	--prospero-input-padding-y: 0.625rem;
+	--prospero-input-padding-x: 0.875rem;
 }
 
 body {
@@ -105,7 +132,9 @@ button a[target="_blank"]::after,
 .custom-logo-link[target="_blank"]::after,
 .site-title a[target="_blank"]::after,
 .partner-logo a[target="_blank"]::after,
-.partner-item a[target="_blank"]::after {
+.partner-item a[target="_blank"]::after,
+.prospero-team .team-social-link[target="_blank"]::after,
+.team-lightbox-social a[target="_blank"]::after {
 	content: none;
 }
 
@@ -282,6 +311,91 @@ button a[target="_blank"]::after,
 }
 
 /* ==========================================================================
+   Top Bar (optional contact bar above the header)
+   ==========================================================================
+
+   Managed via Customizer → Top Bar. Rendered by
+   template-parts/top-bar.php when enabled and at least one of the
+   phone / email fields is filled. Sits above the site header in normal
+   flow — when the sticky header activates, the top bar scrolls off and
+   only the header pins to the viewport.
+   ========================================================================== */
+
+.site-top-bar {
+	/* A subtle band derived from the Customizer background color, similar
+	 * to how the footer is darkened. Stays visible in both light and dark
+	 * modes (see dark-mode.css for the dark variant). */
+	background-color: color-mix(in srgb, var(--color-background) 94%, var(--color-text));
+	color: color-mix(in srgb, var(--color-text) 80%, var(--color-background));
+	font-size: 0.85rem;
+	line-height: 1.4;
+	border-bottom: 1px solid color-mix(in srgb, var(--color-text) 10%, transparent);
+}
+
+.site-top-bar .top-bar-inner {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	align-items: center;
+	gap: var(--spacing-sm);
+	padding-top: 0.4rem;
+	padding-bottom: 0.4rem;
+}
+
+.site-top-bar .top-bar-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	color: inherit;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.site-top-bar .top-bar-link:hover,
+.site-top-bar .top-bar-link:focus {
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
+.site-top-bar .top-bar-link:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 3px;
+	text-decoration: none;
+}
+
+.site-top-bar .top-bar-icon {
+	font-size: 1rem;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.site-top-bar .top-bar-text {
+	display: inline-flex;
+	gap: 0.35rem;
+}
+
+.site-top-bar .top-bar-prefix {
+	color: color-mix(in srgb, var(--color-text) 60%, var(--color-background));
+}
+
+/* Mobile: icons only. The textual prefix + value is hidden visually;
+ * screen readers still get the contact info from aria-label on the link. */
+@media (max-width: 767px) {
+	.site-top-bar .top-bar-inner {
+		justify-content: center;
+		gap: var(--spacing-md);
+	}
+
+	.site-top-bar .top-bar-text {
+		display: none;
+	}
+
+	.site-top-bar .top-bar-icon {
+		font-size: 1.125rem;
+	}
+}
+
+/* ==========================================================================
    Header
    ========================================================================== */
 
@@ -341,28 +455,71 @@ button a[target="_blank"]::after,
 
 .site-header.sticky-header.is-sticky {
 	position: fixed;
-	top: 0;
+	/* Offset by the pinned top bar height (0 when no top bar is present). */
+	top: var(--prospero-top-bar-height, 0px);
 	left: 0;
 	right: 0;
 	z-index: 1000;
 	box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
 	padding: calc(var(--spacing-sm) * 0.6) 0;
+	-webkit-backdrop-filter: blur(10px);
 	backdrop-filter: blur(10px);
-	background-color: rgba(255, 255, 255, 0.95);
+	/* Track the Customizer background color, with 95% opacity so the
+	 * backdrop blur still produces a subtle frosted effect. */
+	background-color: color-mix(in srgb, var(--color-background) 95%, transparent);
 }
 
 body.dark-mode .site-header.sticky-header.is-sticky {
-	background-color: rgba(43, 42, 51, 0.95);
+	background-color: color-mix(in srgb, var(--color-background-dark) 95%, transparent);
 	box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }
 
-body.has-sticky-menu.header-is-stuck {
-	padding-top: 90px;
+/*
+ * When the sticky header is active, pin the top bar to the viewport
+ * top as well so contact options stay reachable while scrolling. The
+ * sticky header sits directly underneath (top: --prospero-top-bar-height).
+ * body.padding-top reserves the combined height so page content isn't
+ * hidden under the two bars.
+ */
+body.header-is-stuck .site-top-bar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 1001;
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	box-shadow: 0 1px 12px rgba(0, 0, 0, 0.08);
+}
+
+body.dark-mode.header-is-stuck .site-top-bar {
+	box-shadow: 0 1px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.header-is-stuck {
+	padding-top: calc(var(--prospero-top-bar-height, 0px) + 90px);
 }
 
 .site-header.sticky-header.is-sticky .custom-logo {
 	max-height: 50px;
 	transition: max-height 0.3s ease;
+}
+
+/*
+ * Sticky mode, logo-center: the two-row stacking (logo on row 1, menu
+ * + actions on row 2) is preserved intentionally - collapsing to a
+ * single row would squash long / full-width menus against the logo.
+ * Instead we just tighten the row gap in sticky mode so the rows sit
+ * visually closer, which is the actual source of wasted space in the
+ * fixed header. Horizontal layout is untouched, so any menu length
+ * continues to fit. Transition keeps the change smooth.
+ */
+.site-header.sticky-header.logo-center .header-inner {
+	transition: row-gap 0.3s ease, gap 0.3s ease;
+}
+
+.site-header.sticky-header.logo-center.is-sticky .header-inner {
+	row-gap: var(--spacing-xs);
 }
 
 /* ==========================================================================
@@ -470,11 +627,22 @@ body.has-sticky-menu.header-is-stuck {
 		color: var(--color-text);
 		font-weight: 500;
 		white-space: nowrap;
+		text-decoration: none;
 	}
 
+	/*
+	 * Visible hover / focus feedback for regular menu links. A color
+	 * shift alone was too subtle; an underline with a small offset
+	 * reads as interactive without shifting the link's layout box.
+	 * The CTA button variant resets this below so it keeps its
+	 * button-style hover (background change) instead.
+	 */
 	.desktop-menu a:hover,
 	.desktop-menu a:focus {
 		color: var(--color-primary);
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-underline-offset: 0.35em;
 	}
 
 	/* Desktop dropdown submenus */
@@ -856,6 +1024,13 @@ body.has-sticky-menu.header-is-stuck {
    Buttons
    ========================================================================== */
 
+/*
+ * Button base - shared structural styles. Visual properties
+ * (background, text, border, radius, font transform) come from
+ * CSS custom properties populated by prospero_dynamic_css() from
+ * the Customizer. Defaults mirror the PHP defaults so the buttons
+ * still render if the dynamic CSS is not loaded.
+ */
 .button,
 .wp-block-button__link,
 input[type="submit"],
@@ -868,34 +1043,208 @@ button[type="submit"],
 	font-family: inherit;
 	text-align: center;
 	text-decoration: none;
-	border: 2px solid transparent;
-	border-radius: 4px;
 	cursor: pointer;
 	transition: all 0.3s ease;
-	background-color: var(--color-primary);
-	color: #fff;
+	background-color: var(--prospero-btn-primary-bg, var(--color-primary));
+	color: var(--prospero-btn-primary-text, #fff);
+	border: 2px solid var(--prospero-btn-primary-border, var(--color-primary));
+	border-radius: var(--prospero-btn-primary-radius, 4px);
+	text-transform: var(--prospero-btn-primary-text-transform, none);
+	letter-spacing: var(--prospero-btn-primary-letter-spacing, normal);
 }
 
-.button-primary,
-.wp-block-button.is-style-primary .wp-block-button__link {
-	background-color: var(--color-primary);
-	color: #fff;
-}
-
-.button-primary:hover {
-	background-color: color-mix(in srgb, var(--color-primary) 80%, black);
+.button:hover,
+.button:focus,
+.button-primary:hover,
+.button-primary:focus,
+.wp-block-button__link:hover,
+.wp-block-button__link:focus,
+.wp-block-button.is-style-primary .wp-block-button__link:hover,
+.wp-block-button.is-style-primary .wp-block-button__link:focus,
+input[type="submit"]:hover,
+input[type="submit"]:focus,
+button[type="submit"]:hover,
+button[type="submit"]:focus,
+.submit-button:hover,
+.submit-button:focus {
+	background-color: var(--prospero-btn-primary-hover-bg, color-mix(in srgb, var(--color-primary) 80%, black));
+	color: var(--prospero-btn-primary-hover-text, var(--prospero-btn-primary-text, #fff));
 }
 
 .button-secondary,
 .wp-block-button.is-style-secondary .wp-block-button__link {
-	background-color: var(--color-secondary);
-	color: #fff;
+	background-color: var(--prospero-btn-secondary-bg, var(--color-secondary));
+	color: var(--prospero-btn-secondary-text, #fff);
+	border: 2px solid var(--prospero-btn-secondary-border, var(--color-secondary));
+	border-radius: var(--prospero-btn-secondary-radius, 4px);
+	text-transform: var(--prospero-btn-secondary-text-transform, none);
+	letter-spacing: var(--prospero-btn-secondary-letter-spacing, normal);
+	/* Secondary buttons are slightly smaller than primary. */
+	padding: 0.625rem 1.25rem;
+	font-size: 0.9375rem;
+}
+
+.button-secondary:hover,
+.button-secondary:focus,
+.wp-block-button.is-style-secondary .wp-block-button__link:hover,
+.wp-block-button.is-style-secondary .wp-block-button__link:focus {
+	background-color: var(--prospero-btn-secondary-hover-bg, color-mix(in srgb, var(--color-secondary) 80%, black));
+	color: var(--prospero-btn-secondary-hover-text, var(--prospero-btn-secondary-text, #fff));
 }
 
 .button-tertiary,
 .wp-block-button.is-style-tertiary .wp-block-button__link {
-	background-color: var(--color-tertiary);
-	color: #fff;
+	background-color: var(--prospero-btn-tertiary-bg, var(--color-tertiary));
+	color: var(--prospero-btn-tertiary-text, #fff);
+	border: 2px solid var(--prospero-btn-tertiary-border, var(--color-tertiary));
+	border-radius: var(--prospero-btn-tertiary-radius, 4px);
+	text-transform: var(--prospero-btn-tertiary-text-transform, none);
+	letter-spacing: var(--prospero-btn-tertiary-letter-spacing, normal);
+	/* Tertiary buttons are smaller than secondary. */
+	padding: 0.5rem 1rem;
+	font-size: 0.875rem;
+}
+
+.button-tertiary:hover,
+.button-tertiary:focus,
+.wp-block-button.is-style-tertiary .wp-block-button__link:hover,
+.wp-block-button.is-style-tertiary .wp-block-button__link:focus {
+	background-color: var(--prospero-btn-tertiary-hover-bg, color-mix(in srgb, var(--color-tertiary) 80%, black));
+	color: var(--prospero-btn-tertiary-hover-text, var(--prospero-btn-tertiary-text, #fff));
+}
+
+/* ==========================================================================
+   Form Fields
+   ==========================================================================
+
+   Modern, sleek form controls that respect Customizer colors and dark
+   mode via --prospero-input-* variables (see :root for defaults and
+   dark-mode.css for dark-mode overrides). `input[type="submit"]`,
+   `button[type="submit"]`, `input[type="file"]` and `input[type="checkbox"|"radio"]`
+   are intentionally excluded so they keep their own styling.
+   ========================================================================== */
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="number"],
+input[type="date"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+textarea,
+select {
+	display: block;
+	width: 100%;
+	max-width: 100%;
+	padding: var(--prospero-input-padding-y) var(--prospero-input-padding-x);
+	font-family: inherit;
+	font-size: 1rem;
+	line-height: 1.5;
+	color: var(--prospero-input-text);
+	background-color: var(--prospero-input-bg);
+	/* 1.5px gives a more perceptible outline than 1px without looking heavy. */
+	border: 1.5px solid var(--prospero-input-border);
+	border-radius: var(--prospero-input-radius);
+	transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+input[type="text"]:hover,
+input[type="email"]:hover,
+input[type="password"]:hover,
+input[type="search"]:hover,
+input[type="tel"]:hover,
+input[type="url"]:hover,
+input[type="number"]:hover,
+input[type="date"]:hover,
+input[type="datetime-local"]:hover,
+input[type="month"]:hover,
+input[type="week"]:hover,
+input[type="time"]:hover,
+textarea:hover,
+select:hover {
+	border-color: var(--prospero-input-border-hover);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="tel"]:focus,
+input[type="url"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="datetime-local"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="time"]:focus,
+textarea:focus,
+select:focus {
+	outline: none;
+	border-color: var(--prospero-input-border-focus);
+	box-shadow: 0 0 0 3px var(--prospero-input-focus-ring);
+}
+
+input::placeholder,
+textarea::placeholder {
+	color: var(--prospero-input-placeholder);
+	opacity: 1; /* Firefox defaults placeholders to 56% opacity; normalise it */
+}
+
+input:disabled,
+textarea:disabled,
+select:disabled {
+	opacity: 0.6;
+	cursor: not-allowed;
+}
+
+/* Select - custom chevron indicator (neutral gray works in both modes) */
+select {
+	padding-right: 2.5rem;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 0.875rem center;
+	background-size: 12px 8px;
+}
+
+/* Textarea */
+textarea {
+	min-height: 7.5rem;
+	resize: vertical;
+}
+
+/* Safari autofill override so the browser's yellow fill doesn't replace
+ * the themed background in light mode. Uses a big inset shadow trick. */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+	-webkit-box-shadow: 0 0 0 1000px var(--prospero-input-bg) inset;
+	-webkit-text-fill-color: var(--prospero-input-text);
+	transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Labels - subtle emphasis, aligned with form fields */
+.form-group label,
+.form-field label,
+form p > label {
+	display: inline-block;
+	margin-bottom: 0.35rem;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+/* Screen-reader-only labels should not force layout changes */
+.screen-reader-text label,
+label.screen-reader-text {
+	margin: 0;
 }
 
 /* ==========================================================================
@@ -903,10 +1252,9 @@ button[type="submit"],
    ========================================================================== */
 
 .site-footer {
-	background-color: var(--color-secondary);
-	color: #fff;
+	background-color: color-mix(in srgb, var(--color-background) 92%, black);
+	color: var(--color-text);
 	padding: var(--spacing-lg) 0 var(--spacing-md);
-	margin-top: var(--spacing-xl);
 }
 
 .footer-navigation ul {
@@ -929,7 +1277,7 @@ button[type="submit"],
 
 .footer-navigation a,
 .social-navigation a {
-	color: #fff;
+	color: inherit;
 }
 
 /* Social Menu Icons */
@@ -944,12 +1292,12 @@ button[type="submit"],
 	width: 44px;
 	height: 44px;
 	border-radius: 50%;
-	background-color: rgba(255, 255, 255, 0.1);
+	background-color: rgba(0, 0, 0, 0.08);
 	transition: background-color 0.2s ease, transform 0.2s ease;
 }
 
 .social-navigation a:hover {
-	background-color: rgba(255, 255, 255, 0.2);
+	background-color: rgba(0, 0, 0, 0.15);
 	transform: scale(1.1);
 }
 
@@ -1263,13 +1611,302 @@ body.dark-mode .message.error {
 	white-space: nowrap;
 }
 
-/* Menu item icons */
-.menu-item-login a [class^="icon-"],
-.menu-item-logout a [class^="icon-"],
-.menu-item-account a [class^="icon-"],
+/*
+ * Menu item icons (login / logout / account / user dropdown trigger)
+ *
+ * Use inline-flex on the anchor so the icon and text are properly
+ * baseline-centered by the flex container instead of relying on
+ * vertical-align which aligns to text baseline and makes the icon
+ * appear to sit too low. Gap replaces the old margin-right trick.
+ * Icons are slightly larger than the text they sit next to so they
+ * read as glyphs rather than afterthoughts.
+ */
+.menu-item-login > a,
+.menu-item-logout > a,
+.menu-item-account > a,
+.menu-item-user-account > a {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+}
+
+.menu-item-login > a [class^="icon-"],
+.menu-item-logout > a [class^="icon-"],
+.menu-item-account > a [class^="icon-"],
 .menu-item-user-account > a [class^="icon-"] {
-	margin-right: 0.35em;
-	vertical-align: middle;
+	font-size: 1.15em;
+	line-height: 1;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Menu Item CTA Button
+   ==========================================================================
+
+   Rendered when a menu item has the `menu-item-cta` class. The class is
+   added automatically by inc/nav-menu.php when the "Display as CTA
+   button" checkbox on a menu item is enabled (Appearance → Menus).
+
+   Visual styling is delegated to a dedicated --prospero-btn-menu-cta-*
+   variable group, distinct from primary/secondary/tertiary so it can
+   be styled differently from content buttons (Customizer → Button
+   Styles → Menu CTA Button).
+   ========================================================================== */
+
+/*
+ * Padding is split between desktop and mobile so the CTA's TOTAL outer
+ * height (padding + border) equals the regular menu link height:
+ *
+ *   Desktop menu link: 0.5rem top + text + 0.5rem bottom
+ *   Desktop CTA:       calc(0.5rem - 2px) + 2px border + text + 2px border + calc(0.5rem - 2px)
+ *
+ *   Mobile menu link:  1rem top + text + 1rem bottom
+ *   Mobile CTA:        calc(1rem - 2px) + 2px border + text + 2px border + calc(1rem - 2px)
+ *
+ * Line-height is inherited (1.6), so the text box is identical in both,
+ * which lets the CTA sit perfectly in line with the rest of the menu.
+ */
+.desktop-menu li.menu-item-cta > a,
+.mobile-menu-list li.menu-item-cta > a,
+.mobile-menu-list li.menu-item-cta .menu-item-inner > a {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4em;
+	background-color: var(--prospero-btn-menu-cta-bg, var(--color-primary));
+	color: var(--prospero-btn-menu-cta-text, #fff);
+	border: 2px solid var(--prospero-btn-menu-cta-border, var(--color-primary));
+	border-radius: var(--prospero-btn-menu-cta-radius, 4px);
+	font-weight: 600;
+	text-decoration: none;
+	text-transform: var(--prospero-btn-menu-cta-text-transform, none);
+	letter-spacing: var(--prospero-btn-menu-cta-letter-spacing, normal);
+	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.desktop-menu li.menu-item-cta > a {
+	padding: calc(var(--spacing-xs) - 2px) var(--spacing-sm);
+}
+
+.mobile-menu-list li.menu-item-cta > a,
+.mobile-menu-list li.menu-item-cta .menu-item-inner > a {
+	padding: calc(var(--spacing-sm) - 2px) var(--spacing-sm);
+}
+
+.desktop-menu li.menu-item-cta > a:hover,
+.desktop-menu li.menu-item-cta > a:focus,
+.mobile-menu-list li.menu-item-cta > a:hover,
+.mobile-menu-list li.menu-item-cta > a:focus,
+.mobile-menu-list li.menu-item-cta .menu-item-inner > a:hover,
+.mobile-menu-list li.menu-item-cta .menu-item-inner > a:focus {
+	background-color: var(--prospero-btn-menu-cta-hover-bg, color-mix(in srgb, var(--color-primary) 80%, black));
+	color: var(--prospero-btn-menu-cta-hover-text, var(--prospero-btn-menu-cta-text, #fff));
+	border-color: var(--prospero-btn-menu-cta-hover-bg, var(--prospero-btn-menu-cta-border, var(--color-primary)));
+	/* Cancel the underline hover applied to regular menu links. */
+	text-decoration: none;
+}
+
+/* On mobile the list row has its own bottom border - neutralise it so
+ * the CTA reads as a self-contained button within the list. */
+.mobile-menu-list li.menu-item-cta {
+	border-bottom: none;
+}
+
+/* ==========================================================================
+   FAQ Accordion
+   ==========================================================================
+
+   Styles used by archive-faq.php, taxonomy-faq_category.php,
+   single-faq.php and the FAQ list block (when rendered with the
+   accordion option). Expand/collapse behavior is handled by
+   assets/js/faq-accordion.js via aria-expanded + the `hidden` attr
+   on .faq-answer, so the closed items are also hidden from screen
+   readers. All colors derive from the Customizer variables so the
+   accordion tracks light / dark mode automatically.
+   ========================================================================== */
+
+.faq-accordion {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+	margin: 0 0 var(--spacing-lg);
+}
+
+.faq-accordion-item {
+	border: 1px solid color-mix(in srgb, var(--color-text) 15%, transparent);
+	border-radius: 6px;
+	background: color-mix(in srgb, var(--color-background) 96%, var(--color-text));
+	overflow: hidden;
+	transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+body.dark-mode .faq-accordion-item {
+	border-color: color-mix(in srgb, var(--color-text-dark) 15%, transparent);
+	background: color-mix(in srgb, var(--color-background-dark) 88%, var(--color-text-dark));
+}
+
+.faq-accordion-item:hover,
+.faq-accordion-item:focus-within {
+	border-color: color-mix(in srgb, var(--color-text) 35%, transparent);
+}
+
+body.dark-mode .faq-accordion-item:hover,
+body.dark-mode .faq-accordion-item:focus-within {
+	border-color: color-mix(in srgb, var(--color-text-dark) 35%, transparent);
+}
+
+.faq-accordion-item .faq-question {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--spacing-sm);
+	width: 100%;
+	padding: var(--spacing-sm);
+	background: transparent;
+	border: none;
+	color: inherit;
+	font-family: inherit;
+	font-size: 1.05rem;
+	font-weight: 500;
+	text-align: left;
+	line-height: 1.4;
+	cursor: pointer;
+	transition: color 0.2s ease;
+}
+
+.faq-accordion-item .faq-question:hover,
+.faq-accordion-item .faq-question:focus {
+	color: var(--color-primary);
+}
+
+.faq-accordion-item .faq-question:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: -2px;
+}
+
+.faq-accordion-item .faq-question-text {
+	flex: 1;
+	min-width: 0;
+}
+
+.faq-accordion-item .faq-toggle {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.75rem;
+	height: 1.75rem;
+	font-size: 1.25rem;
+	line-height: 1;
+	border-radius: 50%;
+	background-color: color-mix(in srgb, var(--color-text) 10%, transparent);
+	color: inherit;
+	transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+body.dark-mode .faq-accordion-item .faq-toggle {
+	background-color: color-mix(in srgb, var(--color-text-dark) 12%, transparent);
+}
+
+.faq-accordion-item .faq-question[aria-expanded="true"] .faq-toggle {
+	background-color: var(--color-primary);
+	color: #fff;
+}
+
+.faq-accordion-item .faq-answer {
+	padding: 0 var(--spacing-md) var(--spacing-md);
+	line-height: 1.7;
+}
+
+.faq-accordion-item .faq-answer > :first-child {
+	margin-top: 0;
+}
+
+.faq-accordion-item .faq-answer > :last-child {
+	margin-bottom: 0;
+}
+
+/* Category group headings inside the FAQ list (archive + block when
+ * no specific category is selected). Sits above the per-group
+ * accordion. The :first-child rule means the first group has no
+ * extra top margin; later groups get comfortable breathing room. */
+.prospero-faq-list .faq-group-title {
+	margin: var(--spacing-lg) 0 var(--spacing-sm);
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: var(--color-text);
+}
+
+.prospero-faq-list > .faq-group-title:first-child {
+	margin-top: 0;
+}
+
+body.dark-mode .prospero-faq-list .faq-group-title {
+	color: var(--color-text-dark);
+}
+
+/* Archive / taxonomy / single layout niceties */
+.faq-archive-template .page-header,
+.single-faq .page-header {
+	margin-bottom: var(--spacing-lg);
+}
+
+.faq-archive-link {
+	margin: var(--spacing-sm) 0 0;
+	font-size: 0.9rem;
+}
+
+.faq-archive-link a {
+	color: color-mix(in srgb, var(--color-text) 70%, transparent);
+	text-decoration: none;
+}
+
+.faq-archive-link a:hover,
+.faq-archive-link a:focus {
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
+body.dark-mode .faq-archive-link a {
+	color: color-mix(in srgb, var(--color-text-dark) 70%, transparent);
+}
+
+body.dark-mode .faq-archive-link a:hover,
+body.dark-mode .faq-archive-link a:focus {
+	color: var(--color-text-dark);
+}
+
+.single-faq .faq-categories {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--spacing-xs);
+	margin-bottom: var(--spacing-xs);
+}
+
+.single-faq .faq-category {
+	font-size: 0.75rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	text-decoration: none;
+	color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+
+.single-faq .faq-category:hover,
+.single-faq .faq-category:focus {
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
+body.dark-mode .single-faq .faq-category {
+	color: color-mix(in srgb, var(--color-text-dark) 70%, transparent);
+}
+
+body.dark-mode .single-faq .faq-category:hover,
+body.dark-mode .single-faq .faq-category:focus {
+	color: var(--color-text-dark);
 }
 
 /* ==========================================================================
@@ -1502,32 +2139,19 @@ body.dark-mode .message.error {
 	margin-bottom: var(--spacing-xs);
 }
 
-/* Search form styling */
+/* Search form styling - inherits field styling from the global form rules. */
 .search-form {
 	display: flex;
 	gap: var(--spacing-sm);
+	align-items: stretch;
 }
 
 .search-form label {
 	flex: 1;
 }
 
-.search-form .search-field {
-	width: 100%;
-	padding: var(--spacing-sm) var(--spacing-md);
-	border: 2px solid var(--color-border, #e0e0e0);
-	border-radius: 4px;
-	font-size: 1rem;
-	transition: border-color 0.2s ease;
-}
-
-.search-form .search-field:focus {
-	outline: none;
-	border-color: var(--color-primary);
-}
-
 .search-form .search-submit {
-	padding: var(--spacing-sm) var(--spacing-md);
+	flex-shrink: 0;
 }
 
 /* ==========================================================================
@@ -1561,14 +2185,19 @@ body.dark-mode .message.error {
 	outline-offset: 2px;
 }
 
-/* Search Overlay */
+/*
+ * Search Overlay
+ *
+ * Background follows the Customizer background color (with 98% opacity
+ * so the blurred page behind it is still subtly visible).
+ */
 .search-overlay {
 	position: fixed;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: rgba(255, 255, 255, 0.98);
+	background: color-mix(in srgb, var(--color-background) 98%, transparent);
 	backdrop-filter: blur(20px);
 	-webkit-backdrop-filter: blur(20px);
 	z-index: 99999;
@@ -1628,25 +2257,29 @@ body.dark-mode .message.error {
 	width: 100%;
 }
 
+/*
+ * Search overlay field - hero-size variant. Overrides the global input
+ * rules with a borderless underline style, but still pulls colors from
+ * the same --prospero-input-* variable system so it stays theme-aware.
+ */
 .search-overlay .search-field {
-	width: 100%;
 	padding: var(--spacing-md) var(--spacing-lg);
 	font-size: 1.5rem;
 	border: none;
-	border-bottom: 2px solid var(--color-border, rgba(0, 0, 0, 0.15));
+	border-bottom: 2px solid var(--prospero-input-border);
 	background: transparent;
-	color: var(--color-text);
 	border-radius: 0;
-	transition: border-color 0.2s ease;
+	box-shadow: none;
 }
 
-.search-overlay .search-field::placeholder {
-	color: var(--color-secondary);
+.search-overlay .search-field:hover {
+	border-bottom-color: var(--prospero-input-border-hover);
 }
 
 .search-overlay .search-field:focus {
-	outline: none;
-	border-bottom-color: var(--color-primary);
+	border-color: transparent;
+	border-bottom-color: var(--prospero-input-border-focus);
+	box-shadow: none;
 }
 
 .search-overlay .search-submit {
@@ -1712,14 +2345,15 @@ body.dark-mode .message.error {
 .projects-template .page-description {
 	max-width: 800px;
 	margin-bottom: var(--spacing-lg);
-	color: var(--color-secondary);
 }
 
-body.dark-mode .projects-template .page-description {
-	color: rgba(255, 255, 255, 0.7);
-}
-
-/* Projects Filter Buttons */
+/*
+ * Taxonomy / projects filter buttons
+ *
+ * Subtle by default (text color + soft border). Primary color is only
+ * used for the active/current filter so it doesn't compete with the
+ * actual primary CTA buttons on the page.
+ */
 .projects-filters {
 	display: flex;
 	flex-wrap: wrap;
@@ -1729,37 +2363,50 @@ body.dark-mode .projects-template .page-description {
 
 .filter-button {
 	padding: var(--spacing-xs) var(--spacing-sm);
-	border: 2px solid var(--color-primary);
+	border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
 	background: transparent;
-	color: var(--color-primary);
+	color: color-mix(in srgb, var(--color-text) 75%, transparent);
 	border-radius: 4px;
 	cursor: pointer;
 	font-size: 0.9rem;
 	font-weight: 500;
-	transition: all 0.3s ease;
+	transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
 .filter-button:hover,
 .filter-button:focus {
-	background: var(--color-primary);
-	color: #fff;
+	color: var(--color-text);
+	border-color: color-mix(in srgb, var(--color-text) 45%, transparent);
+	background: transparent;
+}
+
+.filter-button:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
 }
 
 .filter-button.active {
-	background: var(--color-primary);
-	color: #fff;
+	color: var(--color-primary);
+	border-color: var(--color-primary);
+	background: transparent;
 }
 
 body.dark-mode .filter-button {
-	border-color: var(--color-primary);
-	color: var(--color-primary);
+	border-color: color-mix(in srgb, var(--color-text-dark) 25%, transparent);
+	color: color-mix(in srgb, var(--color-text-dark) 75%, transparent);
 }
 
 body.dark-mode .filter-button:hover,
-body.dark-mode .filter-button:focus,
+body.dark-mode .filter-button:focus {
+	color: var(--color-text-dark);
+	border-color: color-mix(in srgb, var(--color-text-dark) 45%, transparent);
+	background: transparent;
+}
+
 body.dark-mode .filter-button.active {
-	background: var(--color-primary);
-	color: #fff;
+	color: var(--color-primary);
+	border-color: var(--color-primary);
+	background: transparent;
 }
 
 /* Projects Grid */
@@ -2107,10 +2754,11 @@ body.dark-mode .blog-template .blog-page-intro {
 
 .blog-template .page-description {
 	max-width: 700px;
-	color: var(--color-secondary);
 }
 
-/* Blog Category Filter */
+/* Blog Category Filter
+ * Inherits the subtle styling from the shared .filter-button rules above.
+ * Only layout-level overrides live here. */
 .blog-category-filter {
 	display: flex;
 	flex-wrap: wrap;
@@ -2126,30 +2774,7 @@ body.dark-mode .blog-category-filter {
 
 .blog-category-filter .filter-button {
 	padding: 8px 16px;
-	border: 1px solid var(--color-primary);
-	background: transparent;
-	color: var(--color-primary);
 	border-radius: var(--border-radius, 4px);
-	font-size: 0.9rem;
-	font-weight: 500;
-	cursor: pointer;
-	transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.blog-category-filter .filter-button:hover,
-.blog-category-filter .filter-button:focus {
-	background: color-mix(in srgb, var(--color-primary) 10%, transparent);
-	outline: none;
-}
-
-.blog-category-filter .filter-button:focus-visible {
-	outline: 2px solid var(--color-primary);
-	outline-offset: 2px;
-}
-
-.blog-category-filter .filter-button.active {
-	background: var(--color-primary);
-	color: #fff;
 }
 
 /* Blog Posts Loading State */
@@ -2337,20 +2962,19 @@ body.dark-mode .blog-template .posts-grid .entry-title a {
 
 .blog-template .posts-grid .entry-meta {
 	font-size: 0.8rem;
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text) 60%, transparent);
 	margin-bottom: var(--spacing-sm);
+}
+
+body.dark-mode .blog-template .posts-grid .entry-meta {
+	color: color-mix(in srgb, var(--color-text-dark) 60%, transparent);
 }
 
 .blog-template .posts-grid .entry-summary {
 	flex: 1;
 	font-size: 0.9rem;
-	color: var(--color-secondary);
 	line-height: 1.5;
 	margin-bottom: var(--spacing-sm);
-}
-
-body.dark-mode .blog-template .posts-grid .entry-summary {
-	color: rgba(255, 255, 255, 0.7);
 }
 
 .blog-template .posts-grid .entry-footer {
@@ -2386,9 +3010,16 @@ body.dark-mode .blog-template .posts-list .blog-list-item {
 	border-left: 4px solid var(--color-primary);
 }
 
+/*
+ * List layout uses a 1:2 thumbnail-to-content ratio so the image stays
+ * proportional on any container width (previously the thumbnail was a
+ * fixed 200px, which collapses to well under a third on wide layouts).
+ * `flex-basis: 0` makes the `flex-grow` values the sole driver of the
+ * split; `min-width: 0` on the content column lets long words wrap
+ * inside the flex child instead of forcing the column to widen.
+ */
 .blog-template .posts-list .post-thumbnail {
-	flex-shrink: 0;
-	width: 200px;
+	flex: 1 1 0;
 	aspect-ratio: 4 / 3;
 	overflow: hidden;
 	border-radius: var(--border-radius);
@@ -2406,7 +3037,8 @@ body.dark-mode .blog-template .posts-list .blog-list-item {
 }
 
 .blog-template .posts-list .post-content {
-	flex: 1;
+	flex: 2 1 0;
+	min-width: 0;
 	display: flex;
 	flex-direction: column;
 }
@@ -2440,10 +3072,14 @@ body.dark-mode .blog-template .posts-list .entry-title a {
 
 .blog-template .posts-list .entry-meta {
 	font-size: 0.85rem;
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text) 60%, transparent);
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--spacing-sm);
+}
+
+body.dark-mode .blog-template .posts-list .entry-meta {
+	color: color-mix(in srgb, var(--color-text-dark) 60%, transparent);
 }
 
 .blog-template .posts-list .entry-meta > span:not(:last-child)::after {
@@ -2453,13 +3089,8 @@ body.dark-mode .blog-template .posts-list .entry-title a {
 
 .blog-template .posts-list .entry-summary {
 	flex: 1;
-	color: var(--color-secondary);
 	line-height: 1.6;
 	margin-bottom: var(--spacing-sm);
-}
-
-body.dark-mode .blog-template .posts-list .entry-summary {
-	color: rgba(255, 255, 255, 0.7);
 }
 
 .blog-template .posts-list .entry-summary p {
@@ -2582,15 +3213,22 @@ body.dark-mode .related-project-title {
 	align-items: center;
 }
 
+/*
+ * Breadcrumbs are navigational side-info, not a main CTA. They should
+ * stay in the muted text color family and only gain full text color on
+ * hover/focus — the primary/secondary/tertiary accent colors are
+ * intentionally NOT used here.
+ */
 .breadcrumb-item a {
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text) 60%, transparent);
 	text-decoration: none;
 	transition: color 0.2s ease;
 }
 
 .breadcrumb-item a:hover,
 .breadcrumb-item a:focus {
-	color: var(--color-primary);
+	color: var(--color-text);
+	text-decoration: underline;
 }
 
 .breadcrumb-item-current span {
@@ -2599,12 +3237,12 @@ body.dark-mode .related-project-title {
 }
 
 body.dark-mode .breadcrumb-item a {
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text-dark) 60%, transparent);
 }
 
 body.dark-mode .breadcrumb-item a:hover,
 body.dark-mode .breadcrumb-item a:focus {
-	color: var(--color-primary);
+	color: var(--color-text-dark);
 }
 
 body.dark-mode .breadcrumb-item-current span {
@@ -2613,8 +3251,11 @@ body.dark-mode .breadcrumb-item-current span {
 
 .breadcrumb-separator {
 	margin: 0 0.5rem;
-	color: var(--color-secondary);
-	opacity: 0.6;
+	color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+
+body.dark-mode .breadcrumb-separator {
+	color: color-mix(in srgb, var(--color-text-dark) 45%, transparent);
 }
 
 /* Schema.org compatibility for SEO plugin breadcrumbs */
@@ -2625,16 +3266,26 @@ body.dark-mode .breadcrumb-item-current span {
 /* Yoast breadcrumb styling */
 .breadcrumbs .yoast-breadcrumb {
 	font-size: 0.875rem;
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text) 60%, transparent);
 }
 
 .breadcrumbs .yoast-breadcrumb a {
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text) 60%, transparent);
 	text-decoration: none;
 }
 
 .breadcrumbs .yoast-breadcrumb a:hover {
-	color: var(--color-primary);
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
+body.dark-mode .breadcrumbs .yoast-breadcrumb,
+body.dark-mode .breadcrumbs .yoast-breadcrumb a {
+	color: color-mix(in srgb, var(--color-text-dark) 60%, transparent);
+}
+
+body.dark-mode .breadcrumbs .yoast-breadcrumb a:hover {
+	color: var(--color-text-dark);
 }
 
 /* Rank Math breadcrumb styling */
@@ -2643,12 +3294,21 @@ body.dark-mode .breadcrumb-item-current span {
 }
 
 .breadcrumbs .rank-math-breadcrumb a {
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text) 60%, transparent);
 	text-decoration: none;
 }
 
 .breadcrumbs .rank-math-breadcrumb a:hover {
-	color: var(--color-primary);
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
+body.dark-mode .breadcrumbs .rank-math-breadcrumb a {
+	color: color-mix(in srgb, var(--color-text-dark) 60%, transparent);
+}
+
+body.dark-mode .breadcrumbs .rank-math-breadcrumb a:hover {
+	color: var(--color-text-dark);
 }
 
 /* ==========================================================================
@@ -2660,27 +3320,41 @@ body.dark-mode .breadcrumb-item-current span {
 	padding: var(--spacing-xl) 0 var(--spacing-lg);
 }
 
+/*
+ * On a single post the category is supplemental info — show it as
+ * a subtle uppercase text label rather than a filled pill. The filled
+ * primary-color badge was competing with the actual CTA buttons on
+ * the page.
+ */
 .single-post .post-categories {
 	margin-bottom: var(--spacing-sm);
 }
 
 .single-post .post-category {
 	display: inline-block;
-	padding: 0.25rem 0.75rem;
-	background: var(--color-primary);
-	color: #fff;
 	font-size: 0.75rem;
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.05em;
-	border-radius: 3px;
 	text-decoration: none;
-	margin: 0 0.25rem 0.25rem 0;
-	transition: background 0.2s ease;
+	color: color-mix(in srgb, var(--color-text) 70%, transparent);
+	margin: 0 0.75rem 0.25rem 0;
+	transition: color 0.2s ease;
 }
 
-.single-post .post-category:hover {
-	background: color-mix(in srgb, var(--color-primary) 80%, black);
+.single-post .post-category:hover,
+.single-post .post-category:focus {
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
+body.dark-mode .single-post .post-category {
+	color: color-mix(in srgb, var(--color-text-dark) 70%, transparent);
+}
+
+body.dark-mode .single-post .post-category:hover,
+body.dark-mode .single-post .post-category:focus {
+	color: var(--color-text-dark);
 }
 
 .single-post .post-title {
@@ -2694,9 +3368,13 @@ body.dark-mode .breadcrumb-item-current span {
 	justify-content: center;
 	flex-wrap: wrap;
 	gap: var(--spacing-sm) var(--spacing-md);
-	color: var(--color-secondary);
+	color: color-mix(in srgb, var(--color-text) 60%, transparent);
 	font-size: 0.9rem;
 	margin-bottom: var(--spacing-md);
+}
+
+body.dark-mode .single-post .post-meta {
+	color: color-mix(in srgb, var(--color-text-dark) 60%, transparent);
 }
 
 .single-post .post-meta a {
@@ -2704,8 +3382,15 @@ body.dark-mode .breadcrumb-item-current span {
 	text-decoration: none;
 }
 
-.single-post .post-meta a:hover {
-	color: var(--color-primary);
+.single-post .post-meta a:hover,
+.single-post .post-meta a:focus {
+	color: var(--color-text);
+	text-decoration: underline;
+}
+
+body.dark-mode .single-post .post-meta a:hover,
+body.dark-mode .single-post .post-meta a:focus {
+	color: var(--color-text-dark);
 }
 
 .single-post .post-tags {
@@ -3122,10 +3807,10 @@ body.dark-mode .pre-footer-widget .search-field {
 		max-width: 100%;
 	}
 
-	/* Blog list responsive - smaller thumbnail on tablet */
-	.blog-template .posts-list .post-thumbnail {
-		width: 160px;
-	}
+	/* Blog list responsive - the 1:2 flex ratio already scales the
+	 * thumbnail down with the container, so no explicit width override
+	 * is needed on tablet. Kept as an anchor in case a future tweak
+	 * needs to diverge from the desktop ratio. */
 
 	/* Single post responsive */
 	.single-post .post-title {
@@ -3196,14 +3881,22 @@ body.dark-mode .pre-footer-widget .search-field {
 		grid-template-columns: 1fr !important;
 	}
 
-	/* Blog list responsive - stack on mobile */
+	/* Blog list responsive - stack on mobile. Reset the flex-grow on
+	 * both columns so they each span the full row width once the
+	 * container switches to `flex-direction: column`. */
 	.blog-template .posts-list .blog-list-item {
 		flex-direction: column;
 	}
 
 	.blog-template .posts-list .post-thumbnail {
+		flex: 0 0 auto;
 		width: 100%;
 		max-width: 300px;
+	}
+
+	.blog-template .posts-list .post-content {
+		flex: 0 0 auto;
+		width: 100%;
 	}
 
 	/* Single post responsive */

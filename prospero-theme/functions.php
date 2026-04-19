@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define theme constants
-define( 'PROSPERO_VERSION', '1.0.0' );
+define( 'PROSPERO_VERSION', '1.1.0' );
 define( 'PROSPERO_THEME_DIR', get_template_directory() );
 define( 'PROSPERO_THEME_URI', get_template_directory_uri() );
 
@@ -351,6 +351,8 @@ require_once PROSPERO_THEME_DIR . '/inc/shortcodes.php';
 require_once PROSPERO_THEME_DIR . '/inc/typography.php';
 require_once PROSPERO_THEME_DIR . '/inc/ajax-filters.php';
 require_once PROSPERO_THEME_DIR . '/inc/frontend-login.php';
+require_once PROSPERO_THEME_DIR . '/inc/nav-menu.php';
+require_once PROSPERO_THEME_DIR . '/inc/faqs.php';
 require_once PROSPERO_THEME_DIR . '/inc/security.php';
 require_once PROSPERO_THEME_DIR . '/inc/seo.php';
 require_once PROSPERO_THEME_DIR . '/inc/sidebars.php';

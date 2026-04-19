@@ -165,51 +165,30 @@ function prospero_filter_theme_json_colors( $theme_json ) {
 add_filter( 'wp_theme_json_data_theme', 'prospero_filter_theme_json_colors' );
 
 /**
- * Add CSS custom properties to block editor
- * This ensures buttons and other elements use the correct Customizer colors
+ * Inject the Customizer-driven CSS custom properties into the block editor.
+ *
+ * theme.json's palette and element styles reference these variables
+ * (see `styles.elements.button` in theme.json). By attaching them as inline
+ * CSS to the editor stylesheet we guarantee that every Gutenberg block in
+ * the editor iframe renders with the current Customizer colors as its
+ * default — without us having to restyle each core block individually.
  */
 function prospero_editor_custom_properties() {
-	// Get button settings from Customizer
-	$primary_style = get_theme_mod( 'prospero_primary_btn_style', 'flat' );
-	$primary_bg = get_theme_mod( 'prospero_primary_btn_bg', 'rgba(0, 123, 255, 1)' );
-	$primary_text = get_theme_mod( 'prospero_primary_btn_text', 'rgba(255, 255, 255, 1)' );
-	$primary_radius = get_theme_mod( 'prospero_primary_btn_radius', '4px' );
-	$primary_hover_bg = get_theme_mod( 'prospero_primary_btn_hover_bg', '' );
-	$primary_hover_text = get_theme_mod( 'prospero_primary_btn_hover_text', '' );
-	
-	$secondary_style = get_theme_mod( 'prospero_secondary_btn_style', 'outline' );
-	$secondary_bg = get_theme_mod( 'prospero_secondary_btn_bg', 'rgba(108, 117, 125, 1)' );
-	$secondary_text = get_theme_mod( 'prospero_secondary_btn_text', 'rgba(255, 255, 255, 1)' );
-	$secondary_radius = get_theme_mod( 'prospero_secondary_btn_radius', '4px' );
-	
-	$tertiary_style = get_theme_mod( 'prospero_tertiary_btn_style', 'flat' );
-	$tertiary_bg = get_theme_mod( 'prospero_tertiary_btn_bg', 'rgba(40, 167, 69, 1)' );
-	$tertiary_text = get_theme_mod( 'prospero_tertiary_btn_text', 'rgba(255, 255, 255, 1)' );
-	$tertiary_radius = get_theme_mod( 'prospero_tertiary_btn_radius', '4px' );
-	
-	// Calculate hover colors
-	$primary_hover_bg_auto = ! empty( $primary_hover_bg ) ? $primary_hover_bg : 'color-mix(in srgb, ' . esc_attr( $primary_bg ) . ' 80%, black)';
-	$secondary_hover_bg_auto = ! empty( get_theme_mod( 'prospero_secondary_btn_hover_bg', '' ) ) ? get_theme_mod( 'prospero_secondary_btn_hover_bg', '' ) : 'color-mix(in srgb, ' . esc_attr( $secondary_bg ) . ' 80%, black)';
-	$tertiary_hover_bg_auto = ! empty( get_theme_mod( 'prospero_tertiary_btn_hover_bg', '' ) ) ? get_theme_mod( 'prospero_tertiary_btn_hover_bg', '' ) : 'color-mix(in srgb, ' . esc_attr( $tertiary_bg ) . ' 80%, black)';
-	
-	$css = ':root {
-		--prospero-btn-primary-bg: ' . esc_attr( $primary_style === 'outline' ? 'transparent' : $primary_bg ) . ';
-		--prospero-btn-primary-text: ' . esc_attr( $primary_style === 'outline' ? $primary_bg : $primary_text ) . ';
-		--prospero-btn-primary-radius: ' . esc_attr( $primary_radius ) . ';
-		--prospero-btn-primary-hover-bg: ' . $primary_hover_bg_auto . ';
-		--prospero-btn-primary-hover-text: ' . esc_attr( ! empty( $primary_hover_text ) ? $primary_hover_text : $primary_text ) . ';
-		
-		--prospero-btn-secondary-bg: ' . esc_attr( $secondary_style === 'outline' ? 'transparent' : $secondary_bg ) . ';
-		--prospero-btn-secondary-text: ' . esc_attr( $secondary_style === 'outline' ? $secondary_bg : $secondary_text ) . ';
-		--prospero-btn-secondary-radius: ' . esc_attr( $secondary_radius ) . ';
-		--prospero-btn-secondary-hover-bg: ' . $secondary_hover_bg_auto . ';
-		
-		--prospero-btn-tertiary-bg: ' . esc_attr( $tertiary_style === 'outline' ? 'transparent' : $tertiary_bg ) . ';
-		--prospero-btn-tertiary-text: ' . esc_attr( $tertiary_style === 'outline' ? $tertiary_bg : $tertiary_text ) . ';
-		--prospero-btn-tertiary-radius: ' . esc_attr( $tertiary_radius ) . ';
-		--prospero-btn-tertiary-hover-bg: ' . $tertiary_hover_bg_auto . ';
-	}';
-	
+	if ( ! function_exists( 'prospero_get_button_css_vars' ) ) {
+		return;
+	}
+
+	$css  = ':root {';
+	// Mirror the aliases from the frontend so theme.json fallbacks resolve.
+	$css .= '--prospero-primary: ' . esc_attr( get_theme_mod( 'prospero_primary_color', '#007bff' ) ) . ';';
+	$css .= '--prospero-secondary: ' . esc_attr( get_theme_mod( 'prospero_secondary_color', '#6c757d' ) ) . ';';
+	$css .= '--prospero-tertiary: ' . esc_attr( get_theme_mod( 'prospero_tertiary_color', '#28a745' ) ) . ';';
+	// Editor canvas is generally light-mode; pass it explicitly so the
+	// contrast fallback in prospero_get_button_css_vars_for() uses the
+	// light page background as its reference.
+	$css .= prospero_render_css_vars( prospero_get_button_css_vars( 'light' ) );
+	$css .= '}';
+
 	wp_add_inline_style( 'prospero-editor-style', $css );
 }
 add_action( 'enqueue_block_editor_assets', 'prospero_editor_custom_properties', 20 );

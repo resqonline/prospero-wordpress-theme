@@ -72,9 +72,21 @@
 			var attributes = props.attributes;
 			var setAttributes = props.setAttributes;
 
+			// Build class names to match frontend
+			var wrapperClasses = [ 'prospero-cta', 'prospero-cta-' + attributes.layout ];
+			if ( attributes.bgColor ) {
+				wrapperClasses.push( 'has-' + attributes.bgColor + '-background-color' );
+			}
+			if ( attributes.bgImageUrl ) {
+				wrapperClasses.push( 'has-background-image' );
+			}
+			if ( attributes.imageUrl && attributes.layout !== 'center' ) {
+				wrapperClasses.push( 'has-image' );
+			}
+
 			var blockProps = useBlockProps ? useBlockProps( {
-				className: 'prospero-cta prospero-cta-' + attributes.layout
-			} ) : { className: props.className + ' prospero-cta prospero-cta-' + attributes.layout };
+				className: wrapperClasses.join( ' ' )
+			} ) : { className: props.className + ' ' + wrapperClasses.join( ' ' ) };
 
 			// Build inline styles for background
 			var wrapperStyle = {};
@@ -252,28 +264,30 @@
 				),
 				el( 'div', Object.assign( {}, blockProps, { style: wrapperStyle, key: 'editor' } ),
 					attributes.bgImageUrl ? el( 'div', { className: 'prospero-cta-overlay' } ) : null,
-					( attributes.layout !== 'center' && attributes.imageUrl ) ?
-						el( 'div', { className: 'prospero-cta-image' },
-							el( 'img', { src: attributes.imageUrl, alt: '' } )
-						) : null,
-					el( 'div', { className: 'prospero-cta-content' },
-						( attributes.layout === 'center' && attributes.imageUrl ) ?
-							el( 'div', { className: 'prospero-cta-image prospero-cta-image-center' },
+					el( 'div', { className: 'prospero-cta-inner' },
+						( attributes.layout !== 'center' && attributes.imageUrl ) ?
+							el( 'div', { className: 'prospero-cta-image' },
 								el( 'img', { src: attributes.imageUrl, alt: '' } )
 							) : null,
-						attributes.heading ?
-							el( 'h2', { className: 'prospero-cta-heading' }, attributes.heading ) :
-							el( 'h2', { className: 'prospero-cta-heading prospero-placeholder' }, __( 'Add heading...', 'prospero-theme' ) ),
-						attributes.content ?
-							el( 'div', { className: 'prospero-cta-text' }, attributes.content ) :
-							el( 'div', { className: 'prospero-cta-text prospero-placeholder' }, __( 'Add content...', 'prospero-theme' ) ),
-						attributes.buttonText ?
-							el( 'div', { className: 'prospero-cta-button' },
-								el( 'span', { className: 'button button-' + attributes.buttonStyle }, attributes.buttonText )
-							) :
-							el( 'div', { className: 'prospero-cta-button prospero-placeholder' },
-								el( 'span', { className: 'button button-' + attributes.buttonStyle }, __( 'Button Text', 'prospero-theme' ) )
-							)
+						el( 'div', { className: 'prospero-cta-content' },
+							( attributes.layout === 'center' && attributes.imageUrl ) ?
+								el( 'div', { className: 'prospero-cta-image prospero-cta-image-center' },
+									el( 'img', { src: attributes.imageUrl, alt: '' } )
+								) : null,
+							attributes.heading ?
+								el( 'h2', { className: 'prospero-cta-heading' }, attributes.heading ) :
+								el( 'h2', { className: 'prospero-cta-heading prospero-placeholder' }, __( 'Add heading...', 'prospero-theme' ) ),
+							attributes.content ?
+								el( 'div', { className: 'prospero-cta-text' }, attributes.content ) :
+								el( 'div', { className: 'prospero-cta-text prospero-placeholder' }, __( 'Add content...', 'prospero-theme' ) ),
+							attributes.buttonText ?
+								el( 'div', { className: 'prospero-cta-button' },
+									el( 'span', { className: 'button button-' + attributes.buttonStyle }, attributes.buttonText )
+								) :
+								el( 'div', { className: 'prospero-cta-button prospero-placeholder' },
+									el( 'span', { className: 'button button-' + attributes.buttonStyle }, __( 'Button Text', 'prospero-theme' ) )
+								)
+						)
 					)
 				)
 			];

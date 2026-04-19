@@ -157,10 +157,94 @@
 		}
 	}
 
+	/**
+	 * Star Ratings (Testimonials)
+	 */
+	function initStarRatings() {
+		var $container = $('#prospero-ratings-container');
+		var $addButton = $('#prospero-add-rating');
+		var $addDefaultButton = $('#prospero-add-default-ratings');
+		var $template = $('#prospero-rating-template');
+		
+		if (!$container.length || !$addButton.length) return;
+		
+		var ratingIndex = $container.find('.prospero-rating-row').length;
+		
+		// Add new rating row
+		$addButton.on('click', function(e) {
+			e.preventDefault();
+			addRatingRow('', 5);
+		});
+		
+		// Add default ratings
+		if ($addDefaultButton.length) {
+			$addDefaultButton.on('click', function(e) {
+				e.preventDefault();
+				
+				var labels = prosperoAdmin.defaultRatingLabels || [];
+				
+				if (labels.length === 0) {
+					alert(prosperoAdmin.noDefaultLabels || 'No default labels configured.');
+					return;
+				}
+				
+				// Clear existing ratings
+				$container.empty();
+				ratingIndex = 0;
+				// Add default ratings
+				labels.forEach(function(label) {
+					addRatingRow(label, 5);
+				});
+			});
+		}
+		
+		// Add rating row function
+		function addRatingRow(label, value) {
+			var html = $template.html();
+			html = html.replace(/\{\{INDEX\}\}/g, ratingIndex);
+			var $row = $(html);
+			
+			if (label) {
+				$row.find('input[type="text"]').val(label);
+			}
+			if (value) {
+				$row.find('select').val(value);
+				updateStarPreview($row, value);
+			}
+			
+			$container.append($row);
+			ratingIndex++;
+		}
+		
+		// Update star preview when value changes
+		$container.on('change', 'select', function() {
+			var $row = $(this).closest('.prospero-rating-row');
+			var value = parseInt($(this).val(), 10);
+			updateStarPreview($row, value);
+		});
+		
+		// Update star preview display
+		function updateStarPreview($row, value) {
+			var $preview = $row.find('.prospero-rating-preview');
+			var html = '';
+			for (var i = 1; i <= 5; i++) {
+				html += '<span class="dashicons ' + (i <= value ? 'dashicons-star-filled' : 'dashicons-star-empty') + '"></span>';
+			}
+			$preview.html(html);
+		}
+		
+		// Remove rating row
+		$container.on('click', '.prospero-remove-rating', function(e) {
+			e.preventDefault();
+			$(this).closest('.prospero-rating-row').remove();
+		});
+	}
+
 	// Initialize on document ready
 	$(document).ready(function() {
 		initSecondaryImageUpload();
 		initGalleryUpload();
+		initStarRatings();
 	});
 
 })(jQuery);

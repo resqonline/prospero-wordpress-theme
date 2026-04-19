@@ -21,7 +21,12 @@
 	max-width: 100%;
 	overflow: hidden;
 	margin: var(--spacing-lg) 0;
-	padding: 0 50px var(--spacing-lg) 50px; /* Space for arrows (left/right) and page dots (bottom) */
+	padding: 0; /* No padding by default (non-slider) */
+}
+
+/* Only add side/bottom padding when containing an active slider (space for arrows and dots) */
+.prospero-slider-wrapper:has(.prospero-slider) {
+	padding: 0 50px var(--spacing-lg) 50px;
 }
 
 /* Clearfix for slider wrapper */

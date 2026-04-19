@@ -120,7 +120,8 @@
 
 				case 'team':
 					options = Object.assign(options, {
-						cellAlign: 'left'
+						cellAlign: 'left',
+						wrapAround: false
 					});
 					break;
 

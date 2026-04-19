@@ -9,6 +9,19 @@
 body.dark-mode {
 	color: var(--color-text-dark);
 	background-color: var(--color-background-dark);
+
+	/* Re-point the form-field variables (see main.css :root) to the dark
+	 * palette so every input / textarea / select automatically restyles
+	 * without needing per-selector dark-mode rules.
+	 *
+	 * Values are chosen to meet WCAG 1.4.11 (>=3:1 for UI boundaries)
+	 * and WCAG AA text contrast (>=4.5:1) for placeholders against the
+	 * input fill and the page background. */
+	--prospero-input-bg: color-mix(in srgb, var(--color-background-dark) 82%, var(--color-text-dark));
+	--prospero-input-border: color-mix(in srgb, var(--color-text-dark) 50%, var(--color-background-dark));
+	--prospero-input-border-hover: color-mix(in srgb, var(--color-text-dark) 75%, var(--color-background-dark));
+	--prospero-input-text: var(--color-text-dark);
+	--prospero-input-placeholder: color-mix(in srgb, var(--color-text-dark) 65%, var(--color-background-dark));
 }
 
 body.dark-mode .site-header {
@@ -19,6 +32,26 @@ body.dark-mode .site-header {
 body.dark-mode .site-title a,
 body.dark-mode .main-navigation a {
 	color: var(--color-text-dark);
+}
+
+/*
+ * The menu CTA must keep its Customizer-configured text color in dark
+ * mode. Without this override the generic `.main-navigation a` rule
+ * above would win the cascade (same specificity, later in source).
+ */
+body.dark-mode .desktop-menu li.menu-item-cta > a,
+body.dark-mode .mobile-menu-list li.menu-item-cta > a,
+body.dark-mode .mobile-menu-list li.menu-item-cta .menu-item-inner > a {
+	color: var(--prospero-btn-menu-cta-text, #fff);
+}
+
+body.dark-mode .desktop-menu li.menu-item-cta > a:hover,
+body.dark-mode .desktop-menu li.menu-item-cta > a:focus,
+body.dark-mode .mobile-menu-list li.menu-item-cta > a:hover,
+body.dark-mode .mobile-menu-list li.menu-item-cta > a:focus,
+body.dark-mode .mobile-menu-list li.menu-item-cta .menu-item-inner > a:hover,
+body.dark-mode .mobile-menu-list li.menu-item-cta .menu-item-inner > a:focus {
+	color: var(--prospero-btn-menu-cta-hover-text, var(--prospero-btn-menu-cta-text, #fff));
 }
 
 body.dark-mode .site-description {
@@ -44,7 +77,33 @@ body.dark-mode .has-hamburger-menu .main-navigation ul {
 }
 
 body.dark-mode .site-footer {
-	background-color: #1a1923;
+	background-color: color-mix(in srgb, var(--color-background-dark) 88%, white);
+	color: var(--color-text-dark);
+}
+
+/* Dark mode top bar - lift a shade of the dark background, similar to
+ * the footer treatment but lighter, so it reads as a distinct band. */
+body.dark-mode .site-top-bar {
+	background-color: color-mix(in srgb, var(--color-background-dark) 88%, white);
+	color: color-mix(in srgb, var(--color-text-dark) 80%, var(--color-background-dark));
+	border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-mode .site-top-bar .top-bar-link:hover,
+body.dark-mode .site-top-bar .top-bar-link:focus {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .site-top-bar .top-bar-prefix {
+	color: color-mix(in srgb, var(--color-text-dark) 60%, var(--color-background-dark));
+}
+
+body.dark-mode .social-navigation a {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .social-navigation a:hover {
+	background-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Dark Mode Toggle Button */
@@ -60,6 +119,10 @@ body.dark-mode .site-footer {
 	justify-content: center;
 	min-width: 40px;
 	min-height: 40px;
+	/* Match the other header icon buttons (search toggle, mobile menu
+	 * toggle) so the sun / moon glyph tracks the theme text color
+	 * instead of falling back to the user-agent button default. */
+	color: var(--color-text);
 	transition: all 0.3s ease;
 	flex-shrink: 0;
 }
@@ -77,6 +140,7 @@ body.dark-mode .site-footer {
 
 body.dark-mode .dark-mode-toggle {
 	background: rgba(255, 255, 255, 0.1);
+	color: var(--color-text-dark);
 }
 
 body.dark-mode .dark-mode-toggle:hover {
@@ -176,34 +240,23 @@ body.dark-mode .search-suggestions {
 	border-color: rgba(255, 255, 255, 0.1);
 }
 
-body.dark-mode .search-form .search-field {
-	background: var(--color-background-dark);
-	border-color: rgba(255, 255, 255, 0.2);
-	color: var(--color-text-dark);
-}
+/* .search-form .search-field now uses the shared form variables above. */
 
 /* Dark mode back to top button */
 body.dark-mode .back-to-top {
 	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
-/* Dark mode search overlay */
+/* Dark mode search overlay - track Customizer dark background color. */
 body.dark-mode .search-overlay {
-	background: rgba(43, 42, 51, 0.98);
+	background: color-mix(in srgb, var(--color-background-dark) 98%, transparent);
 }
 
 body.dark-mode .search-overlay-close {
 	color: var(--color-text-dark);
 }
 
-body.dark-mode .search-overlay .search-field {
-	color: var(--color-text-dark);
-	border-bottom-color: rgba(255, 255, 255, 0.2);
-}
-
-body.dark-mode .search-overlay .search-field::placeholder {
-	color: rgba(255, 255, 255, 0.5);
-}
+/* .search-overlay .search-field now uses the shared form variables above. */
 
 /* Dark mode mobile menu */
 body.dark-mode .mobile-menu-panel {

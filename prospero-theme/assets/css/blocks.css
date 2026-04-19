@@ -65,6 +65,15 @@
 	color: #ffffff;
 }
 
+/* Inner wrapper - constrains content to max-width */
+.prospero-cta-inner {
+	max-width: var(--content-width, 1200px);
+	margin: 0 auto;
+	padding: 0 var(--spacing-md, 1rem);
+	position: relative;
+	z-index: 2;
+}
+
 /* Center layout (default) */
 .prospero-cta-center {
 	text-align: center;
@@ -88,7 +97,7 @@
 }
 
 /* Left layout (image left, text right) */
-.prospero-cta-left {
+.prospero-cta-left .prospero-cta-inner {
 	display: flex;
 	align-items: center;
 	gap: var(--spacing-lg, 2rem);
@@ -112,7 +121,7 @@
 }
 
 /* Right layout (image right, text left) */
-.prospero-cta-right {
+.prospero-cta-right .prospero-cta-inner {
 	display: flex;
 	align-items: center;
 	flex-direction: row-reverse;
@@ -163,8 +172,8 @@
 		padding: var(--spacing-lg, 2rem) var(--spacing-sm, 1rem);
 	}
 	
-	.prospero-cta-left,
-	.prospero-cta-right {
+	.prospero-cta-left .prospero-cta-inner,
+	.prospero-cta-right .prospero-cta-inner {
 		flex-direction: column;
 		text-align: center;
 	}
@@ -267,6 +276,119 @@ body.dark-mode .prospero-testimonial-block {
 		left: 50%;
 		transform: translateX(-50%);
 	}
+}
+
+/* ==========================================================================
+   Testimonial Star Ratings
+   ==========================================================================
+
+   Stars are rendered with Unicode ★ (filled) / ☆ (outlined) so the
+   visual distinction between awarded and empty stars comes from the
+   glyph itself, not an opacity trick. Both use the same highlight
+   color so they read as one rating row.
+
+   Layout: items flow inline on one row when there's room, wrap
+   left-aligned when they don't, and stack one-per-row on narrow
+   viewports (≤ 600px) so a wrapped row never produces an awkward
+   centered fragment.
+   ========================================================================== */
+
+.testimonial-ratings {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-start;
+	gap: var(--spacing-xs, 0.5rem) var(--spacing-md, 1.5rem);
+	margin-top: var(--spacing-sm, 0.75rem);
+}
+
+.testimonial-rating-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9rem;
+	flex: 0 0 auto;
+}
+
+.testimonial-rating-item .rating-label {
+	font-weight: 500;
+	color: var(--color-text);
+}
+
+body.dark-mode .testimonial-rating-item .rating-label {
+	color: var(--color-text-dark);
+}
+
+.testimonial-rating-item .rating-stars {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.15rem;
+	line-height: 1;
+}
+
+/*
+ * `.rating-star` is rendered purely via CSS `mask-image` on the Lucide
+ * star SVG polygon (same source used to build the prospero-icons font
+ * glyph \f1e4). Both filled and empty states share the identical
+ * viewBox and polygon, so their on-screen sizes are pixel-identical -
+ * the difference is only fill vs stroke. Color is driven by
+ * `currentColor` so Customizer highlight / text colors flow through.
+ */
+.testimonial-rating-item .rating-star {
+	display: inline-block;
+	width: 1.25rem;
+	height: 1.25rem;
+	flex-shrink: 0;
+	background-color: currentColor;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	-webkit-mask-size: contain;
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: contain;
+}
+
+/* Filled: same polygon rendered as a solid shape. Keeps the identical
+ * stroke attributes as the outlined variant below so both masks share
+ * the exact same outer bounding box (otherwise the outlined stroke
+ * extends the "empty" star ~1px further on every side than the plain
+ * filled polygon). */
+.testimonial-rating-item .rating-star.is-filled {
+	color: var(--color-highlight, #f5c518);
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2' fill='black' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* Empty: same polygon, rendered only as a stroked outline (matches the
+ * prospero-icons star glyph so the two read as a pair). Color is a
+ * muted derivative of the theme text color that stays legible in
+ * both light and dark mode. */
+.testimonial-rating-item .rating-star.is-empty {
+	color: color-mix(in srgb, var(--color-text) 35%, transparent);
+	-webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+	mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+body.dark-mode .testimonial-rating-item .rating-star.is-empty {
+	color: color-mix(in srgb, var(--color-text-dark) 35%, transparent);
+}
+
+/* Mobile: stack each rating on its own line so a narrow testimonial
+ * card never produces a half-wrapped row. */
+@media (max-width: 600px) {
+	.testimonial-ratings {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--spacing-xs, 0.5rem);
+	}
+}
+
+/* Keep the left-aligned flow inside sliders and single-column layouts
+ * too - centered wrap looked off. The items themselves still carry
+ * their inline baseline so they line up with the testimonial author. */
+.prospero-testimonials[data-columns="1"] .testimonial-ratings,
+.prospero-slider .testimonial-ratings {
+	justify-content: flex-start;
 }
 
 /* ==========================================================================
@@ -586,23 +708,26 @@ body.dark-mode .prospero-member-content-restricted {
 	gap: var(--spacing-md, 1.5rem);
 }
 
-.prospero-team-list .team-item {
+.prospero-team-list .team-member-card {
 	display: flex;
 	gap: var(--spacing-md, 1.5rem);
 	align-items: flex-start;
+	width: 100%;
 }
 
 .prospero-team-list .team-image {
-	flex: 0 0 150px;
-	max-width: 150px;
+	flex: 0 0 180px;
+	max-width: 180px;
+	margin-bottom: 0;
 }
 
 .prospero-team-list .team-content {
 	flex: 1;
+	padding-top: 0;
 }
 
 @media (max-width: 480px) {
-	.prospero-team-list .team-item {
+	.prospero-team-list .team-member-card {
 		flex-direction: column;
 	}
 
@@ -618,6 +743,17 @@ body.dark-mode .prospero-member-content-restricted {
 	text-align: center;
 }
 
+.prospero-team .team-member-card {
+	background: rgba(0, 0, 0, 0.03);
+	border-radius: 8px;
+	padding: var(--spacing-md, 1.5rem);
+	height: 100%;
+}
+
+body.dark-mode .prospero-team .team-member-card {
+	background: rgba(255, 255, 255, 0.05);
+}
+
 .prospero-team-list .team-item {
 	text-align: left;
 }
@@ -627,9 +763,18 @@ body.dark-mode .prospero-member-content-restricted {
 	overflow: hidden;
 }
 
-.prospero-team .team-image img {
+/* Image container for shape control */
+.prospero-team .team-image-container {
+	display: block;
 	width: 100%;
-	height: auto;
+	overflow: hidden;
+	position: relative;
+}
+
+.prospero-team .team-image-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 	display: block;
 	transition: transform 0.3s ease;
 }
@@ -637,6 +782,27 @@ body.dark-mode .prospero-member-content-restricted {
 .prospero-team .team-image a:hover img,
 .prospero-team .team-image button:hover img {
 	transform: scale(1.05);
+}
+
+/* Image Style: Square */
+.prospero-team .team-image-square .team-image-container {
+	aspect-ratio: 1 / 1;
+}
+
+/* Image Style: Round */
+.prospero-team .team-image-round .team-image-container {
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+}
+
+/* Image Style: Portrait */
+.prospero-team .team-image-portrait .team-image-container {
+	aspect-ratio: 3 / 4;
+}
+
+/* Team content */
+.prospero-team .team-content {
+	padding: var(--spacing-xs, 0.5rem) 0;
 }
 
 .prospero-team .team-name {
@@ -648,46 +814,144 @@ body.dark-mode .prospero-member-content-restricted {
 .prospero-team .team-name button {
 	color: inherit;
 	text-decoration: none;
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
 }
 
 .prospero-team .team-name a:hover,
 .prospero-team .team-name button:hover {
-	color: var(--prospero-primary, #007bff);
+	color: var(--color-primary, #007bff);
 }
 
 .prospero-team .team-position {
-	margin: 0 0 var(--spacing-xs, 0.5rem);
+	margin: 0 0 var(--spacing-sm, 0.75rem);
 	font-size: 0.875rem;
-	color: var(--prospero-text-muted, #666);
+	color: var(--color-text-muted, #666);
 	font-style: italic;
+}
+
+body.dark-mode .prospero-team .team-position {
+	color: rgba(255, 255, 255, 0.6);
 }
 
 .prospero-team .team-excerpt {
 	font-size: 0.9375rem;
-	color: var(--prospero-text-muted, #666);
+	color: var(--color-text-muted, #666);
+	margin-bottom: var(--spacing-sm, 0.75rem);
 }
 
-/* Image Style: Square */
-.prospero-team-image-square .team-image img {
-	aspect-ratio: 1 / 1;
-	object-fit: cover;
+body.dark-mode .prospero-team .team-excerpt {
+	color: rgba(255, 255, 255, 0.7);
 }
 
-/* Image Style: Round */
-.prospero-team-image-round .team-image img {
-	aspect-ratio: 1 / 1;
-	object-fit: cover;
+/* Contact links */
+.prospero-team .team-contact {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.25rem;
+	margin-bottom: var(--spacing-sm, 0.75rem);
+}
+
+.prospero-team-list .team-contact {
+	align-items: flex-start;
+}
+
+.prospero-team .team-contact .team-contact-link {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	width: auto !important;
+	height: auto !important;
+	max-width: 100%;
+	border-radius: 0 !important;
+	background: none !important;
+	color: var(--color-text, #333);
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.prospero-team-list .team-contact .team-contact-link {
+	justify-content: flex-start;
+}
+
+.prospero-team .team-contact .team-contact-link:hover {
+	color: var(--color-primary, #007bff);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.prospero-team .team-contact .team-contact-link [class^="icon-"] {
+	font-size: 1rem;
+	width: 1.25rem;
+	flex: 0 0 1.25rem;
+}
+
+.prospero-team .team-contact .team-contact-text {
+	font-size: inherit;
+	color: inherit;
+	overflow-wrap: anywhere;
+}
+
+body.dark-mode .prospero-team .team-contact .team-contact-link {
+	color: var(--color-text-dark, #fff);
+}
+
+body.dark-mode .prospero-team .team-contact .team-contact-link:hover {
+	color: var(--color-primary, #007bff);
+}
+
+/* Social icons */
+.prospero-team .team-social {
+	display: flex;
+	justify-content: center;
+	gap: var(--spacing-xs, 0.5rem);
+	margin-bottom: var(--spacing-sm, 0.75rem);
+}
+
+.prospero-team-list .team-social {
+	justify-content: flex-start;
+}
+
+.prospero-team .team-social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.5rem;
+	height: 2.5rem;
 	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.05);
+	color: var(--color-text, #333);
+	transition: background-color 0.2s ease, color 0.2s ease;
+	text-decoration: none;
 }
 
-.prospero-team-image-round .team-image {
-	border-radius: 50%;
+.prospero-team .team-social-link:hover {
+	background: var(--color-primary, #007bff);
+	color: #fff;
 }
 
-/* Image Style: Portrait */
-.prospero-team-image-portrait .team-image img {
-	aspect-ratio: 3 / 4;
-	object-fit: cover;
+.prospero-team .team-social-link [class^="icon-"] {
+	font-size: 1.25rem;
+}
+
+body.dark-mode .prospero-team .team-social-link {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--color-text-dark, #fff);
+}
+
+body.dark-mode .prospero-team .team-social-link:hover {
+	background: var(--color-primary, #007bff);
+	color: #fff;
+}
+
+/* Team link button */
+.prospero-team .team-link {
+	margin-top: var(--spacing-xs, 0.5rem);
 }
 
 /* Lightbox Trigger Styles */
@@ -731,13 +995,18 @@ body.dark-mode .prospero-member-content-restricted {
 }
 
 .prospero-team-lightbox-modal {
-	background: var(--prospero-background, #fff);
+	background: var(--color-background, #fff);
 	max-width: 900px;
 	width: 100%;
 	max-height: 90vh;
 	overflow-y: auto;
 	border-radius: 8px;
 	position: relative;
+}
+
+body.dark-mode .prospero-team-lightbox-modal {
+	background: var(--color-background-dark, #1a1a1a);
+	color: var(--color-text-dark, #fff);
 }
 
 .prospero-team-lightbox-close {
@@ -749,74 +1018,527 @@ body.dark-mode .prospero-member-content-restricted {
 	font-size: 2rem;
 	line-height: 1;
 	cursor: pointer;
-	color: var(--prospero-text, #333);
+	color: var(--color-text, #333);
 	z-index: 1;
 	padding: 0.25rem;
+}
+
+body.dark-mode .prospero-team-lightbox-close {
+	color: var(--color-text-dark, #fff);
 }
 
 .prospero-team-lightbox-close:hover {
 	opacity: 0.7;
 }
 
-.prospero-team-lightbox-inner {
+.team-lightbox-inner {
 	display: flex;
-	gap: var(--spacing-md, 1.5rem);
+	flex-direction: column;
 	padding: var(--spacing-lg, 2rem);
+	gap: var(--spacing-md, 1.5rem);
 }
 
-.prospero-team-lightbox-image {
+/* Top row: image left, details right */
+.team-lightbox-top {
+	display: flex;
+	gap: var(--spacing-lg, 2rem);
+	align-items: flex-start;
+}
+
+/* Lightbox image with shape support */
+.team-lightbox-image {
+	flex: 0 0 240px;
+	max-width: 240px;
+}
+
+.team-lightbox-image .team-image-container {
+	display: block;
+	overflow: hidden;
+}
+
+.team-lightbox-image .team-image-container img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.team-lightbox-image.team-image-square .team-image-container {
+	aspect-ratio: 1 / 1;
+}
+
+.team-lightbox-image.team-image-round .team-image-container {
+	aspect-ratio: 1 / 1;
+	border-radius: 50%;
+}
+
+.team-lightbox-image.team-image-portrait .team-image-container {
+	aspect-ratio: 3 / 4;
+}
+
+.team-lightbox-details {
+	flex: 1;
+}
+
+.team-lightbox-name {
+	margin: 0 0 0.25rem;
+}
+
+.team-lightbox-position {
+	margin: 0 0 var(--spacing-md, 1rem);
+	font-size: 1.1rem;
+	color: var(--color-text-muted, #666);
+	font-style: italic;
+}
+
+body.dark-mode .team-lightbox-position {
+	color: rgba(255, 255, 255, 0.6);
+}
+
+/* Lightbox contact links */
+.team-lightbox-contact {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs, 0.5rem);
+	margin-bottom: var(--spacing-md, 1rem);
+}
+
+.team-lightbox-contact .team-contact-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	color: var(--color-text, #333);
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.team-lightbox-contact .team-contact-link:hover {
+	color: var(--color-primary, #007bff);
+}
+
+.team-lightbox-contact .team-contact-link [class^="icon-"] {
+	font-size: 1rem;
+	width: 1.25rem;
+}
+
+body.dark-mode .team-lightbox-contact .team-contact-link {
+	color: var(--color-text-dark, #fff);
+}
+
+body.dark-mode .team-lightbox-contact .team-contact-link:hover {
+	color: var(--color-primary, #007bff);
+}
+
+/* Lightbox social links */
+.team-lightbox-social {
+	display: flex;
+	gap: var(--spacing-xs, 0.5rem);
+	margin-bottom: var(--spacing-md, 1rem);
+}
+
+.team-lightbox-social .team-social-link {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.05);
+	color: var(--color-text, #333);
+	transition: background-color 0.2s ease, color 0.2s ease;
+	text-decoration: none;
+}
+
+.team-lightbox-social .team-social-link:hover {
+	background: var(--color-primary, #007bff);
+	color: #fff;
+}
+
+.team-lightbox-social .team-social-link [class^="icon-"] {
+	font-size: 1rem;
+}
+
+body.dark-mode .team-lightbox-social .team-social-link {
+	background: rgba(255, 255, 255, 0.1);
+	color: var(--color-text-dark, #fff);
+}
+
+body.dark-mode .team-lightbox-social .team-social-link:hover {
+	background: var(--color-primary, #007bff);
+	color: #fff;
+}
+
+.team-lightbox-bio {
+	line-height: 1.7;
+	padding-top: var(--spacing-md, 1.5rem);
+}
+
+/* Single team page context - no modal padding, larger image */
+.single-team-profile .team-lightbox-inner {
+	padding: 0;
+}
+
+.single-team-profile .team-lightbox-image {
 	flex: 0 0 300px;
 	max-width: 300px;
 }
 
-.prospero-team-lightbox-image img {
-	width: 100%;
-	height: auto;
-	border-radius: 4px;
-}
-
-.prospero-team-image-round .prospero-team-lightbox-image img {
-	border-radius: 50%;
-}
-
-.prospero-team-lightbox-details {
-	flex: 1;
-}
-
-.prospero-team-lightbox-name {
-	margin: 0 0 0.25rem;
-}
-
-.prospero-team-lightbox-position {
-	margin: 0 0 var(--spacing-sm, 1rem);
-	font-size: 1rem;
-	color: var(--prospero-text-muted, #666);
-	font-style: italic;
-}
-
-.prospero-team-lightbox-bio {
-	line-height: 1.7;
-}
-
 @media (max-width: 767px) {
-	.prospero-team-lightbox-inner {
+	.team-lightbox-top {
 		flex-direction: column;
+		align-items: center;
 	}
 
-	.prospero-team-lightbox-image {
+	.team-lightbox-image {
 		flex: 0 0 auto;
 		max-width: 200px;
-		margin: 0 auto;
+		width: 100%;
+	}
+
+	.team-lightbox-details {
+		width: 100%;
+	}
+	
+	.team-lightbox-contact,
+	.team-lightbox-social {
+		justify-content: center;
+	}
+
+	.single-team-profile .team-lightbox-image {
+		flex: 0 0 auto;
+		max-width: 250px;
+		width: 100%;
 	}
 }
 
 /* Focus styles for accessibility */
 .prospero-team .team-lightbox-trigger:focus-visible {
-	outline: 2px solid var(--prospero-primary, #007bff);
+	outline: 2px solid var(--color-primary, #007bff);
 	outline-offset: 2px;
 }
 
 .prospero-team-lightbox-close:focus-visible {
-	outline: 2px solid var(--prospero-primary, #007bff);
+	outline: 2px solid var(--color-primary, #007bff);
 	outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Block Alignment: Wide and Full Width
+   ==========================================================================
+   
+   Full-width blocks (.alignfull): 
+   - Background stretches to full viewport width
+   - Content inside is constrained to max content width
+   
+   Wide blocks (.alignwide):
+   - Stretches to wide content size (defined in theme.json/Customizer)
+   ========================================================================== */
+
+/* Wide alignment - stretches beyond container but not full width */
+.alignwide {
+	max-width: var(--wp--style--global--wide-size, calc(var(--content-width, 1200px) + 200px));
+	margin-left: auto;
+	margin-right: auto;
+	width: calc(100% + var(--spacing-lg, 2rem));
+	margin-left: calc(-1 * var(--spacing-md, 1rem));
+}
+
+/* Full-width alignment - background stretches full viewport */
+.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	position: relative;
+}
+
+/* Full-width blocks: inner content wrapper constrained to content width */
+.alignfull > .wp-block-group__inner-container,
+.alignfull > .wp-block-cover__inner-container,
+.alignfull > .wp-block-columns,
+.alignfull .alignfull-content,
+.alignfull > *:not(.alignfull-background) {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+/* Prospero CTA Block - Full Width */
+.prospero-cta.alignfull {
+	border-radius: 0;
+	margin-left: calc(-50vw + 50%);
+	margin-right: 0;
+	width: 100vw;
+	max-width: 100vw;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.prospero-cta.alignfull .prospero-cta-inner {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+.prospero-cta.alignfull.prospero-cta-center .prospero-cta-content {
+	max-width: 800px;
+}
+
+/* Prospero Text Content Block - Full Width */
+.prospero-text-content.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.prospero-text-content.alignfull > * {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+/* Team Block - Full Width */
+.prospero-team.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+.prospero-team.alignfull .prospero-team-columns,
+.prospero-team.alignfull .prospero-team-list,
+.prospero-team.alignfull .prospero-team-slider {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Testimonials Block - Full Width */
+.prospero-testimonials.alignfull,
+.prospero-testimonial-single.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+.prospero-testimonials.alignfull > *,
+.prospero-testimonial-single.alignfull .prospero-testimonial {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Partners Block - Full Width */
+.prospero-partners.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+.prospero-partners.alignfull > * {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* ==========================================================================
+   Partner Single Block
+   ==========================================================================
+
+   Side-by-side logo + content layout. `.partner-single-logo-left` keeps
+   the default flex row order (logo first). `.partner-single-logo-right`
+   reverses it so the logo appears after the text on desktop. On narrow
+   viewports both variants stack vertically (logo on top) so the content
+   stays readable.
+   ========================================================================== */
+
+.prospero-partner-single {
+	display: flex;
+	gap: var(--spacing-md, 1.5rem);
+	align-items: center;
+	margin: var(--spacing-md, 1.5rem) 0;
+}
+
+.prospero-partner-single.partner-single-logo-right {
+	flex-direction: row-reverse;
+}
+
+.prospero-partner-single.partner-single-no-logo {
+	display: block;
+}
+
+.prospero-partner-single .partner-logo {
+	flex: 0 0 auto;
+	max-width: 220px;
+	width: 30%;
+	min-width: 140px;
+}
+
+.prospero-partner-single .partner-logo a {
+	display: block;
+}
+
+.prospero-partner-single .partner-logo img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.prospero-partner-single .partner-content {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.prospero-partner-single .partner-name {
+	margin-top: 0;
+	margin-bottom: var(--spacing-xs, 0.5rem);
+}
+
+.prospero-partner-single .partner-description > :last-child {
+	margin-bottom: 0;
+}
+
+.prospero-partner-single .partner-visit {
+	margin: var(--spacing-sm, 1rem) 0 0;
+}
+
+/* Mobile: stack logo on top of the content regardless of logoPosition. */
+@media (max-width: 600px) {
+	.prospero-partner-single,
+	.prospero-partner-single.partner-single-logo-right {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.prospero-partner-single .partner-logo {
+		width: auto;
+		max-width: 160px;
+	}
+}
+
+/* FAQ Block - Full Width */
+.prospero-faqs.alignfull {
+	width: 100vw;
+	max-width: 100vw;
+	margin-left: calc(-50vw + 50%);
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+.prospero-faqs.alignfull .prospero-faq-list {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* WordPress Core Blocks - Full Width Enhancements */
+
+/* Group block */
+.wp-block-group.alignfull {
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+.wp-block-group.alignfull > .wp-block-group__inner-container {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Cover block */
+.wp-block-cover.alignfull > .wp-block-cover__inner-container {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+/* Columns block */
+.wp-block-columns.alignfull {
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+/* Image/Gallery - full width should stretch completely */
+.wp-block-image.alignfull img,
+.wp-block-gallery.alignfull {
+	width: 100%;
+	max-width: 100%;
+}
+
+/* Video/Embed - constrain content */
+.wp-block-video.alignfull,
+.wp-block-embed.alignfull {
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+}
+
+.wp-block-video.alignfull > *,
+.wp-block-embed.alignfull .wp-block-embed__wrapper {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* Buttons - center in full width */
+.wp-block-buttons.alignfull {
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+	justify-content: center;
+}
+
+/* Wide alignment - similar approach but narrower */
+.wp-block-group.alignwide > .wp-block-group__inner-container,
+.wp-block-cover.alignwide > .wp-block-cover__inner-container {
+	max-width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+	.alignwide {
+		width: calc(100% + var(--spacing-md, 1rem));
+		margin-left: calc(-0.5 * var(--spacing-md, 1rem));
+	}
+}
+
+@media (max-width: 767px) {
+	/* On mobile, reduce padding for full-width blocks */
+	.alignfull,
+	.prospero-cta.alignfull,
+	.prospero-team.alignfull,
+	.prospero-testimonials.alignfull,
+	.prospero-partners.alignfull,
+	.prospero-faqs.alignfull,
+	.wp-block-group.alignfull,
+	.wp-block-cover.alignfull {
+		padding-left: var(--spacing-sm, 0.75rem);
+		padding-right: var(--spacing-sm, 0.75rem);
+	}
+
+	.alignfull > .wp-block-group__inner-container,
+	.alignfull > .wp-block-cover__inner-container,
+	.prospero-cta.alignfull .prospero-cta-content,
+	.prospero-text-content.alignfull > * {
+		padding-left: var(--spacing-sm, 0.75rem);
+		padding-right: var(--spacing-sm, 0.75rem);
+	}
+
+	/* Wide becomes normal width on mobile */
+	.alignwide {
+		width: 100%;
+		margin-left: 0;
+	}
 }
