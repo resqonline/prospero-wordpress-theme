@@ -25,7 +25,10 @@ A modern, accessible WordPress theme with dark mode support, custom Gutenberg bl
 
 - **Dark Mode** - Automatic, light, or dark mode with user preference persistence
 - **Custom Gutenberg Blocks** - Text Content, CTA, Affiliate Link, Member Content, Testimonial, Partner, and Team blocks
-- **Custom Post Types** - Testimonials, Partners, Team Members, and Projects
+- **Custom Post Types** - Testimonials, Partners, Team Members, Projects, and FAQs
+- **FAQ System** - Accordion templates with category grouping, hide-from-view toggle, and Schema.org FAQPage markup
+- **Top Bar** - Optional sticky contact bar above the header with phone and email links
+- **Menu CTA Buttons** - Highlight any menu item as a styled call-to-action button with independent Customizer controls
 - **Frontend Login System** - Complete user registration, login, and account management
 - **Local Avatars** - GDPR-compliant avatar system (no Gravatar)
 - **Local Google Fonts** - Automatic download and local hosting of fonts
@@ -76,12 +79,33 @@ Configure the appearance of primary, secondary, and tertiary buttons:
 - **Style**: Filled or Outline
 - **Corners**: Rounded or Square
 
+A dedicated **Menu CTA Button** subsection controls CTA button appearance independently:
+
+- **Style**: Filled or Outline
+- **Corners**: Rounded or Square
+- **Colors**: Background, text, hover background, hover text
+- **Font Style**: Normal or Uppercase
+
+**Accessibility** subsection: *Enforce WCAG AA button contrast (3:1)* checkbox — off by default (1.5:1 fallback threshold). Enable for strict WCAG 2.1 / EAA compliance.
+
 ### Header Options
 
 | Setting | Description |
 |---------|-------------|
 | Sticky Menu | Header stays fixed when scrolling |
 | Hamburger Menu | Always show mobile-style hamburger menu |
+
+### Top Bar
+
+| Setting | Description |
+|---------|-------------|
+| Enable Top Bar | Shows a contact bar above the site header |
+| Phone Prefix | Label shown before the phone number (e.g. "Call us:") |
+| Phone Number | Phone number — rendered as a clean `tel:` link |
+| Email Prefix | Label shown before the email address |
+| Email Address | Email address — GDPR-protected via `antispambot()` |
+
+*On mobile (≤ 767 px) only the icons are shown; prefix and value are visually hidden but remain screen-reader accessible. When the sticky header is active, the top bar pins to the top of the viewport and the header shifts down accordingly.*
 
 ### Typography
 
@@ -100,6 +124,12 @@ Enable or disable each post type:
 - **Enable Partners** - Partner/client logos
 - **Enable Team** - Team member profiles
 - **Enable Projects** - Portfolio projects
+- **Enable FAQs** - Frequently asked questions with category support
+
+Additional FAQ settings (visible when FAQs are enabled):
+
+- **FAQ Archive Title** - Custom heading for the FAQ archive page (defaults to "Frequently Asked Questions")
+- **FAQ Archive Description** - Optional intro paragraph shown above the accordion
 
 ### Frontend Login
 
@@ -173,6 +203,24 @@ Portfolio projects with gallery support.
 - Menu Order (for custom sorting)
 
 **Usage:** Add via **Projects > Add New** or use the Projects template.
+
+### FAQs
+
+Frequently asked questions displayed as an accessible accordion.
+
+**Fields:**
+- Title (the question)
+- Content (the answer)
+- FAQ Categories
+
+**Templates:**
+- Archive: `/faq/` — all FAQs grouped by category with Schema.org `FAQPage` markup
+- Taxonomy: `/faq-category/[slug]/` — FAQs filtered to one category
+- Single: `/faq/[slug]/` — single FAQ, pre-expanded, with category chips and a back link
+
+**Per-category option:** A *Hide from all-FAQs view* toggle on each `faq_category` term excludes that category's FAQs from the main archive while keeping the taxonomy page accessible.
+
+**Usage:** Add via **FAQs > Add New**. Use the FAQ List block for dynamic output or the `[prospero_faq]` shortcode for manual accordions in page content.
 
 ---
 
@@ -256,6 +304,24 @@ Display team member cards.
 - Show contact info
 - Show social links
 - Enable lightbox popup
+
+### Partner Single Block
+
+Display a single partner with logo and description in a side-by-side layout.
+
+**Settings:**
+- Select partner
+- Logo position (left or right)
+- Show "Visit website" button
+- Visit link text and button style (primary, secondary, tertiary)
+
+### FAQ List Block
+
+Display FAQ items from the FAQ post type as a click-to-expand accordion.
+
+**Settings:**
+- Category filter (blank = all categories, auto-grouped by term)
+- Number of FAQs
 
 ---
 
@@ -438,6 +504,12 @@ Navigation for logged-in users. Displayed on account and member pages.
 - Change Password
 - Logout
 
+### Menu CTA Buttons
+
+Any menu item can be displayed as a styled call-to-action button. Enable the **Display as CTA button** checkbox on the individual menu item in **Appearance > Menus**.
+
+CTA button appearance is controlled separately under **Appearance > Customize > Button Styles > Menu CTA Button**, independent of the primary/secondary/tertiary content buttons.
+
 ---
 
 ## Frontend Login System
@@ -568,27 +640,34 @@ All forms use:
 
 ```
 prospero-theme/
+├── archive-faq.php          # FAQ archive (grouped accordion, FAQPage schema)
+├── single-faq.php           # Single FAQ (pre-expanded, category chips)
+├── single-team.php          # Single team member detail
+├── taxonomy-faq_category.php  # FAQ category taxonomy template
 ├── assets/
-│   ├── css/           # Stylesheets
-│   ├── js/            # JavaScript files
-│   ├── fonts/         # Local font files (auto-generated)
-│   └── libs/          # Third-party libraries (Flickity)
-├── blocks/            # Custom Gutenberg blocks
-├── inc/               # PHP functionality modules
+│   ├── css/                 # Stylesheets
+│   │   └── admin-nav-menu.css  # Menu editor: CTA button field styling
+│   ├── js/                  # JavaScript files
+│   ├── fonts/               # Local font files (auto-generated)
+│   └── libs/                # Third-party libraries (Flickity)
+├── blocks/                  # Custom Gutenberg blocks
+├── inc/                     # PHP functionality modules
 │   ├── ajax-filters.php
 │   ├── blocks.php
 │   ├── customizer.php
+│   ├── faqs.php             # FAQ CPT, faq_category taxonomy, hide-from-all toggle
 │   ├── frontend-login.php
 │   ├── gutenberg.php
+│   ├── nav-menu.php         # Menu CTA button field + FAQ archive nav meta box
 │   ├── post-types.php
 │   ├── security.php
 │   ├── seo.php
 │   ├── shortcodes.php
 │   ├── template-functions.php
 │   └── typography.php
-├── template-parts/    # Reusable template components
-├── languages/         # Translation files
-└── functions.php      # Main theme file
+├── template-parts/          # Reusable template components
+├── languages/               # Translation files
+└── functions.php            # Main theme file
 ```
 
 ### Naming Conventions
@@ -603,10 +682,13 @@ prospero-theme/
 
 Reusable components in `template-parts/`:
 
-- `content-testimonial.php`
-- `content-partner.php`
-- `content-team.php`
-- `content-project.php`
+- `content-blog-item.php` - Single blog post card (shared by main loop and AJAX filter)
+- `content-testimonial.php` - Testimonial card
+- `content-partner.php` - Partner logo card
+- `content-team.php` - Team member card
+- `content-team-detail.php` - Team member lightbox detail panel
+- `content-project.php` - Project card
+- `top-bar.php` - Top bar with phone/email contact links
 
 ### Hooks and Filters
 
