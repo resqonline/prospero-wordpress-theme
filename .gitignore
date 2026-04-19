@@ -34,11 +34,14 @@ yarn.lock
 # Build files
 *.map
 
-# Downloaded Google Fonts (can be regenerated)
+# Downloaded Google Fonts (can be regenerated, NOT the icon font)
 prospero-theme/assets/fonts/*.css
 prospero-theme/assets/fonts/*.woff
 prospero-theme/assets/fonts/*.woff2
 prospero-theme/assets/fonts/*.ttf
 prospero-theme/assets/fonts/*.eot
+
+# Keep the icon font — it is a permanent project asset, not auto-downloaded
+!prospero-theme/assets/fonts/prospero-icons.*
 sticky-header-darkmode-test.md
 WARP.md
