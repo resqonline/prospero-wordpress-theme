@@ -36,14 +36,17 @@ A modern, accessible WordPress theme with dark mode support, Gutenberg blocks, a
 	- Text color / Dark mode text color
 	- Highlight color
 	- Background / Dark mode background colors
-- Button styles (Primary, Secondary, Tertiary) with outline and rounded corner options
+- Button styles (Primary, Secondary, Tertiary) with outline, rounded corner, and uppercase options
+- Menu CTA Button styling (independent controls, separate from content buttons)
+- Top Bar with phone and email contact links (sticky, icon-only on mobile)
 - Sticky menu option
 - Hamburger menu option (always visible or responsive)
 - Google Fonts with local hosting support
 - Product placement notice text for affiliate content
 - Frontend login system toggle
 - Custom CSS field
-- Post type activation toggles
+- Post type activation toggles (Testimonials, Partners, Team, Projects, FAQs)
+- FAQ archive title and description
 
 ### Custom Post Types
 All post types can be enabled/disabled via Customizer:
@@ -71,6 +74,13 @@ All post types can be enabled/disabled via Customizer:
 	- Fields: Title, Content, Image Gallery, Project Website, Testimonial link
 	- Custom order support
 
+5. **FAQs**
+	- Archive, taxonomy and single templates with accordion display
+	- Schema.org FAQPage markup
+	- Custom taxonomy: FAQ Categories (with per-category hide-from-all-view toggle)
+	- Fields: Title (question), Content (answer)
+	- Customizer: FAQ Archive Title and FAQ Archive Description
+
 ### Custom Gutenberg Blocks
 - **Text Content Block** - Styled text with alignment and width options
 - **Call to Action Block** - Headline, text, button, images, layout options
@@ -78,7 +88,9 @@ All post types can be enabled/disabled via Customizer:
 - **Member Content Block** - Role-based visibility for logged-in users
 - **Testimonial Block** - Grid or slider display with Flickity integration
 - **Partner Block** - Grid or slider display with Flickity integration
+- **Partner Single Block** - Single partner with logo/content side-by-side layout, optional visit-link button
 - **Team Block** - Grid/slider layouts with lightbox support for contact info
+- **FAQ List Block** - FAQ CPT content as a click-to-expand accordion, auto-grouped by category
 
 ### Shortcodes
 - `[testimonials category="" slider="yes"]` - Display testimonials
@@ -129,51 +141,73 @@ When enabled in Customizer:
 ### Automatic Updates
 The theme includes automatic update functionality via GitHub releases. When a new version is released, you'll see an update notification in WordPress just like themes from WordPress.org.
 
+### Child Theme
+A starter child theme is included in the `prospero-theme-child/` directory:
+1. Copy `prospero-theme-child/` to your WordPress themes directory alongside the parent theme
+2. Activate the child theme in Appearance → Themes
+3. Add custom CSS in `assets/css/custom.css` and JavaScript in `assets/js/custom.js` — both are auto-loaded by the parent
+4. Override any parent template by copying it to the same relative path in the child theme
+
 ## Theme Structure
 
+The repository contains the parent theme and a starter child theme:
+
 ```
-prospero-theme/
-├── assets/
-│   ├── css/
-│   │   ├── main.css           # Main theme styles
-│   │   ├── dark-mode.css      # Dark mode specific styles
-│   │   ├── blocks.css         # Custom block styles
-│   │   ├── shortcodes.css     # Shortcode styles
-│   │   └── editor-style.css   # Gutenberg editor styles
-│   ├── js/
-│   │   ├── main.js            # Main JavaScript (menu, lightbox)
-│   │   ├── dark-mode.js       # Dark mode functionality
-│   │   ├── flickity-init.js   # Slider initialization
-│   │   ├── faq-accordion.js   # FAQ accordion functionality
-│   │   └── projects-filter.js # Ajax project filtering
-│   ├── fonts/                 # Local fonts (auto-downloaded)
-│   └── libs/
-│       └── flickity/          # Flickity slider library
-├── blocks/                    # Custom Gutenberg blocks
-├── inc/
-│   ├── ajax-filters.php       # Ajax filter handlers
-│   ├── blocks.php             # Block registration
-│   ├── customizer.php         # Theme Customizer settings
-│   ├── frontend-login.php     # Frontend login system
-│   ├── gutenberg.php          # Gutenberg configuration
-│   ├── post-types.php         # Custom post types
-│   ├── security.php           # Security functions
-│   ├── seo.php                # SEO functions
-│   ├── shortcodes.php         # Shortcode implementations
-│   ├── template-functions.php # Template helper functions
-│   ├── theme-updater.php      # GitHub auto-updates
-│   ├── typography.php         # Google Fonts local hosting
-│   └── lib/
-│       └── plugin-update-checker/  # Update checker library
-├── languages/                 # Translation files
-├── template-parts/            # Reusable template components
-├── functions.php              # Theme functions
-├── header.php / footer.php    # Header and footer templates
-├── index.php                  # Main template fallback
-├── template-*.php             # Page templates
-├── single-*.php               # Single post type templates
-├── archive-*.php              # Archive templates
-└── style.css                  # Theme stylesheet with header
+prospero-wordpress-theme/
+├── prospero-theme/                  # Parent theme
+│   ├── archive-faq.php              # FAQ archive template
+│   ├── single-faq.php               # Single FAQ template
+│   ├── single-team.php              # Single team member template
+│   ├── taxonomy-faq_category.php    # FAQ category template
+│   ├── assets/
+│   │   ├── css/
+│   │   │   ├── main.css             # Main theme styles
+│   │   │   ├── dark-mode.css        # Dark mode styles
+│   │   │   ├── blocks.css           # Custom block styles
+│   │   │   ├── shortcodes.css       # Shortcode styles
+│   │   │   ├── editor-style.css     # Gutenberg editor styles
+│   │   │   └── admin-nav-menu.css   # Menu editor styles
+│   │   ├── js/
+│   │   │   ├── main.js              # Main JavaScript (menu, sticky header)
+│   │   │   ├── dark-mode.js         # Dark mode functionality
+│   │   │   ├── flickity-init.js     # Slider initialization
+│   │   │   ├── faq-accordion.js     # FAQ accordion functionality
+│   │   │   ├── blog-filter.js       # Blog AJAX filter
+│   │   │   └── projects-filter.js   # Ajax project filtering
+│   │   ├── fonts/                   # Local fonts (auto-downloaded)
+│   │   └── libs/
+│   │       └── flickity/            # Flickity slider library
+│   ├── blocks/                      # Custom Gutenberg blocks
+│   ├── inc/
+│   │   ├── ajax-filters.php         # Ajax filter handlers
+│   │   ├── blocks.php               # Block registration
+│   │   ├── customizer.php           # Theme Customizer settings
+│   │   ├── faqs.php                 # FAQ post type and taxonomy
+│   │   ├── frontend-login.php       # Frontend login system
+│   │   ├── gutenberg.php            # Gutenberg configuration
+│   │   ├── nav-menu.php             # Menu CTA button field
+│   │   ├── post-types.php           # Custom post types
+│   │   ├── security.php             # Security functions
+│   │   ├── seo.php                  # SEO functions
+│   │   ├── shortcodes.php           # Shortcode implementations
+│   │   ├── template-functions.php   # Template helper functions
+│   │   ├── theme-updater.php        # GitHub auto-updates
+│   │   ├── typography.php           # Google Fonts local hosting
+│   │   └── lib/
+│   │       └── plugin-update-checker/  # Update checker library
+│   ├── languages/                   # Translation files
+│   ├── template-parts/              # Reusable template components
+│   ├── functions.php                # Theme functions
+│   ├── header.php / footer.php      # Header and footer templates
+│   ├── index.php                    # Main template fallback
+│   ├── template-*.php               # Page templates
+│   └── style.css                    # Theme stylesheet with header
+└── prospero-theme-child/            # Starter child theme
+    ├── assets/
+    │   ├── css/custom.css           # Custom styles (auto-loaded)
+    │   └── js/custom.js             # Custom scripts (auto-loaded)
+    ├── functions.php                # Child theme functions
+    └── style.css                    # Child theme header + custom CSS
 ```
 
 ## Customization
@@ -189,17 +223,24 @@ Navigate to Appearance → Customize → Typography:
 - Choose Google Fonts (will be downloaded and hosted locally)
 - Or use system fonts for better performance
 
+### Top Bar
+Navigate to Appearance → Customize → Top Bar:
+- Enable/disable the contact bar above the header
+- Phone number with optional prefix label (e.g. "Call us:")
+- Email address with optional prefix label (GDPR-protected)
+
 ### Post Types
 Navigate to Appearance → Customize → Post Types to enable/disable:
-- Testimonials
-- Partners
-- Team
-- Projects
+- Testimonials, Partners, Team, Projects, FAQs
+- FAQ archive title and description (when FAQs are enabled)
 
 ### Dark Mode
 Navigate to Appearance → Customize → Dark Mode Settings:
 - Enable/disable dark mode
 - Set default mode (Light, Dark, or Auto based on system preference)
+
+### Menu CTA Buttons
+In Appearance → Menus, check **Display as CTA button** on any menu item to style it as a call-to-action. Configure appearance independently in Appearance → Customize → Button Styles → Menu CTA Button.
 
 ## Browser Support
 
@@ -251,6 +292,21 @@ http://www.gnu.org/licenses/gpl-2.0.html
 For support, please open an issue in the GitHub repository.
 
 ## Changelog
+
+### Version 1.1.0
+- FAQ post type with archive, taxonomy and single templates, Schema.org FAQPage markup, and accordion display
+- Top Bar with phone/email contact links (sticky, icon-only on mobile)
+- Menu CTA Button: per-item toggle in Appearance → Menus, dedicated Customizer styling controls
+- Partner Single Block: logo + content side-by-side, logo position, optional visit-link button
+- FAQ List Block: FAQ CPT content as a click-to-expand accordion, auto-grouped by category
+- Button overhaul: all styles driven by CSS custom properties from Customizer (flat/outline, radius, color, uppercase)
+- Global form field styling with CSS variables, dark mode, and Customizer color support
+- Blog AJAX filter fixes: shared template part, sticky post handling, scoped excerpt length
+- Testimonial star ratings via CSS mask-image for consistent glyph metrics
+- Footer, sticky header, and search overlay backgrounds derived from Customizer colors
+- Button size hierarchy: primary > secondary > tertiary
+- Child theme scaffolding: `assets/css/custom.css` and `assets/js/custom.js` with usage documentation
+- Optional WCAG AA button contrast enforcement (Button Styles → Accessibility)
 
 ### Version 1.0.0
 - Complete theme structure and architecture
