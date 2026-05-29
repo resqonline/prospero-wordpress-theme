@@ -34,7 +34,6 @@
 	position: relative;
 	padding: 3rem 1.5rem;
 	margin: 2rem 0;
-	border-radius: 8px;
 	background-size: cover;
 	background-position: center;
 	overflow: hidden;
@@ -115,7 +114,6 @@
 .editor-styles-wrapper .prospero-cta-center .prospero-cta-image-center img {
 	max-width: 300px;
 	height: auto;
-	border-radius: 8px;
 	margin: 0 auto;
 	display: block;
 }
@@ -135,7 +133,6 @@
 .editor-styles-wrapper .prospero-cta-left .prospero-cta-image img {
 	width: 100%;
 	height: auto;
-	border-radius: 8px;
 	display: block;
 }
 
@@ -160,7 +157,6 @@
 .editor-styles-wrapper .prospero-cta-right .prospero-cta-image img {
 	width: 100%;
 	height: auto;
-	border-radius: 8px;
 	display: block;
 }
 

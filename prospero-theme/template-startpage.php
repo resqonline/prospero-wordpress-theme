@@ -17,17 +17,6 @@ get_header();
 		?>
 		<article id="post-<?php the_ID(); ?>" <?php post_class( 'startpage-content' ); ?>>
 			<div class="container">
-				<?php
-				// Display page title if not hidden
-				if ( ! get_post_meta( get_the_ID(), '_prospero_hide_title', true ) ) :
-					?>
-					<header class="page-header">
-						<h1 class="page-title"><?php the_title(); ?></h1>
-					</header>
-					<?php
-				endif;
-				?>
-				
 				<div class="page-content">
 					<?php
 					the_content();

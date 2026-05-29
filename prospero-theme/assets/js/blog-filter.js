@@ -55,6 +55,10 @@
 		formData.append('nonce', prosperoBlogFilter.nonce);
 		formData.append('category', category);
 		formData.append('paged', page);
+		// Pass the main archive's query vars (captured server-side after
+		// pre_get_posts) so the handler can rebuild an equivalent query
+		// without hardcoding parity values.
+		formData.append('base_query_vars', JSON.stringify(prosperoBlogFilter.baseQueryVars || {}));
 
 		// Make AJAX request
 		fetch(prosperoBlogFilter.ajaxUrl, {

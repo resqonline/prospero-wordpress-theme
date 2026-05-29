@@ -5,9 +5,9 @@
 	var MediaUpload = blockEditor.MediaUpload;
 	var MediaUploadCheck = blockEditor.MediaUploadCheck;
 	var useBlockProps = blockEditor.useBlockProps;
+	var RichText = blockEditor.RichText;
 	var PanelBody = components.PanelBody;
 	var TextControl = components.TextControl;
-	var TextareaControl = components.TextareaControl;
 	var SelectControl = components.SelectControl;
 	var Button = components.Button;
 	var ToggleControl = components.ToggleControl;
@@ -132,15 +132,8 @@
 							value: attributes.heading,
 							onChange: function( value ) {
 								setAttributes( { heading: value } );
-							}
-						} ),
-						el( TextareaControl, {
-							label: __( 'Text Content', 'prospero-theme' ),
-							value: attributes.content,
-							onChange: function( value ) {
-								setAttributes( { content: value } );
 							},
-							rows: 4
+							help: __( 'Text content is edited inline in the block preview.', 'prospero-theme' )
 						} ),
 						el( TextControl, {
 							label: __( 'Button Text', 'prospero-theme' ),
@@ -277,9 +270,17 @@
 							attributes.heading ?
 								el( 'h2', { className: 'prospero-cta-heading' }, attributes.heading ) :
 								el( 'h2', { className: 'prospero-cta-heading prospero-placeholder' }, __( 'Add heading...', 'prospero-theme' ) ),
-							attributes.content ?
-								el( 'div', { className: 'prospero-cta-text' }, attributes.content ) :
-								el( 'div', { className: 'prospero-cta-text prospero-placeholder' }, __( 'Add content...', 'prospero-theme' ) ),
+						el( RichText, {
+							tagName: 'div',
+							className: 'prospero-cta-text',
+							value: attributes.content,
+							onChange: function( value ) {
+								setAttributes( { content: value } );
+							},
+							multiline: 'p',
+							placeholder: __( 'Add content...', 'prospero-theme' ),
+							allowedFormats: [ 'core/bold', 'core/italic', 'core/link' ]
+						} ),
 							attributes.buttonText ?
 								el( 'div', { className: 'prospero-cta-button' },
 									el( 'span', { className: 'button button-' + attributes.buttonStyle }, attributes.buttonText )

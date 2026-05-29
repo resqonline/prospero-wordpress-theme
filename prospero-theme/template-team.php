@@ -30,7 +30,7 @@ get_header();
 
 		<?php
 		// Check if team post type is enabled
-		if ( ! get_theme_mod( 'prospero_enable_team', true ) ) :
+		if ( ! get_theme_mod( 'prospero_enable_team', false ) ) :
 			?>
 			<div class="notice notice-info">
 				<p><?php esc_html_e( 'Team custom post type is not enabled. Please enable it in the Customizer.', 'prospero-theme' ); ?></p>

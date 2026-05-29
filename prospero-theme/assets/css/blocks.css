@@ -13,7 +13,6 @@
 	position: relative;
 	padding: var(--spacing-xl, 3rem) var(--spacing-md, 1.5rem);
 	margin: var(--spacing-lg, 2rem) 0;
-	border-radius: 8px;
 	background-size: cover;
 	background-position: center;
 	overflow: hidden;
@@ -91,7 +90,6 @@
 .prospero-cta-center .prospero-cta-image-center img {
 	max-width: 300px;
 	height: auto;
-	border-radius: 8px;
 	margin: 0 auto;
 	display: block;
 }
@@ -111,7 +109,6 @@
 .prospero-cta-left .prospero-cta-image img {
 	width: 100%;
 	height: auto;
-	border-radius: 8px;
 	display: block;
 }
 
@@ -136,7 +133,6 @@
 .prospero-cta-right .prospero-cta-image img {
 	width: 100%;
 	height: auto;
-	border-radius: 8px;
 	display: block;
 }
 
@@ -613,21 +609,6 @@ body.dark-mode .prospero-member-content-restricted {
 
 .prospero-text-content li {
 	margin-bottom: 0.5em;
-}
-
-/* Alignment variations */
-.prospero-text-content.alignwide {
-	max-width: var(--wp--style--global--wide-size, 1200px);
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.prospero-text-content.alignfull {
-	max-width: none;
-	width: 100vw;
-	margin-left: calc(-50vw + 50%);
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
 }
 
 /* Editor-specific styles */
@@ -1225,132 +1206,109 @@ body.dark-mode .team-lightbox-social .team-social-link:hover {
 /* ==========================================================================
    Block Alignment: Wide and Full Width
    ==========================================================================
-   
-   Full-width blocks (.alignfull): 
-   - Background stretches to full viewport width
-   - Content inside is constrained to max content width
-   
-   Wide blocks (.alignwide):
-   - Stretches to wide content size (defined in theme.json/Customizer)
+   .alignfull uses symmetric negative viewport margins so the outer element
+   stretches edge-to-edge from inside any centered ancestor. Inner wrappers
+   are constrained back to --content-width.
    ========================================================================== */
 
-/* Wide alignment - stretches beyond container but not full width */
-.alignwide {
-	max-width: var(--wp--style--global--wide-size, calc(var(--content-width, 1200px) + 200px));
-	margin-left: auto;
-	margin-right: auto;
-	width: calc(100% + var(--spacing-lg, 2rem));
-	margin-left: calc(-1 * var(--spacing-md, 1rem));
-}
-
-/* Full-width alignment - background stretches full viewport */
 .alignfull {
-	width: 100vw;
-	max-width: 100vw;
-	margin-left: calc(-50vw + 50%);
+	width: auto;
+	max-width: none;
+	margin-left: calc(50% - 50vw);
+	margin-right: calc(50% - 50vw);
 	position: relative;
 }
 
-/* Full-width blocks: inner content wrapper constrained to content width */
 .alignfull > .wp-block-group__inner-container,
 .alignfull > .wp-block-cover__inner-container,
 .alignfull > .wp-block-columns,
-.alignfull .alignfull-content,
-.alignfull > *:not(.alignfull-background) {
+.alignfull .alignfull-content {
 	max-width: var(--content-width, 1200px);
 	margin-left: auto;
 	margin-right: auto;
 	padding-left: var(--spacing-md, 1rem);
 	padding-right: var(--spacing-md, 1rem);
+	box-sizing: border-box;
 }
 
-/* Prospero CTA Block - Full Width */
+.prospero-cta.alignfull .prospero-cta-inner,
+.prospero-text-content.alignfull > *,
+.prospero-team.alignfull .prospero-team-columns,
+.prospero-team.alignfull .prospero-team-list,
+.prospero-team.alignfull .prospero-team-slider,
+.prospero-testimonials.alignfull > *,
+.prospero-testimonial-single.alignfull .prospero-testimonial,
+.prospero-partners.alignfull > *,
+.prospero-faqs.alignfull .prospero-faq-list {
+	max-width: var(--content-width, 1200px);
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: var(--spacing-md, 1rem);
+	padding-right: var(--spacing-md, 1rem);
+	box-sizing: border-box;
+}
+
 .prospero-cta.alignfull {
 	border-radius: 0;
-	margin-left: calc(-50vw + 50%);
-	margin-right: 0;
-	width: 100vw;
-	max-width: 100vw;
-	padding-left: 0;
-	padding-right: 0;
-}
-
-.prospero-cta.alignfull .prospero-cta-inner {
-	max-width: var(--content-width, 1200px);
-	margin-left: auto;
-	margin-right: auto;
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
 }
 
 .prospero-cta.alignfull.prospero-cta-center .prospero-cta-content {
 	max-width: 800px;
 }
 
-/* Prospero Text Content Block - Full Width */
-.prospero-text-content.alignfull {
-	width: 100vw;
-	max-width: 100vw;
-	margin-left: calc(-50vw + 50%);
-	padding-left: 0;
-	padding-right: 0;
+.wp-block-image.alignfull img,
+.wp-block-gallery.alignfull {
+	width: 100%;
+	max-width: 100%;
 }
 
-.prospero-text-content.alignfull > * {
+.wp-block-video.alignfull > *,
+.wp-block-embed.alignfull .wp-block-embed__wrapper {
 	max-width: var(--content-width, 1200px);
 	margin-left: auto;
 	margin-right: auto;
 	padding-left: var(--spacing-md, 1rem);
 	padding-right: var(--spacing-md, 1rem);
+	box-sizing: border-box;
 }
 
-/* Team Block - Full Width */
-.prospero-team.alignfull {
-	width: 100vw;
-	max-width: 100vw;
-	margin-left: calc(-50vw + 50%);
+.wp-block-buttons.alignfull {
 	padding-left: var(--spacing-md, 1rem);
 	padding-right: var(--spacing-md, 1rem);
+	justify-content: center;
 }
 
-.prospero-team.alignfull .prospero-team-columns,
-.prospero-team.alignfull .prospero-team-list,
-.prospero-team.alignfull .prospero-team-slider {
-	max-width: var(--content-width, 1200px);
+.alignwide {
+	max-width: var(--wp--style--global--wide-size, var(--content-width, 1200px));
 	margin-left: auto;
 	margin-right: auto;
 }
 
-/* Testimonials Block - Full Width */
-.prospero-testimonials.alignfull,
-.prospero-testimonial-single.alignfull {
-	width: 100vw;
-	max-width: 100vw;
-	margin-left: calc(-50vw + 50%);
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
+.wp-block-group.alignwide > .wp-block-group__inner-container,
+.wp-block-cover.alignwide > .wp-block-cover__inner-container {
+	max-width: 100%;
 }
 
-.prospero-testimonials.alignfull > *,
-.prospero-testimonial-single.alignfull .prospero-testimonial {
-	max-width: var(--content-width, 1200px);
-	margin-left: auto;
-	margin-right: auto;
-}
-
-/* Partners Block - Full Width */
-.prospero-partners.alignfull {
-	width: 100vw;
-	max-width: 100vw;
-	margin-left: calc(-50vw + 50%);
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
-}
-
-.prospero-partners.alignfull > * {
-	max-width: var(--content-width, 1200px);
-	margin-left: auto;
-	margin-right: auto;
+@media (max-width: 767px) {
+	.alignfull > .wp-block-group__inner-container,
+	.alignfull > .wp-block-cover__inner-container,
+	.alignfull > .wp-block-columns,
+	.alignfull .alignfull-content,
+	.prospero-cta.alignfull .prospero-cta-inner,
+	.prospero-text-content.alignfull > *,
+	.prospero-team.alignfull .prospero-team-columns,
+	.prospero-team.alignfull .prospero-team-list,
+	.prospero-team.alignfull .prospero-team-slider,
+	.prospero-testimonials.alignfull > *,
+	.prospero-testimonial-single.alignfull .prospero-testimonial,
+	.prospero-partners.alignfull > *,
+	.prospero-faqs.alignfull .prospero-faq-list,
+	.wp-block-video.alignfull > *,
+	.wp-block-embed.alignfull .wp-block-embed__wrapper,
+	.wp-block-buttons.alignfull {
+		padding-left: var(--spacing-sm, 0.75rem);
+		padding-right: var(--spacing-sm, 0.75rem);
+	}
 }
 
 /* ==========================================================================
@@ -1428,117 +1386,97 @@ body.dark-mode .team-lightbox-social .team-social-link:hover {
 	}
 }
 
-/* FAQ Block - Full Width */
-.prospero-faqs.alignfull {
-	width: 100vw;
-	max-width: 100vw;
-	margin-left: calc(-50vw + 50%);
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
+/* ==========================================================================
+   Gallery Slider Variant
+   ==========================================================================
+
+   Opt-in three ways (any of them activate the slider; all share the
+   same layout neutralization rules below):
+
+   - Block style "Slider" -> `.wp-block-gallery.is-style-slider`
+   - Block style "Slider (autoplay)" -> `.wp-block-gallery.is-style-slider-autoplay`
+     (both registered for `core/gallery` in `inc/gutenberg.php`).
+   - Manual class `prospero-gallery-slider` added via Advanced ->
+     Additional CSS classes (covers the classic [gallery] shortcode
+     and any markup the block style picker doesn't reach). Combine
+     with `prospero-gallery-autoplay` to get the autoplay behaviour
+     on a manually-classed gallery.
+
+   `assets/js/flickity-init.js` initializes Flickity on the inner
+   cells container; these rules neutralize the default flex / grid
+   layout so Flickity can position cells absolutely, and reset the
+   gallery item margins so the per-cell margins applied in JS aren't
+   stacked on top of them.
+
+   The cell widths themselves are set inline by the JS (calc-based on
+   the wrapper's `columns-N` / `gallery-columns-N` class) so any column
+   count the user picked in the editor flows through to the slider.
+   ========================================================================== */
+
+.wp-block-gallery.is-style-slider,
+.wp-block-gallery.is-style-slider-autoplay,
+.wp-block-gallery.prospero-gallery-slider,
+.gallery.prospero-gallery-slider {
+	/* Replace the default flex / grid layout. Once Flickity initializes
+	 * it positions the cells via absolute positioning; this just keeps
+	 * the pre-init render from showing a flexed row that briefly clashes
+	 * with the inline cell widths the JS is about to apply. */
+	display: block;
 }
 
-.prospero-faqs.alignfull .prospero-faq-list {
-	max-width: var(--content-width, 1200px);
-	margin-left: auto;
-	margin-right: auto;
+.wp-block-gallery.is-style-slider > .wp-block-image,
+.wp-block-gallery.is-style-slider-autoplay > .wp-block-image,
+.wp-block-gallery.prospero-gallery-slider > .wp-block-image,
+.wp-block-gallery.is-style-slider .blocks-gallery-grid > .blocks-gallery-item,
+.wp-block-gallery.is-style-slider-autoplay .blocks-gallery-grid > .blocks-gallery-item,
+.wp-block-gallery.prospero-gallery-slider .blocks-gallery-grid > .blocks-gallery-item,
+.gallery.prospero-gallery-slider > .gallery-item {
+	/* Cell margins are driven exclusively by the inline styles the JS
+	 * applies (gap = 16px to the right of each cell). Clear any margin
+	 * the gallery's default rules added so the spacing doesn't double up. */
+	margin: 0;
+	/* Lift any width / max-width the core layout enforces so the
+	 * inline calc(...) cell width wins. */
+	max-width: none;
 }
 
-/* WordPress Core Blocks - Full Width Enhancements */
-
-/* Group block */
-.wp-block-group.alignfull {
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
-}
-
-.wp-block-group.alignfull > .wp-block-group__inner-container {
-	max-width: var(--content-width, 1200px);
-	margin-left: auto;
-	margin-right: auto;
-}
-
-/* Cover block */
-.wp-block-cover.alignfull > .wp-block-cover__inner-container {
-	max-width: var(--content-width, 1200px);
-	margin-left: auto;
-	margin-right: auto;
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
-}
-
-/* Columns block */
-.wp-block-columns.alignfull {
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
-}
-
-/* Image/Gallery - full width should stretch completely */
-.wp-block-image.alignfull img,
-.wp-block-gallery.alignfull {
+.wp-block-gallery.is-style-slider img,
+.wp-block-gallery.is-style-slider-autoplay img,
+.wp-block-gallery.prospero-gallery-slider img,
+.gallery.prospero-gallery-slider img {
 	width: 100%;
-	max-width: 100%;
+	height: auto;
+	display: block;
 }
 
-/* Video/Embed - constrain content */
-.wp-block-video.alignfull,
-.wp-block-embed.alignfull {
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
+/* The classic [gallery] shortcode wraps images in `.gallery-icon`;
+ * make sure that wrapper doesn't constrain the figure inside a cell. */
+.gallery.prospero-gallery-slider > .gallery-item .gallery-icon {
+	margin: 0;
+	width: 100%;
 }
 
-.wp-block-video.alignfull > *,
-.wp-block-embed.alignfull .wp-block-embed__wrapper {
-	max-width: var(--content-width, 1200px);
-	margin-left: auto;
-	margin-right: auto;
+/* Captions inside slider cells should sit flush with the image, not
+ * push the next cell down. The standard `figcaption` styling from the
+ * gallery block is preserved otherwise. */
+.wp-block-gallery.is-style-slider .wp-block-image figcaption,
+.wp-block-gallery.is-style-slider-autoplay .wp-block-image figcaption,
+.wp-block-gallery.prospero-gallery-slider .wp-block-image figcaption,
+.gallery.prospero-gallery-slider .gallery-item .wp-caption-text {
+	margin-top: var(--spacing-xs, 0.5rem);
+	margin-bottom: 0;
 }
 
-/* Buttons - center in full width */
-.wp-block-buttons.alignfull {
-	padding-left: var(--spacing-md, 1rem);
-	padding-right: var(--spacing-md, 1rem);
-	justify-content: center;
+/* Pre-init guard: while Flickity is still loading and the wrapper
+ * doesn't yet have `.prospero-gallery-slider-init`, hide the visual
+ * mess that briefly appears (cells with inline widths but no Flickity
+ * positioning). Flickity itself adds `.flickity-enabled` to the cells
+ * container once it's set up; once that's there the cells are
+ * absolutely positioned and visible normally. */
+.wp-block-gallery.is-style-slider:not(.prospero-gallery-slider-init) > .wp-block-image:not(:first-child),
+.wp-block-gallery.is-style-slider-autoplay:not(.prospero-gallery-slider-init) > .wp-block-image:not(:first-child),
+.wp-block-gallery.prospero-gallery-slider:not(.prospero-gallery-slider-init) > .wp-block-image:not(:first-child),
+.gallery.prospero-gallery-slider:not(.prospero-gallery-slider-init) > .gallery-item:not(:first-child) {
+	visibility: hidden;
 }
 
-/* Wide alignment - similar approach but narrower */
-.wp-block-group.alignwide > .wp-block-group__inner-container,
-.wp-block-cover.alignwide > .wp-block-cover__inner-container {
-	max-width: 100%;
-}
-
-/* Responsive adjustments */
-@media (max-width: 1024px) {
-	.alignwide {
-		width: calc(100% + var(--spacing-md, 1rem));
-		margin-left: calc(-0.5 * var(--spacing-md, 1rem));
-	}
-}
-
-@media (max-width: 767px) {
-	/* On mobile, reduce padding for full-width blocks */
-	.alignfull,
-	.prospero-cta.alignfull,
-	.prospero-team.alignfull,
-	.prospero-testimonials.alignfull,
-	.prospero-partners.alignfull,
-	.prospero-faqs.alignfull,
-	.wp-block-group.alignfull,
-	.wp-block-cover.alignfull {
-		padding-left: var(--spacing-sm, 0.75rem);
-		padding-right: var(--spacing-sm, 0.75rem);
-	}
-
-	.alignfull > .wp-block-group__inner-container,
-	.alignfull > .wp-block-cover__inner-container,
-	.prospero-cta.alignfull .prospero-cta-content,
-	.prospero-text-content.alignfull > * {
-		padding-left: var(--spacing-sm, 0.75rem);
-		padding-right: var(--spacing-sm, 0.75rem);
-	}
-
-	/* Wide becomes normal width on mobile */
-	.alignwide {
-		width: 100%;
-		margin-left: 0;
-	}
-}

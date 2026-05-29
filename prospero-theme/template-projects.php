@@ -33,7 +33,7 @@ endif;
 
 		<?php
 		// Check if projects post type is enabled
-		if ( ! get_theme_mod( 'prospero_enable_projects', true ) ) :
+		if ( ! get_theme_mod( 'prospero_enable_projects', false ) ) :
 			?>
 			<div class="notice notice-info">
 				<p><?php esc_html_e( 'Projects custom post type is not enabled. Please enable it in the Customizer.', 'prospero-theme' ); ?></p>
@@ -48,10 +48,10 @@ endif;
 
 			if ( ! empty( $project_tags ) && ! is_wp_error( $project_tags ) ) :
 				?>
-				<div class="projects-filters">
-					<button class="filter-button active" data-tag="all" data-ajax-nonce="<?php echo esc_attr( wp_create_nonce( 'prospero_filter_projects' ) ); ?>">
-						<?php esc_html_e( 'All', 'prospero-theme' ); ?>
-					</button>
+			<div class="projects-filters">
+				<button class="filter-button active" data-tag="all">
+					<?php esc_html_e( 'All', 'prospero-theme' ); ?>
+				</button>
 					<?php foreach ( $project_tags as $tag ) : ?>
 						<button class="filter-button" data-tag="<?php echo esc_attr( $tag->slug ); ?>">
 							<?php echo esc_html( $tag->name ); ?>
@@ -62,15 +62,24 @@ endif;
 			endif;
 			?>
 
-			<div class="projects-grid" id="projects-grid" data-columns="3">
+			<?php
+			// Single source of truth for query args used by both the initial
+			// render and the data attributes read by the AJAX filter JS.
+			$projects_query_args = array(
+				'post_type'      => 'project',
+				'posts_per_page' => 12,
+				'post_status'    => 'publish',
+				'orderby'        => 'menu_order',
+				'order'          => 'ASC',
+			);
+			?>
+			<div class="projects-grid" id="projects-grid" data-columns="3"
+				data-posts-per-page="<?php echo esc_attr( $projects_query_args['posts_per_page'] ); ?>"
+				data-orderby="<?php echo esc_attr( $projects_query_args['orderby'] ); ?>"
+				data-order="<?php echo esc_attr( $projects_query_args['order'] ); ?>"
+			>
 				<?php
-				$projects_query = new WP_Query( array(
-					'post_type'      => 'project',
-					'posts_per_page' => 12,
-					'post_status'    => 'publish',
-					'orderby'        => 'menu_order',
-					'order'          => 'ASC',
-				) );
+				$projects_query = new WP_Query( $projects_query_args );
 
 				if ( $projects_query->have_posts() ) :
 					while ( $projects_query->have_posts() ) :

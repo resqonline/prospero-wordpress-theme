@@ -13,9 +13,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * Display custom logo with dark mode support.
+ *
  * Shows both light and dark logos, CSS handles visibility based on mode.
+ * Honors the `prospero_show_logo` Customizer toggle (Site Identity ->
+ * Show Logo in Header): when unchecked, no logo markup is emitted at
+ * all so only the site title and tagline render in the header.
  */
 function prospero_custom_logo() {
+	// Customizer opt-out: "Show Logo in Header" disabled = render nothing,
+	// so the .site-title-wrap markup in header.php is the only thing in
+	// the branding column.
+	if ( ! get_theme_mod( 'prospero_show_logo', true ) ) {
+		return;
+	}
+
 	$site_name   = get_bloginfo( 'name' );
 	$home_url    = home_url( '/' );
 	$dark_logo_id = get_theme_mod( 'prospero_dark_logo' );
@@ -396,6 +407,93 @@ function prospero_get_button_css_vars( $mode = 'light' ) {
 }
 
 /**
+ * Build the CSS custom properties for a chrome region (header / footer)
+ * for a given page mode.
+ *
+ * Background is optional in the Customizer. If the user leaves the
+ * setting empty, the region falls back to today's computed background:
+ *
+ * - Header: page background of the active mode
+ * - Footer: slightly darkened / lifted shade of the page background
+ *
+ * Text color is always auto-resolved (no separate setting): whichever
+ * of `prospero_text_color` / `prospero_dark_text_color` has the higher
+ * WCAG contrast against the chosen chrome background wins. This covers
+ * cases like a dark header in light mode, where the header text needs
+ * to flip to the dark-mode text color to stay readable.
+ *
+ * @param string $region `header` or `footer`.
+ * @param string $mode   `light` (default) or `dark`.
+ * @return array Map of CSS custom property name => value.
+ */
+function prospero_get_chrome_css_vars_for( $region, $mode = 'light' ) {
+	if ( ! in_array( $region, array( 'header', 'footer' ), true ) ) {
+		return array();
+	}
+
+	$defaults = array(
+		'header' => array(
+			'light' => array(
+				'bg'   => 'var(--color-background)',
+				'text' => 'var(--color-text)',
+			),
+			'dark'  => array(
+				'bg'   => 'var(--color-background-dark)',
+				'text' => 'var(--color-text-dark)',
+			),
+		),
+		'footer' => array(
+			'light' => array(
+				'bg'   => 'color-mix(in srgb, var(--color-background) 92%, black)',
+				'text' => 'var(--color-text)',
+			),
+			'dark'  => array(
+				'bg'   => 'color-mix(in srgb, var(--color-background-dark) 88%, white)',
+				'text' => 'var(--color-text-dark)',
+			),
+		),
+	);
+
+	$setting_key = 'dark' === $mode
+		? "prospero_{$region}_bg_color_dark"
+		: "prospero_{$region}_bg_color";
+
+	$bg = trim( (string) get_theme_mod( $setting_key, '' ) );
+
+	if ( '' === $bg ) {
+		return array(
+			"--prospero-{$region}-bg"   => $defaults[ $region ][ $mode ]['bg'],
+			"--prospero-{$region}-text" => $defaults[ $region ][ $mode ]['text'],
+		);
+	}
+
+	$light_text     = get_theme_mod( 'prospero_text_color', '#333333' );
+	$dark_text      = get_theme_mod( 'prospero_dark_text_color', '#f7f7f7' );
+	$light_contrast = prospero_contrast_ratio( $bg, $light_text );
+	$dark_contrast  = prospero_contrast_ratio( $bg, $dark_text );
+	$resolved_text  = $dark_contrast > $light_contrast ? $dark_text : $light_text;
+
+	return array(
+		"--prospero-{$region}-bg"   => $bg,
+		"--prospero-{$region}-text" => $resolved_text,
+	);
+}
+
+/**
+ * Build the combined map of header + footer CSS custom properties
+ * for the given mode.
+ *
+ * @param string $mode `light` (default) or `dark`.
+ * @return array Map of CSS custom property name => value.
+ */
+function prospero_get_chrome_css_vars( $mode = 'light' ) {
+	return array_merge(
+		prospero_get_chrome_css_vars_for( 'header', $mode ),
+		prospero_get_chrome_css_vars_for( 'footer', $mode )
+	);
+}
+
+/**
  * Render a set of :root CSS custom properties as a CSS string.
  *
  * @param array $vars Map of variable name => value.
@@ -451,15 +549,22 @@ function prospero_dynamic_css() {
 	$light_button_vars = prospero_get_button_css_vars( 'light' );
 	$css .= prospero_render_css_vars( $light_button_vars );
 
+	// Header / footer chrome vars for light mode.
+	$light_chrome_vars = prospero_get_chrome_css_vars( 'light' );
+	$css .= prospero_render_css_vars( $light_chrome_vars );
+
 	$css .= '}';
 
-	// Emit dark-mode overrides only for button variables that actually
-	// differ from light mode (i.e. the contrast fallback kicked in for
-	// one of the roles). Keeps the output minimal when everything's fine.
+	// Emit dark-mode overrides only for variables that actually differ
+	// from light mode. This covers both the button contrast safety net
+	// and the mode-specific header/footer chrome vars.
+	$light_vars        = array_merge( $light_button_vars, $light_chrome_vars );
 	$dark_button_vars  = prospero_get_button_css_vars( 'dark' );
+	$dark_chrome_vars  = prospero_get_chrome_css_vars( 'dark' );
+	$dark_vars         = array_merge( $dark_button_vars, $dark_chrome_vars );
 	$dark_overrides    = array();
-	foreach ( $dark_button_vars as $var_name => $var_value ) {
-		if ( ! array_key_exists( $var_name, $light_button_vars ) || $light_button_vars[ $var_name ] !== $var_value ) {
+	foreach ( $dark_vars as $var_name => $var_value ) {
+		if ( ! array_key_exists( $var_name, $light_vars ) || $light_vars[ $var_name ] !== $var_value ) {
 			$dark_overrides[ $var_name ] = $var_value;
 		}
 	}
@@ -472,6 +577,37 @@ function prospero_dynamic_css() {
 	echo '<style type="text/css" id="prospero-dynamic-css">' . $css . '</style>';
 }
 add_action( 'wp_head', 'prospero_dynamic_css', 99 );
+
+/**
+ * Resolve the full-width featured-image banner setting for posts/pages.
+ *
+ * @param int|WP_Post|null $post Optional post or post ID.
+ * @return bool
+ */
+function prospero_should_show_fullwidth_featured( $post = null ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
+		return false;
+	}
+
+	$override = get_post_meta( $post->ID, '_prospero_featured_fullwidth', true );
+	if ( 'fullwidth' === $override ) {
+		return true;
+	}
+	if ( 'constrained' === $override ) {
+		return false;
+	}
+
+	if ( 'page' === $post->post_type ) {
+		return (bool) get_theme_mod( 'prospero_page_featured_fullwidth', false );
+	}
+
+	if ( 'post' === $post->post_type ) {
+		return (bool) get_theme_mod( 'prospero_single_featured_fullwidth', false );
+	}
+
+	return false;
+}
 
 /**
  * Calculate reading time for content

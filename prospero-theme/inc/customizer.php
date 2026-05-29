@@ -128,8 +128,25 @@ function prospero_customizer_color_palettes() {
 	$highlight = get_theme_mod( 'prospero_highlight_color', '#ffc107' );
 	$bg = get_theme_mod( 'prospero_background_color', '#ffffff' );
 	$dark_bg = get_theme_mod( 'prospero_dark_background_color', '#2b2a33' );
+	$header_bg = get_theme_mod( 'prospero_header_bg_color', '' );
+	$header_bg_dark = get_theme_mod( 'prospero_header_bg_color_dark', '' );
+	$footer_bg = get_theme_mod( 'prospero_footer_bg_color', '' );
+	$footer_bg_dark = get_theme_mod( 'prospero_footer_bg_color_dark', '' );
 	
-	$palettes = array( $primary, $secondary, $tertiary, $highlight, $text, $dark_text, $bg, $dark_bg );
+	$palettes = array_values( array_filter( array_unique( array(
+		$primary,
+		$secondary,
+		$tertiary,
+		$highlight,
+		$text,
+		$dark_text,
+		$bg,
+		$dark_bg,
+		$header_bg,
+		$header_bg_dark,
+		$footer_bg,
+		$footer_bg_dark,
+	) ) ) );
 	
 	// Output inline script to update iris after controls are ready
 	?>
@@ -176,6 +193,25 @@ function prospero_customize_register( $wp_customize ) {
 		'mime_type'   => 'image',
 		'priority'    => 9, // Right after the default custom_logo
 	) ) );
+
+	// ===== SITE IDENTITY - SHOW LOGO TOGGLE =====
+	// Lets the user opt out of rendering any logo in the header (and on
+	// the WP login screen) so only the site title and tagline are shown.
+	// Default `true` preserves the previous behavior - the bundled
+	// logo.svg / logo-dark.svg files are still used as a fallback when
+	// no custom logo is uploaded. Unchecking suppresses BOTH the
+	// uploaded custom logo and the bundled fallback.
+	$wp_customize->add_setting( 'prospero_show_logo', array(
+		'default'           => true,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_show_logo', array(
+		'label'       => esc_html__( 'Show Logo in Header', 'prospero-theme' ),
+		'description' => esc_html__( 'Uncheck to hide every logo (your uploaded logo and the theme\'s bundled placeholder) and display only the site title and tagline.', 'prospero-theme' ),
+		'section'     => 'title_tagline',
+		'type'        => 'checkbox',
+		'priority'    => 10, // Right after the dark logo control
+	) );
 	
 	// ===== COLORS SECTION =====
 	$wp_customize->add_section( 'prospero_colors', array(
@@ -276,6 +312,64 @@ function prospero_customize_register( $wp_customize ) {
 	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_dark_background_color', array(
 		'label'       => esc_html__( 'Dark Mode Background Color', 'prospero-theme' ),
 		'description' => esc_html__( 'Page background when dark mode is active. Card and footer backgrounds are automatically derived from this (slightly lifted shade).', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
+	) ) );
+
+	// Header Background Color
+	//
+	// Optional - empty falls back to the page background color (today's
+	// behavior). When set, the header text color is auto-picked between
+	// `prospero_text_color` and `prospero_dark_text_color` based on
+	// WCAG contrast against this bg, so a dark header on a light page
+	// stays readable without exposing a separate text color setting.
+	$wp_customize->add_setting( 'prospero_header_bg_color', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_hex_color',
+		'transport'         => 'refresh',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_header_bg_color', array(
+		'label'       => esc_html__( 'Header Background Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional. Site header background in light mode. Leave empty to use the page background color. Header text color is auto-picked from the Text Color / Dark Mode Text Color settings based on contrast.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
+	) ) );
+
+	// Header Background Color (Dark Mode)
+	$wp_customize->add_setting( 'prospero_header_bg_color_dark', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_hex_color',
+		'transport'         => 'refresh',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_header_bg_color_dark', array(
+		'label'       => esc_html__( 'Header Background Color (Dark Mode)', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional. Site header background when dark mode is active. Leave empty to use the dark mode page background color.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
+	) ) );
+
+	// Footer Background Color
+	//
+	// Optional - empty falls back to today's auto-darken of the page
+	// background. When set, the footer text color is auto-picked the
+	// same way as the header (see comment above).
+	$wp_customize->add_setting( 'prospero_footer_bg_color', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_hex_color',
+		'transport'         => 'refresh',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_footer_bg_color', array(
+		'label'       => esc_html__( 'Footer Background Color', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional. Site footer background in light mode. Leave empty to use the auto-darkened page background color. Footer text color is auto-picked from the Text Color / Dark Mode Text Color settings based on contrast.', 'prospero-theme' ),
+		'section'     => 'prospero_colors',
+	) ) );
+
+	// Footer Background Color (Dark Mode)
+	$wp_customize->add_setting( 'prospero_footer_bg_color_dark', array(
+		'default'           => '',
+		'sanitize_callback' => 'sanitize_hex_color',
+		'transport'         => 'refresh',
+	) );
+	$wp_customize->add_control( new WP_Customize_Color_Control( $wp_customize, 'prospero_footer_bg_color_dark', array(
+		'label'       => esc_html__( 'Footer Background Color (Dark Mode)', 'prospero-theme' ),
+		'description' => esc_html__( 'Optional. Site footer background when dark mode is active. Leave empty to use the auto-lifted dark mode page background color.', 'prospero-theme' ),
 		'section'     => 'prospero_colors',
 	) ) );
 	
@@ -990,6 +1084,18 @@ function prospero_customize_register( $wp_customize ) {
 		'section'     => 'prospero_content',
 		'type'        => 'textarea',
 	) );
+
+	// Page featured image - full width banner
+	$wp_customize->add_setting( 'prospero_page_featured_fullwidth', array(
+		'default'           => false,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_page_featured_fullwidth', array(
+		'label'       => esc_html__( 'Full-width Featured Image on Pages', 'prospero-theme' ),
+		'description' => esc_html__( 'When enabled, pages with a featured image render it as a full-width banner above the page title. Per-page override available in the editor sidebar.', 'prospero-theme' ),
+		'section'     => 'prospero_content',
+		'type'        => 'checkbox',
+	) );
 	
 	// ===== BLOG LAYOUT SECTION =====
 	$wp_customize->add_section( 'prospero_blog_layout', array(
@@ -1070,6 +1176,18 @@ function prospero_customize_register( $wp_customize ) {
 			'below'  => esc_html__( 'Below title and meta', 'prospero-theme' ),
 			'hidden' => esc_html__( 'Hidden', 'prospero-theme' ),
 		),
+	) );
+
+	// Single post featured image - full width banner
+	$wp_customize->add_setting( 'prospero_single_featured_fullwidth', array(
+		'default'           => false,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_single_featured_fullwidth', array(
+		'label'       => esc_html__( 'Full-width Featured Image', 'prospero-theme' ),
+		'description' => esc_html__( 'Render the featured image as a full-width banner that spans the viewport. Per-post override available in the editor sidebar.', 'prospero-theme' ),
+		'section'     => 'prospero_blog_layout',
+		'type'        => 'checkbox',
 	) );
 	
 	// ===== BREADCRUMBS SECTION =====

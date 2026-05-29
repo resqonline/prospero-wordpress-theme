@@ -25,13 +25,14 @@ body.dark-mode {
 }
 
 body.dark-mode .site-header {
-	background-color: var(--color-background-dark);
+	background-color: var(--prospero-header-bg, var(--color-background-dark));
+	color: var(--prospero-header-text, var(--color-text-dark));
 	border-bottom-color: rgba(255, 255, 255, 0.1);
 }
 
 body.dark-mode .site-title a,
 body.dark-mode .main-navigation a {
-	color: var(--color-text-dark);
+	color: var(--prospero-header-text, var(--color-text-dark));
 }
 
 /*
@@ -77,8 +78,8 @@ body.dark-mode .has-hamburger-menu .main-navigation ul {
 }
 
 body.dark-mode .site-footer {
-	background-color: color-mix(in srgb, var(--color-background-dark) 88%, white);
-	color: var(--color-text-dark);
+	background-color: var(--prospero-footer-bg, color-mix(in srgb, var(--color-background-dark) 88%, white));
+	color: var(--prospero-footer-text, var(--color-text-dark));
 }
 
 /* Dark mode top bar - lift a shade of the dark background, similar to
@@ -120,9 +121,10 @@ body.dark-mode .social-navigation a:hover {
 	min-width: 40px;
 	min-height: 40px;
 	/* Match the other header icon buttons (search toggle, mobile menu
-	 * toggle) so the sun / moon glyph tracks the theme text color
-	 * instead of falling back to the user-agent button default. */
-	color: var(--color-text);
+	 * toggle) so the sun / moon glyph tracks the resolved header text
+	 * color (which auto-adjusts when a custom Header Background Color
+	 * is set) instead of falling back to the user-agent button default. */
+	color: var(--prospero-header-text, var(--color-text));
 	transition: all 0.3s ease;
 	flex-shrink: 0;
 }
@@ -140,7 +142,7 @@ body.dark-mode .social-navigation a:hover {
 
 body.dark-mode .dark-mode-toggle {
 	background: rgba(255, 255, 255, 0.1);
-	color: var(--color-text-dark);
+	color: var(--prospero-header-text, var(--color-text-dark));
 }
 
 body.dark-mode .dark-mode-toggle:hover {
@@ -309,12 +311,12 @@ body.dark-mode .mobile-menu-toggle:hover {
 }
 
 body.dark-mode .menu-toggle-icon {
-	color: var(--color-text-dark);
+	color: var(--prospero-header-text, var(--color-text-dark));
 }
 
 body.dark-mode .header-search-toggle {
 	background: rgba(255, 255, 255, 0.1);
-	color: var(--color-text-dark);
+	color: var(--prospero-header-text, var(--color-text-dark));
 }
 
 body.dark-mode .header-search-toggle:hover {

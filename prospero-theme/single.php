@@ -10,6 +10,7 @@ get_header();
 
 $featured_position = get_theme_mod( 'prospero_single_featured_position', 'below' );
 $show_featured     = has_post_thumbnail() && 'hidden' !== $featured_position;
+$is_fullwidth_featured = $show_featured && prospero_should_show_fullwidth_featured();
 ?>
 
 <main id="main-content" class="site-main single-post">
@@ -21,13 +22,18 @@ $show_featured     = has_post_thumbnail() && 'hidden' !== $featured_position;
 		<?php
 		// Featured image above title
 		if ( $show_featured && 'above' === $featured_position ) :
+			if ( $is_fullwidth_featured ) :
 		?>
+			<div class="post-featured-image post-featured-image-above post-featured-image-fullwidth">
+				<?php the_post_thumbnail( 'full', array( 'class' => 'post-thumbnail' ) ); ?>
+			</div>
+		<?php else : ?>
 			<div class="post-featured-image post-featured-image-above">
 				<div class="container">
 					<?php the_post_thumbnail( 'full', array( 'class' => 'post-thumbnail' ) ); ?>
 				</div>
 			</div>
-		<?php endif; ?>
+		<?php endif; endif; ?>
 
 		<header class="post-header">
 			<div class="container">
@@ -95,13 +101,18 @@ $show_featured     = has_post_thumbnail() && 'hidden' !== $featured_position;
 		<?php
 		// Featured image below title
 		if ( $show_featured && 'below' === $featured_position ) :
+			if ( $is_fullwidth_featured ) :
 		?>
+			<div class="post-featured-image post-featured-image-fullwidth">
+				<?php the_post_thumbnail( 'full', array( 'class' => 'post-thumbnail' ) ); ?>
+			</div>
+		<?php else : ?>
 			<div class="post-featured-image">
 				<div class="container">
 					<?php the_post_thumbnail( 'full', array( 'class' => 'post-thumbnail' ) ); ?>
 				</div>
 			</div>
-		<?php endif; ?>
+		<?php endif; endif; ?>
 
 		<div class="post-content-wrapper">
 			<div class="container">

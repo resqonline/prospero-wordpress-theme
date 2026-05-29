@@ -17,14 +17,20 @@
 			return;
 		}
 
-		// Get Ajax settings
-		const firstButton = filterButtons[0];
-		const nonce = firstButton.dataset.ajaxNonce;
-		
+		// Get Ajax settings from the localized prosperoAjax object.
+		const nonce = (typeof prosperoAjax !== 'undefined') ? prosperoAjax.nonce : '';
+
 		if (!nonce) {
 			console.error('Ajax nonce not found');
 			return;
 		}
+
+		// Read initial query args from the grid's data attributes — these
+		// are written by the template from the same WP_Query args used for
+		// the initial render, so the AJAX response always matches.
+		const postsPerPage = projectsGrid.dataset.postsPerPage || '12';
+		const orderby     = projectsGrid.dataset.orderby      || 'menu_order';
+		const order       = projectsGrid.dataset.order        || 'ASC';
 
 		// Filter button click handler
 		filterButtons.forEach(function(button) {
@@ -47,12 +53,12 @@
 				
 				// Prepare Ajax data
 				const formData = new FormData();
-				formData.append('action', 'prospero_filter_projects');
-				formData.append('nonce', nonce);
-				formData.append('tag', tag);
-				formData.append('count', '12');
-				formData.append('orderby', 'menu_order');
-				formData.append('order', 'ASC');
+					formData.append('action', 'prospero_filter_projects');
+					formData.append('nonce', nonce);
+					formData.append('tag', tag);
+					formData.append('count', postsPerPage);
+					formData.append('orderby', orderby);
+					formData.append('order', order);
 				
 				// Send Ajax request
 				fetch(prosperoAjax.ajaxUrl, {

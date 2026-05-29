@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Register Testimonials Post Type
  */
 function prospero_register_testimonials() {
-	if ( ! get_theme_mod( 'prospero_enable_testimonials', true ) ) {
+	if ( ! get_theme_mod( 'prospero_enable_testimonials', false ) ) {
 		return;
 	}
 
@@ -72,7 +72,7 @@ add_action( 'init', 'prospero_register_testimonials' );
  * Register Partners Post Type
  */
 function prospero_register_partners() {
-	if ( ! get_theme_mod( 'prospero_enable_partners', true ) ) {
+	if ( ! get_theme_mod( 'prospero_enable_partners', false ) ) {
 		return;
 	}
 
@@ -129,7 +129,7 @@ add_action( 'init', 'prospero_register_partners' );
  * Register Team Post Type
  */
 function prospero_register_team() {
-	if ( ! get_theme_mod( 'prospero_enable_team', true ) ) {
+	if ( ! get_theme_mod( 'prospero_enable_team', false ) ) {
 		return;
 	}
 
@@ -257,7 +257,7 @@ add_action( 'init', 'prospero_register_projects' );
  * Register FAQ Post Type
  */
 function prospero_register_faq() {
-	if ( ! get_theme_mod( 'prospero_enable_faq', true ) ) {
+	if ( ! get_theme_mod( 'prospero_enable_faq', false ) ) {
 		return;
 	}
 
@@ -315,7 +315,7 @@ add_action( 'init', 'prospero_register_faq' );
  */
 function prospero_add_meta_boxes() {
 	// Testimonial display name
-	if ( get_theme_mod( 'prospero_enable_testimonials', true ) ) {
+	if ( get_theme_mod( 'prospero_enable_testimonials', false ) ) {
 		add_meta_box(
 			'prospero_testimonial_display_name',
 			esc_html__( 'Display Name', 'prospero-theme' ),
@@ -337,7 +337,7 @@ function prospero_add_meta_boxes() {
 	}
 
 	// Partner website URL
-	if ( get_theme_mod( 'prospero_enable_partners', true ) ) {
+	if ( get_theme_mod( 'prospero_enable_partners', false ) ) {
 		add_meta_box(
 			'prospero_partner_url',
 			esc_html__( 'Partner Website', 'prospero-theme' ),
@@ -349,7 +349,7 @@ function prospero_add_meta_boxes() {
 	}
 
 	// Team member fields
-	if ( get_theme_mod( 'prospero_enable_team', true ) ) {
+	if ( get_theme_mod( 'prospero_enable_team', false ) ) {
 		// Display name
 		add_meta_box(
 			'prospero_team_display_name',
@@ -402,7 +402,7 @@ function prospero_add_meta_boxes() {
 	}
 
 	// Project fields
-	if ( get_theme_mod( 'prospero_enable_projects', true ) ) {
+	if ( get_theme_mod( 'prospero_enable_projects', false ) ) {
 		// Project website URL
 		add_meta_box(
 			'prospero_project_url',
@@ -424,7 +424,7 @@ function prospero_add_meta_boxes() {
 		);
 
 		// Testimonial selection
-		if ( get_theme_mod( 'prospero_enable_testimonials', true ) ) {
+		if ( get_theme_mod( 'prospero_enable_testimonials', false ) ) {
 			add_meta_box(
 				'prospero_project_testimonial',
 				esc_html__( 'Related Testimonial', 'prospero-theme' ),

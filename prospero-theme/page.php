@@ -17,6 +17,12 @@ get_header();
 	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
 		<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
+			<?php if ( has_post_thumbnail() && prospero_should_show_fullwidth_featured() ) : ?>
+				<div class="post-featured-image post-featured-image-fullwidth">
+					<?php the_post_thumbnail( 'full', array( 'class' => 'post-thumbnail' ) ); ?>
+				</div>
+			<?php endif; ?>
+
 			<header class="page-header">
 				<div class="container">
 					<h1 class="page-title"><?php the_title(); ?></h1>

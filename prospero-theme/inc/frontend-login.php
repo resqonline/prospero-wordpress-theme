@@ -322,8 +322,18 @@ add_action( 'after_setup_theme', 'prospero_hide_admin_bar' );
 
 /**
  * Customize login logo
+ *
+ * Honors the `prospero_show_logo` Customizer toggle: when unchecked,
+ * no override CSS is emitted, so the WP login screen falls back to
+ * its own default logo / mark instead of the theme's bundled
+ * `logo.svg`. The site title above the form still reads as the
+ * site name regardless.
  */
 function prospero_custom_login_logo() {
+	if ( ! get_theme_mod( 'prospero_show_logo', true ) ) {
+		return;
+	}
+
 	if ( has_custom_logo() ) {
 		$custom_logo_id = get_theme_mod( 'custom_logo' );
 		$logo_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );

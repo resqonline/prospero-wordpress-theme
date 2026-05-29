@@ -95,6 +95,15 @@ add_filter( 'widget_update_callback', 'prospero_save_widget_column_span', 10, 4 
 /**
  * Add column span class to widget wrapper
  *
+ * Supports both classic widgets (column span stored under the
+ * `prospero_column_span` instance key, set via `in_widget_form`) and
+ * block widgets (WP_Widget_Block, where the block HTML is stored under
+ * the `content` key and the top-level block's `prosperoColumnSpan`
+ * attribute is parsed out via `parse_blocks()`). The resulting
+ * `.span-1` / `.span-2` / `.span-3` class is injected on the outer
+ * `before_widget` wrapper so the Pre-Footer CSS grid resizes the
+ * widget regardless of whether it's classic or block-based.
+ *
  * @param array $params Widget parameters.
  * @return array Modified parameters.
  */
@@ -112,15 +121,43 @@ function prospero_widget_column_span_class( $params ) {
 		return $params;
 	}
 	
-	$widget_obj = $wp_registered_widgets[ $widget_id ];
-	
-	// Get widget settings
-	$widget_opt = get_option( $widget_obj['callback'][0]->option_name );
-	$widget_num = $widget_obj['params'][0]['number'];
-	
+	$widget_obj  = $wp_registered_widgets[ $widget_id ];
 	$column_span = '1';
-	if ( isset( $widget_opt[ $widget_num ]['prospero_column_span'] ) ) {
-		$column_span = $widget_opt[ $widget_num ]['prospero_column_span'];
+	
+	if ( isset( $widget_obj['callback'][0] ) && is_object( $widget_obj['callback'][0] ) ) {
+		$widget_instance = $widget_obj['callback'][0];
+		$option_name     = isset( $widget_instance->option_name ) ? $widget_instance->option_name : '';
+		$widget_opt      = $option_name ? get_option( $option_name ) : array();
+		$widget_num      = isset( $widget_obj['params'][0]['number'] ) ? $widget_obj['params'][0]['number'] : null;
+		
+		if ( null !== $widget_num && is_array( $widget_opt ) && isset( $widget_opt[ $widget_num ] ) ) {
+			$instance = $widget_opt[ $widget_num ];
+			
+			if ( class_exists( 'WP_Widget_Block' ) && $widget_instance instanceof WP_Widget_Block && ! empty( $instance['content'] ) ) {
+				// Block widget: parse the stored block HTML and read the
+				// first non-empty top-level block's `prosperoColumnSpan`
+				// attribute. Nested blocks are intentionally ignored -
+				// only the outermost block sits on the sidebar grid.
+				$parsed = parse_blocks( $instance['content'] );
+				foreach ( $parsed as $block ) {
+					if ( empty( $block['blockName'] ) ) {
+						continue;
+					}
+					if ( ! empty( $block['attrs']['prosperoColumnSpan'] ) ) {
+						$column_span = (string) $block['attrs']['prosperoColumnSpan'];
+					}
+					break;
+				}
+			} elseif ( isset( $instance['prospero_column_span'] ) ) {
+				// Classic widget path
+				$column_span = (string) $instance['prospero_column_span'];
+			}
+		}
+	}
+	
+	// Validate against allow-list
+	if ( ! in_array( $column_span, array( '1', '2', '3' ), true ) ) {
+		$column_span = '1';
 	}
 	
 	// Add span class to before_widget
@@ -153,7 +190,15 @@ function prospero_render_pre_footer() {
 }
 
 /**
- * Add block widget column span support via JavaScript in the block editor
+ * Enqueue the Column Span UI on the block-based widgets screen.
+ *
+ * The script:
+ * - registers a `prosperoColumnSpan` attribute on every block,
+ * - adds an InspectorControls panel ("Pre-Footer Layout" -> "Column
+ *   Span (Pre-Footer)") to the edit UI of top-level blocks only.
+ *
+ * The attribute is read server-side by `prospero_widget_column_span_class()`
+ * above, so no save-time class injection is required on the JS side.
  */
 function prospero_enqueue_widget_block_editor_assets() {
 	$screen = get_current_screen();
@@ -163,31 +208,24 @@ function prospero_enqueue_widget_block_editor_assets() {
 		return;
 	}
 	
-	wp_add_inline_script(
-		'wp-blocks',
-		"
-		// Add column span attribute to all widgets when in pre-footer sidebar
-		wp.hooks.addFilter(
-			'blocks.registerBlockType',
-			'prospero/widget-column-span',
-			function( settings, name ) {
-				// Only modify widget blocks
-				if ( name.indexOf( 'core/' ) !== 0 ) {
-					return settings;
-				}
-				
-				// Add column span attribute
-				settings.attributes = Object.assign( {}, settings.attributes, {
-					prosperoColumnSpan: {
-						type: 'string',
-						default: '1'
-					}
-				});
-				
-				return settings;
-			}
-		);
-		"
+	wp_enqueue_script(
+		'prospero-widget-column-span',
+		PROSPERO_THEME_URI . '/assets/js/widget-column-span.js',
+		array(
+			'wp-blocks',
+			'wp-element',
+			'wp-compose',
+			'wp-block-editor',
+			'wp-components',
+			'wp-hooks',
+			'wp-i18n',
+		),
+		PROSPERO_VERSION,
+		true
 	);
+	
+	if ( function_exists( 'wp_set_script_translations' ) ) {
+		wp_set_script_translations( 'prospero-widget-column-span', 'prospero-theme' );
+	}
 }
 add_action( 'enqueue_block_editor_assets', 'prospero_enqueue_widget_block_editor_assets' );

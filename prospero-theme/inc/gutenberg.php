@@ -33,6 +33,28 @@ function prospero_register_blocks() {
 		'name'  => 'tertiary',
 		'label' => esc_html__( 'Tertiary', 'prospero-theme' ),
 	) );
+
+	// Gallery slider style - opt-in via the Styles panel in the editor.
+	// Adds the `is-style-slider` class to the `.wp-block-gallery` wrapper;
+	// `assets/js/flickity-init.js` initializes Flickity on any gallery
+	// carrying that class (or the manual `prospero-gallery-slider` class
+	// added via Advanced -> Additional CSS classes). Default gallery
+	// layout is unchanged - the slider is purely opt-in.
+	register_block_style( 'core/gallery', array(
+		'name'  => 'slider',
+		'label' => esc_html__( 'Slider', 'prospero-theme' ),
+	) );
+
+	// Gallery slider with autoplay - second mutually-exclusive style
+	// (block styles in WP can only have one active at a time, so this
+	// is a separate picker entry rather than an additive flag). Adds the
+	// `is-style-slider-autoplay` class. Equivalent to manually adding
+	// `prospero-gallery-slider prospero-gallery-autoplay` to a non-block
+	// gallery via Additional CSS classes.
+	register_block_style( 'core/gallery', array(
+		'name'  => 'slider-autoplay',
+		'label' => esc_html__( 'Slider (autoplay)', 'prospero-theme' ),
+	) );
 	
 	// TODO: Register custom blocks:
 	// - Text Content Block

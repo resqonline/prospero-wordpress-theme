@@ -169,19 +169,183 @@
 			}
 		});
 
-		// Close menu when clicking a link (unless it has a submenu)
+		// Close the menu when a link is clicked. Same-page anchor links
+		// are intercepted so the scroll happens AFTER the panel slides
+		// out (otherwise the motion is hidden behind the overlay). The
+		// pure `#` placeholder on submenu parent items is ignored so it
+		// keeps opening the child panel.
 		const menuLinks = menuPanel.querySelectorAll('a');
 		menuLinks.forEach(function(link) {
-			link.addEventListener('click', function() {
-				// Check if this link is in a menu item with a submenu toggle
+			link.addEventListener('click', function(e) {
 				const menuItem = this.closest('li');
 				const hasSubmenu = menuItem && menuItem.querySelector('.submenu-toggle');
+				const href = this.getAttribute('href') || '';
 
-				// If it's a regular link (not parent of submenu), close menu
-				if (!hasSubmenu || this.getAttribute('href') !== '#') {
-					setTimeout(closeMenu, 100);
+				if (hasSubmenu && href === '#') {
+					return;
 				}
+
+				const target = resolveSamePageAnchorTarget(this);
+				if (target) {
+					e.preventDefault();
+					closeMenu();
+					// 220 ms ≈ the .mobile-menu-panel slide-out transition.
+					scrollToAnchor(target, 220);
+					return;
+				}
+
+				setTimeout(closeMenu, 100);
 			});
+		});
+	}
+
+	/**
+	 * Escape an id/name for use in a CSS attribute selector, with a
+	 * fallback for browsers without `CSS.escape()`.
+	 */
+	function escapeSelectorValue(value) {
+		if (window.CSS && typeof window.CSS.escape === 'function') {
+			return window.CSS.escape(value);
+		}
+
+		return value.replace(/["\\]/g, '\\$&');
+	}
+
+	/**
+	 * Resolve an anchor's `href` to a same-page target element, or
+	 * `null` if the link points elsewhere or the target doesn't exist.
+	 * Matches by `id` first, then by `a[name="..."]` for legacy anchors.
+	 */
+	function resolveSamePageAnchorTarget(link) {
+		let url;
+
+		try {
+			url = new URL(link.href, window.location.href);
+		} catch (err) {
+			return null;
+		}
+
+		if (url.origin !== window.location.origin ||
+			url.pathname !== window.location.pathname ||
+			url.search !== window.location.search) {
+			return null;
+		}
+
+		if (!url.hash || url.hash.length <= 1) {
+			return null;
+		}
+
+		const targetId = decodeURIComponent(url.hash.slice(1));
+
+		return document.getElementById(targetId) ||
+			document.querySelector('a[name="' + escapeSelectorValue(targetId) + '"]');
+	}
+
+	/**
+	 * Smooth-scroll to an anchor target, offsetting for the sticky
+	 * header + top bar, moving keyboard focus to the target, and
+	 * stripping the hash from the URL. Honors `prefers-reduced-motion`.
+	 *
+	 * @param {Element} target Element to scroll to.
+	 * @param {number}  [delay=0] Milliseconds to wait before scrolling.
+	 *                            Used by the hamburger handler to wait
+	 *                            for the panel to close.
+	 */
+	function scrollToAnchor(target, delay) {
+		const run = function () {
+			const header = document.getElementById('masthead');
+			const targetTop = target.getBoundingClientRect().top +
+				window.pageYOffset;
+			let chromeOffset = 0;
+			const reduceMotion = window.matchMedia &&
+				window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+			// Only reserve room for the sticky chrome when it's actually
+			// going to be visible at the destination.
+			if (header && header.classList.contains('sticky-header')) {
+				const topBarVar = getComputedStyle(document.documentElement)
+					.getPropertyValue('--prospero-top-bar-height') || '0';
+				const topBarHeight = parseInt(topBarVar, 10) || 0;
+				const stickyThreshold = header.offsetTop + header.offsetHeight;
+				const willUseStickyChrome = header.classList.contains('is-sticky') ||
+					document.body.classList.contains('header-is-stuck') ||
+					targetTop > stickyThreshold;
+
+				if (willUseStickyChrome) {
+					chromeOffset = header.offsetHeight + topBarHeight;
+				}
+			}
+
+			// Breathing room above the target (matches --spacing-md).
+			const gap = 32;
+			const scrollY = Math.max(0, targetTop - chromeOffset - gap);
+
+			window.scrollTo({
+				top: scrollY,
+				behavior: reduceMotion ? 'auto' : 'smooth'
+			});
+
+			// Move focus so screen reader / keyboard users land at the
+			// target. Temporary `tabindex="-1"` is removed on next blur.
+			const hadTabindex = target.hasAttribute('tabindex');
+			if (!hadTabindex) {
+				target.setAttribute('tabindex', '-1');
+			}
+			target.focus({ preventScroll: true });
+			if (!hadTabindex) {
+				target.addEventListener('blur', function onBlur() {
+					target.removeAttribute('tabindex');
+					target.removeEventListener('blur', onBlur);
+				}, { once: true });
+			}
+
+			// Strip the hash from the URL without adding a history entry.
+			if (window.history && typeof window.history.replaceState === 'function') {
+				window.history.replaceState(
+					window.history.state,
+					'',
+					window.location.pathname + window.location.search
+				);
+			}
+		};
+
+		if (typeof delay === 'number' && delay > 0) {
+			setTimeout(run, delay);
+		} else {
+			run();
+		}
+	}
+
+	/**
+	 * Global same-page anchor link handler.
+	 *
+	 * Delegated at the document level so it catches `<a href="#...">`
+	 * links anywhere - content, blocks, widgets, footer, desktop nav.
+	 * Skips hamburger panel links (handled separately with a close-
+	 * first delay), modifier-key clicks, non-primary mouse buttons,
+	 * `target="_blank"` / `download` links, and any link opting out
+	 * via `data-no-smooth-scroll`.
+	 */
+	function initAnchorScroll() {
+		document.addEventListener('click', function (e) {
+			if (e.defaultPrevented) return;
+			if (e.button !== 0) return;
+			if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+			const link = e.target.closest('a');
+
+			if (!link) return;
+			if (link.closest('.mobile-menu-panel')) return;
+			if (link.hasAttribute('download')) return;
+			if (link.hasAttribute('data-no-smooth-scroll')) return;
+			if (link.target && link.target !== '' && link.target !== '_self') return;
+
+			const target = resolveSamePageAnchorTarget(link);
+
+			if (!target) return;
+
+			e.preventDefault();
+			scrollToAnchor(target);
 		});
 	}
 
@@ -537,6 +701,7 @@
 	 */
 	function init() {
 		initMobileMenu();
+		initAnchorScroll();
 		initHeaderSearch();
 		initStickyHeader();
 		initKeyboardNav();

@@ -22,13 +22,19 @@ function prospero_filter_projects_ajax() {
 		) );
 	}
 	
-	// Get filter parameters
-	$tag = isset( $_POST['tag'] ) ? sanitize_text_field( wp_unslash( $_POST['tag'] ) ) : 'all';
-	$posts_per_page = isset( $_POST['count'] ) ? absint( $_POST['count'] ) : 12;
-	$orderby = isset( $_POST['orderby'] ) ? sanitize_text_field( wp_unslash( $_POST['orderby'] ) ) : 'menu_order';
-	$order = isset( $_POST['order'] ) ? sanitize_text_field( wp_unslash( $_POST['order'] ) ) : 'ASC';
-	
-	// Build query args
+	// Allowlisted orderby values accepted from the client.
+	$valid_orderby = array( 'date', 'title', 'modified', 'comment_count', 'rand', 'ID', 'author', 'name', 'menu_order', 'none' );
+
+	// Get filter parameters — sanitize and allowlist each value.
+	$tag            = isset( $_POST['tag'] ) ? sanitize_text_field( wp_unslash( $_POST['tag'] ) ) : 'all';
+	$posts_per_page = isset( $_POST['count'] ) ? min( absint( $_POST['count'] ), 100 ) : 12;
+	$orderby_raw    = isset( $_POST['orderby'] ) ? sanitize_text_field( wp_unslash( $_POST['orderby'] ) ) : '';
+	$orderby        = in_array( $orderby_raw, $valid_orderby, true ) ? $orderby_raw : 'menu_order';
+	$order_raw      = isset( $_POST['order'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_POST['order'] ) ) ) : '';
+	$order          = in_array( $order_raw, array( 'ASC', 'DESC' ), true ) ? $order_raw : 'ASC';
+
+	// Build query args — post_type and post_status are hardcoded server-side
+	// and never accepted from the client.
 	$args = array(
 		'post_type'      => 'project',
 		'posts_per_page' => $posts_per_page,
@@ -91,20 +97,37 @@ function prospero_filter_blog_ajax() {
 	$category = isset( $_POST['category'] ) ? sanitize_text_field( wp_unslash( $_POST['category'] ) ) : 'all';
 	$paged    = isset( $_POST['paged'] ) ? absint( $_POST['paged'] ) : 1;
 
-	// Build query args. `orderby` + `order` are set explicitly so the ajax
-	// response always matches the main archive's newest-first ordering,
-	// regardless of any `pre_get_posts` filter that might flip defaults.
-	// Term cache is left at its default (primed) because the shared
-	// `content-blog-item.php` template runs `post_class()`, which calls
-	// `get_the_category()` per post - without the cache primed that's an
-	// extra query per article on every filter response.
+	// Receive the main archive's query vars captured on page load (after
+	// pre_get_posts) and serialised by prospero_enqueue_scripts(). Using
+	// them as the query base means any pre_get_posts modification
+	// (ordering, posts_per_page override, plugin-driven changes) carries
+	// over to the filtered response automatically.
+	//
+	// Only posts_per_page, orderby, and order are accepted from the client;
+	// post_type and post_status are hardcoded below so a tampered payload
+	// cannot expose non-public content.
+	$received_vars = isset( $_POST['base_query_vars'] ) ? wp_unslash( $_POST['base_query_vars'] ) : '{}';
+	$client_vars   = json_decode( $received_vars, true );
+	if ( ! is_array( $client_vars ) ) {
+		$client_vars = array();
+	}
+
+	$valid_orderby  = array( 'date', 'title', 'modified', 'comment_count', 'rand', 'ID', 'author', 'name', 'menu_order', 'none' );
+	$orderby_raw    = isset( $client_vars['orderby'] ) ? sanitize_text_field( $client_vars['orderby'] ) : '';
+	$order_raw      = isset( $client_vars['order'] ) ? strtoupper( sanitize_text_field( $client_vars['order'] ) ) : '';
+
+	$posts_per_page = isset( $client_vars['posts_per_page'] ) ? min( absint( $client_vars['posts_per_page'] ), 100 ) : (int) get_option( 'posts_per_page' );
+	$orderby        = in_array( $orderby_raw, $valid_orderby, true ) ? $orderby_raw : 'date';
+	$order          = in_array( $order_raw, array( 'ASC', 'DESC' ), true ) ? $order_raw : 'DESC';
+
+	// Build query args — post_type and post_status are hardcoded server-side.
 	$args = array(
 		'post_type'      => 'post',
-		'posts_per_page' => get_option( 'posts_per_page' ),
+		'posts_per_page' => $posts_per_page,
 		'paged'          => $paged,
 		'post_status'    => 'publish',
-		'orderby'        => 'date',
-		'order'          => 'DESC',
+		'orderby'        => $orderby,
+		'order'          => $order,
 	);
 
 	// Add category filter if not 'all'

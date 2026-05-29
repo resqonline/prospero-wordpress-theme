@@ -57,12 +57,191 @@
 		});
 	}
 
+	/**
+	 * Initialize a WP Gallery / classic [gallery] as a Flickity slider.
+	 *
+	 * Handles three gallery formats:
+	 * - Modern Gutenberg (5.9+) `.wp-block-gallery.has-nested-images` with
+	 *   direct `.wp-block-image` children (cells are the figures).
+	 * - Legacy Gutenberg gallery with an inner `.blocks-gallery-grid`
+	 *   `<ul>` (cells are the `.blocks-gallery-item` `<li>`).
+	 * - Classic `[gallery]` shortcode `.gallery` with `.gallery-item`
+	 *   figures.
+	 *
+	 * The columns count comes from the wrapper's `columns-N` /
+	 * `gallery-columns-N` class, defaulting to 3 if neither is present.
+	 * Flickity is initialized on the inner cells container, not the
+	 * outer wrapper, so CSS targeting the wrapper class (alignment,
+	 * spacing, etc.) keeps working.
+	 *
+	 * Autoplay is enabled when the wrapper carries either the
+	 * `is-style-slider-autoplay` block style (registered for `core/gallery`
+	 * in `inc/gutenberg.php`) or the `prospero-gallery-autoplay` additive
+	 * class (the manual / classic-gallery opt-in). Default interval is
+	 * 5000ms; mouse hover pauses and resumes the player so visitors can
+	 * read captions / focus on a slide without it advancing.
+	 *
+	 * @param {Element} wrapper - The gallery's outer wrapper element.
+	 */
+	function initGallerySlider(wrapper) {
+		// Skip if already initialized (defensive against double-init when a
+		// page swaps gallery markup via PJAX / preview reloads).
+		if (wrapper.classList.contains('prospero-gallery-slider-init')) {
+			return;
+		}
+
+		let cellsContainer = null;
+		let cellSelector = null;
+
+		// Detect the gallery format and pick the appropriate cell container.
+		if (wrapper.classList.contains('wp-block-gallery')) {
+			const legacyList = wrapper.querySelector(':scope > .blocks-gallery-grid');
+			if (legacyList) {
+				// Legacy (<5.9) Gutenberg gallery: <ul> wrapping <li> items.
+				cellsContainer = legacyList;
+				cellSelector = ':scope > .blocks-gallery-item';
+			} else {
+				// Modern (5.9+) Gutenberg gallery: figures as direct children.
+				cellsContainer = wrapper;
+				cellSelector = ':scope > .wp-block-image';
+			}
+		} else if (wrapper.classList.contains('gallery')) {
+			// Classic [gallery] shortcode.
+			cellsContainer = wrapper;
+			cellSelector = ':scope > .gallery-item';
+		} else {
+			return;
+		}
+
+		const cells = cellsContainer.querySelectorAll(cellSelector);
+		if (cells.length === 0) {
+			return;
+		}
+
+		// Detect the columns count from the wrapper's class list. The
+		// `columns-N` (Gutenberg) and `gallery-columns-N` (classic) prefixes
+		// both expose a numeric value; fall back to 3 when neither is set
+		// (e.g. when the user picks the dynamic "columns-default" option).
+		let columns = 3;
+		const classList = Array.prototype.slice.call(wrapper.classList);
+		for (let i = 0; i < classList.length; i++) {
+			const gutenbergMatch = classList[i].match(/^columns-(\d+)$/);
+			if (gutenbergMatch) {
+				columns = parseInt(gutenbergMatch[1], 10);
+				break;
+			}
+			const classicMatch = classList[i].match(/^gallery-columns-(\d+)$/);
+			if (classicMatch) {
+				columns = parseInt(classicMatch[1], 10);
+				break;
+			}
+		}
+		if (columns < 1) {
+			columns = 1;
+		}
+
+		const needsSlider = cells.length > columns;
+		const gap = 16;
+		const totalGapSpace = gap * (columns - 1);
+		const cellWidth = 'calc((100% - ' + totalGapSpace + 'px) / ' + columns + ')';
+
+		// Autoplay opt-in via either the dedicated block style or the
+		// additive class. Disabled when there aren't enough cells to
+		// actually rotate - no point cycling a single static slide.
+		const wantsAutoplay = needsSlider && (
+			wrapper.classList.contains('is-style-slider-autoplay') ||
+			wrapper.classList.contains('prospero-gallery-autoplay')
+		);
+		const autoPlayInterval = wantsAutoplay ? 5000 : false;
+
+		function applyWidths() {
+			cells.forEach(function(cell) {
+				cell.style.width = cellWidth;
+				cell.style.marginRight = gap + 'px';
+				cell.style.marginLeft = '0';
+			});
+		}
+		applyWidths();
+
+		try {
+			const flkty = new Flickity(cellsContainer, {
+				cellAlign: 'left',
+				contain: true,
+				wrapAround: needsSlider,
+				autoPlay: autoPlayInterval,
+				prevNextButtons: needsSlider,
+				pageDots: needsSlider,
+				accessibility: true,
+				setGallerySize: true,
+				imagesLoaded: true,
+				percentPosition: true,
+				draggable: needsSlider
+			});
+
+			wrapper.classList.add('prospero-gallery-slider-init');
+
+			// Keyboard navigation
+			cellsContainer.addEventListener('keydown', function(event) {
+				if (event.keyCode === 37) {
+					event.preventDefault();
+					flkty.previous();
+				} else if (event.keyCode === 39) {
+					event.preventDefault();
+					flkty.next();
+				}
+			});
+
+			// Pause autoplay while the visitor is interacting with the
+			// slider, resume when they move away. Matches the testimonials /
+			// partners listing-slider behaviour above.
+			if (autoPlayInterval) {
+				cellsContainer.addEventListener('mouseenter', function() {
+					flkty.pausePlayer();
+				});
+				cellsContainer.addEventListener('mouseleave', function() {
+					flkty.unpausePlayer();
+				});
+			}
+
+			// Re-apply widths and resize Flickity on window resize. Debounced
+			// the same way as the listing sliders above.
+			let resizeTimer;
+			window.addEventListener('resize', function() {
+				clearTimeout(resizeTimer);
+				resizeTimer = setTimeout(function() {
+					applyWidths();
+					flkty.resize();
+				}, 250);
+			});
+		} catch (error) {
+			console.error('Flickity gallery init error:', error);
+		}
+	}
+
 	// Initialize Flickity sliders when DOM is ready
 	document.addEventListener('DOMContentLoaded', function() {
 		
-		// Initialize all Flickity sliders
+		// Initialize all theme listing sliders (testimonials, partners,
+		// team, projects, generic) emitted by the theme's shortcodes /
+		// custom blocks.
 		const sliders = document.querySelectorAll('.prospero-slider');
-		
+
+		// Initialize gallery sliders. Picked up by any of:
+		// - `is-style-slider` / `is-style-slider-autoplay` (block style
+		//   choices registered for `core/gallery` in `inc/gutenberg.php`).
+		// - `prospero-gallery-slider` (manual opt-in via Advanced -> CSS
+		//   classes, also works for the classic `[gallery]` shortcode).
+		// Autoplay is detected per-wrapper inside `initGallerySlider()`.
+		const gallerySliders = document.querySelectorAll(
+			'.wp-block-gallery.is-style-slider,' +
+			'.wp-block-gallery.is-style-slider-autoplay,' +
+			'.wp-block-gallery.prospero-gallery-slider,' +
+			'.gallery.prospero-gallery-slider'
+		);
+		gallerySliders.forEach(function(gallery) {
+			initGallerySlider(gallery);
+		});
+
 		if (sliders.length === 0) {
 			return;
 		}

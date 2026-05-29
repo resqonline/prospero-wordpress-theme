@@ -224,6 +224,34 @@ function prospero_register_custom_blocks() {
 add_action( 'init', 'prospero_register_custom_blocks' );
 
 /**
+ * Parse the "Additional CSS classes" value from a block's implicit
+ * `className` attribute (Gutenberg's Advanced panel in the block editor)
+ * and return it as an array of sanitised, non-empty class names.
+ *
+ * Server-rendered blocks that build their wrapper markup manually need
+ * to merge these classes themselves - `useBlockProps()` handles it in
+ * the editor, but the PHP `render_callback` is responsible on the
+ * frontend. Returns an empty array when no custom class is set.
+ *
+ * @param array $attributes Block attributes passed to a `render_callback`.
+ * @return string[] List of sanitised class names (may be empty).
+ */
+function prospero_block_custom_classes( $attributes ) {
+	$custom_class = ! empty( $attributes['className'] ) ? $attributes['className'] : '';
+	if ( ! $custom_class ) {
+		return array();
+	}
+	$result = array();
+	foreach ( preg_split( '/\s+/', trim( $custom_class ) ) as $class ) {
+		$sanitized = sanitize_html_class( $class );
+		if ( $sanitized ) {
+			$result[] = $sanitized;
+		}
+	}
+	return $result;
+}
+
+/**
  * Render Call to Action Block
  */
 function prospero_render_cta_block( $attributes ) {
@@ -253,6 +281,7 @@ function prospero_render_cta_block( $attributes ) {
 	if ( $image_url && $layout !== 'center' ) {
 		$wrapper_classes[] = 'has-image';
 	}
+	$wrapper_classes = array_merge( $wrapper_classes, prospero_block_custom_classes( $attributes ) );
 	
 	// Build inline styles
 	$styles = array();
@@ -329,9 +358,11 @@ function prospero_render_testimonial_single_block( $attributes ) {
 		return '';
 	}
 	
+	$wrapper_classes = array_merge( array( 'prospero-testimonial-block' ), prospero_block_custom_classes( $attributes ) );
+	
 	ob_start();
 	?>
-	<div class="prospero-testimonial-block">
+	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>">
 		<?php if ( $show_image && has_post_thumbnail( $testimonial_id ) ) : ?>
 			<div class="testimonial-image">
 				<?php echo get_the_post_thumbnail( $testimonial_id, 'thumbnail', array( 'class' => 'testimonial-thumbnail' ) ); ?>
@@ -373,9 +404,14 @@ function prospero_render_testimonials_list_block( $attributes ) {
 		'show_ratings' => $show_ratings,
 	) );
 	
-	// Wrap with alignment class if set
+	// Wrap with alignment / custom-class wrapper if either is set
+	$wrapper_classes = array();
 	if ( $align ) {
-		$output = '<div class="align' . esc_attr( $align ) . '">' . $output . '</div>';
+		$wrapper_classes[] = 'align' . esc_attr( $align );
+	}
+	$wrapper_classes = array_merge( $wrapper_classes, prospero_block_custom_classes( $attributes ) );
+	if ( ! empty( $wrapper_classes ) ) {
+		$output = '<div class="' . esc_attr( implode( ' ', $wrapper_classes ) ) . '">' . $output . '</div>';
 	}
 	
 	return $output;
@@ -398,9 +434,14 @@ function prospero_render_team_member_block( $attributes ) {
 		return '';
 	}
 	
+	$wrapper_classes = array_merge(
+		array( 'prospero-team-member-block', 'prospero-team-member-' . sanitize_html_class( $layout ) ),
+		prospero_block_custom_classes( $attributes )
+	);
+	
 	ob_start();
 	?>
-	<div class="prospero-team-member-block prospero-team-member-<?php echo esc_attr( $layout ); ?>">
+	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>">
 		<?php if ( has_post_thumbnail( $member_id ) ) : ?>
 			<div class="team-member-image">
 				<a href="<?php echo esc_url( get_permalink( $member_id ) ); ?>">
@@ -431,6 +472,7 @@ function prospero_render_member_content_block( $attributes, $content ) {
 	$login_message      = isset( $attributes['loginMessage'] ) ? $attributes['loginMessage'] : '';
 	$show_fallback_form = isset( $attributes['showFallbackForm'] ) ? (bool) $attributes['showFallbackForm'] : false;
 	$fallback_shortcode = isset( $attributes['fallbackShortcode'] ) ? $attributes['fallbackShortcode'] : '';
+	$custom_classes     = prospero_block_custom_classes( $attributes );
 	
 	// Default login message
 	if ( empty( $login_message ) ) {
@@ -439,9 +481,10 @@ function prospero_render_member_content_block( $attributes, $content ) {
 	
 	// Check if user is logged in
 	if ( ! is_user_logged_in() ) {
+		$login_classes = array_merge( array( 'prospero-member-content-login' ), $custom_classes );
 		ob_start();
 		?>
-		<div class="prospero-member-content-login">
+		<div class="<?php echo esc_attr( implode( ' ', $login_classes ) ); ?>">
 			<p><?php echo esc_html( $login_message ); ?></p>
 			<?php
 			if ( $show_fallback_form && ! empty( $fallback_shortcode ) ) {
@@ -476,11 +519,13 @@ function prospero_render_member_content_block( $attributes, $content ) {
 	}
 	
 	if ( $user_level < $required_level ) {
-		return '<div class="prospero-member-content-restricted"><p>' . esc_html__( 'You do not have permission to view this content.', 'prospero-theme' ) . '</p></div>';
+		$restricted_classes = array_merge( array( 'prospero-member-content-restricted' ), $custom_classes );
+		return '<div class="' . esc_attr( implode( ' ', $restricted_classes ) ) . '"><p>' . esc_html__( 'You do not have permission to view this content.', 'prospero-theme' ) . '</p></div>';
 	}
 	
 	// User has access, show the InnerBlocks content
-	return '<div class="prospero-member-content">' . $content . '</div>';
+	$access_classes = array_merge( array( 'prospero-member-content' ), $custom_classes );
+	return '<div class="' . esc_attr( implode( ' ', $access_classes ) ) . '">' . $content . '</div>';
 }
 
 /**
@@ -683,9 +728,11 @@ function prospero_render_faq_single_block( $attributes ) {
 		return '';
 	}
 	
+	$wrapper_classes = array_merge( array( 'prospero-faq-single' ), prospero_block_custom_classes( $attributes ) );
+	
 	ob_start();
 	?>
-	<div class="prospero-faq-single" itemscope itemtype="https://schema.org/Question">
+	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" itemscope itemtype="https://schema.org/Question">
 		<?php if ( $show_title ) : ?>
 			<h3 class="faq-question" itemprop="name"><?php echo esc_html( $faq->post_title ); ?></h3>
 		<?php endif; ?>
@@ -760,6 +807,7 @@ function prospero_render_faq_list_block( $attributes ) {
 	if ( $align ) {
 		$wrapper_classes[] = 'align' . esc_attr( $align );
 	}
+	$wrapper_classes = array_merge( $wrapper_classes, prospero_block_custom_classes( $attributes ) );
 
 	// Helper that renders a single FAQ item in either the accordion or
 	// flat presentation.
@@ -847,9 +895,14 @@ function prospero_render_partners_list_block( $attributes ) {
 		'slider'   => $slider,
 	) );
 	
-	// Wrap with alignment class if set
+	// Wrap with alignment / custom-class wrapper if either is set
+	$wrapper_classes = array();
 	if ( $align ) {
-		$output = '<div class="align' . esc_attr( $align ) . '">' . $output . '</div>';
+		$wrapper_classes[] = 'align' . esc_attr( $align );
+	}
+	$wrapper_classes = array_merge( $wrapper_classes, prospero_block_custom_classes( $attributes ) );
+	if ( ! empty( $wrapper_classes ) ) {
+		$output = '<div class="' . esc_attr( implode( ' ', $wrapper_classes ) ) . '">' . $output . '</div>';
 	}
 	
 	return $output;
@@ -888,9 +941,14 @@ function prospero_render_team_list_block( $attributes ) {
 		'show_social'  => $showSocial,
 	) );
 	
-	// Wrap with alignment class if set
+	// Wrap with alignment / custom-class wrapper if either is set
+	$wrapper_classes = array();
 	if ( $align ) {
-		$output = '<div class="align' . esc_attr( $align ) . '">' . $output . '</div>';
+		$wrapper_classes[] = 'align' . esc_attr( $align );
+	}
+	$wrapper_classes = array_merge( $wrapper_classes, prospero_block_custom_classes( $attributes ) );
+	if ( ! empty( $wrapper_classes ) ) {
+		$output = '<div class="' . esc_attr( implode( ' ', $wrapper_classes ) ) . '">' . $output . '</div>';
 	}
 	
 	return $output;
@@ -906,13 +964,21 @@ function prospero_render_projects_list_block( $attributes ) {
 	$slider = isset( $attributes['slider'] ) && $attributes['slider'] ? 'yes' : 'no';
 	
 	// Use the shortcode function
-	return prospero_projects_shortcode( array(
+	$output = prospero_projects_shortcode( array(
 		'category' => $category,
 		'count'    => $count,
 		'orderby'  => $orderby,
 		'order'    => 'DESC',
 		'slider'   => $slider,
 	) );
+	
+	// Wrap with custom-class wrapper if "Additional CSS classes" is set
+	$wrapper_classes = prospero_block_custom_classes( $attributes );
+	if ( ! empty( $wrapper_classes ) ) {
+		$output = '<div class="' . esc_attr( implode( ' ', $wrapper_classes ) ) . '">' . $output . '</div>';
+	}
+	
+	return $output;
 }
 
 /**
@@ -922,9 +988,14 @@ function prospero_render_affiliate_link_block( $attributes ) {
 	$mode         = isset( $attributes['mode'] ) ? sanitize_text_field( $attributes['mode'] ) : 'button';
 	$disclosure   = isset( $attributes['disclosure'] ) && $attributes['disclosure'] ? true : false;
 	
+	$wrapper_classes = array_merge(
+		array( 'prospero-affiliate-link', 'prospero-affiliate-' . sanitize_html_class( $mode ) ),
+		prospero_block_custom_classes( $attributes )
+	);
+	
 	ob_start();
 	?>
-	<div class="prospero-affiliate-link prospero-affiliate-<?php echo esc_attr( $mode ); ?>">
+	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>">
 		<?php if ( $disclosure ) :
 			$disclosure_text = get_theme_mod( 'prospero_product_placement_text', '' );
 			if ( ! empty( $disclosure_text ) ) :
@@ -1082,6 +1153,7 @@ function prospero_render_partner_single_block( $attributes ) {
 	if ( ! ( $show_logo && has_post_thumbnail( $partner_id ) ) ) {
 		$wrapper_classes[] = 'partner-single-no-logo';
 	}
+	$wrapper_classes = array_merge( $wrapper_classes, prospero_block_custom_classes( $attributes ) );
 
 	ob_start();
 	?>
@@ -1145,9 +1217,11 @@ function prospero_render_project_single_block( $attributes ) {
 		return '';
 	}
 	
+	$wrapper_classes = array_merge( array( 'prospero-project-single' ), prospero_block_custom_classes( $attributes ) );
+	
 	ob_start();
 	?>
-	<div class="prospero-project-single">
+	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>">
 		<?php if ( $show_featured && has_post_thumbnail( $project_id ) ) : ?>
 			<div class="project-featured-image">
 				<?php echo get_the_post_thumbnail( $project_id, 'large', array( 'class' => 'project-thumbnail' ) ); ?>

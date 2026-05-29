@@ -249,15 +249,29 @@ function prospero_enqueue_scripts() {
 		wp_enqueue_script( 'prospero-projects-filter', PROSPERO_THEME_URI . '/assets/js/projects-filter.js', array(), PROSPERO_VERSION, true );
 		wp_localize_script( 'prospero-projects-filter', 'prosperoAjax', array(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'prospero_filter_projects' ),
 		) );
 	}
 
 	// Blog filter JavaScript (on blog page)
 	if ( is_home() ) {
 		wp_enqueue_script( 'prospero-blog-filter', PROSPERO_THEME_URI . '/assets/js/blog-filter.js', array(), PROSPERO_VERSION, true );
+
+		// Capture the safe, pre_get_posts-modified vars from the main archive
+		// query so the AJAX handler can rebuild an equivalent query without
+		// hardcoding parity values. wp_enqueue_scripts fires well after the
+		// main query has run, so query_vars are fully resolved here.
+		$blog_base_query_vars = array();
+		foreach ( array( 'posts_per_page', 'orderby', 'order' ) as $var ) {
+			if ( isset( $GLOBALS['wp_query']->query_vars[ $var ] ) ) {
+				$blog_base_query_vars[ $var ] = $GLOBALS['wp_query']->query_vars[ $var ];
+			}
+		}
+
 		wp_localize_script( 'prospero-blog-filter', 'prosperoBlogFilter', array(
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'prospero_filter_blog' ),
+			'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+			'nonce'         => wp_create_nonce( 'prospero_filter_blog' ),
+			'baseQueryVars' => $blog_base_query_vars,
 		) );
 	}
 
@@ -344,6 +358,7 @@ add_filter( 'the_posts', 'prospero_sticky_posts_on_archives', 10, 2 );
 require_once PROSPERO_THEME_DIR . '/inc/breadcrumbs.php';
 require_once PROSPERO_THEME_DIR . '/inc/customizer.php';
 require_once PROSPERO_THEME_DIR . '/inc/post-types.php';
+require_once PROSPERO_THEME_DIR . '/inc/featured-image-meta.php';
 require_once PROSPERO_THEME_DIR . '/inc/template-functions.php';
 require_once PROSPERO_THEME_DIR . '/inc/gutenberg.php';
 require_once PROSPERO_THEME_DIR . '/inc/blocks.php';
