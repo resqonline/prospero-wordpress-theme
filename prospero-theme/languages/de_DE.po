@@ -3,9 +3,9 @@
 # This file is distributed under the same license as the Prospero Theme package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Prospero Theme 1.0.0\n"
+"Project-Id-Version: Prospero Theme 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-07 12:00+0000\n"
+"POT-Creation-Date: 2026-06-09 15:30+0000\n"
 "PO-Revision-Date: 2024-02-07 12:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: German\n"
@@ -1104,3 +1104,334 @@ msgstr "Hervorhebung"
 
 msgid "Filter posts by category"
 msgstr "Beiträge nach Kategorie filtern"
+
+# === Added 2026-06-09: previously-missing strings ===
+
+msgid "%d out of 5 stars"
+msgstr "%d von 5 Sternen"
+
+msgid "Accessibility"
+msgstr "Barrierefreiheit"
+
+msgid "Account Navigation"
+msgstr "Konto-Navigation"
+
+msgid "Add Default Ratings"
+msgstr "Standard-Bewertungen hinzufügen"
+
+msgid "Add Rating"
+msgstr "Bewertung hinzufügen"
+
+msgid "Add one or more star ratings. Each rating can have an optional label (e.g., \"Service\", \"Quality\", \"Price\")."
+msgstr "Eine oder mehrere Sterne-Bewertungen hinzufügen. Jede Bewertung kann eine optionale Bezeichnung haben (z. B. „Service“, „Qualität“, „Preis“)."
+
+msgid "Attention color. Used for the sticky post label and other emphasised markers."
+msgstr "Aufmerksamkeitsfarbe. Wird für das Pin-Label angepinnter Beiträge und andere hervorgehobene Markierungen verwendet."
+
+msgid "Back to top"
+msgstr "Nach oben"
+
+msgid "Breadcrumbs from %s will be used. The settings below only apply when the theme's built-in breadcrumbs are used."
+msgstr "Es werden die Breadcrumbs von %s verwendet. Die untenstehenden Einstellungen gelten nur, wenn die theme-eigenen Breadcrumbs verwendet werden."
+
+msgid "Call %s"
+msgstr "%s anrufen"
+
+msgid "Close menu"
+msgstr "Menü schließen"
+
+msgid "Close search"
+msgstr "Suche schließen"
+
+msgid "Constrained to content width"
+msgstr "Auf Inhaltsbreite begrenzt"
+
+msgid "Contact information"
+msgstr "Kontaktinformationen"
+
+msgid "Default Rating Labels"
+msgstr "Standard-Bewertungsbezeichnungen"
+
+msgid "Default body text color in light mode. Used for paragraphs, headings, post excerpts, post meta (muted), and breadcrumb text."
+msgstr "Standard-Textfarbe im Hellmodus. Wird für Absätze, Überschriften, Beitragsauszüge, Beitrags-Metadaten (gedämpft) und Breadcrumb-Text verwendet."
+
+msgid "Default body text color when dark mode is active."
+msgstr "Standard-Textfarbe wenn der Dunkelmodus aktiv ist."
+
+msgid "Display as CTA button"
+msgstr "Als CTA-Button anzeigen"
+
+msgid "Displayed as entered; the tel: link strips formatting automatically. Leave empty to hide."
+msgstr "Wird wie eingegeben angezeigt; der tel:-Link entfernt die Formatierung automatisch. Leer lassen, um auszublenden."
+
+msgid "Don't have an account?"
+msgstr "Noch kein Konto?"
+
+msgid "Email %s"
+msgstr "%s per E-Mail"
+
+msgid "Email Prefix Text"
+msgstr "E-Mail-Präfixtext"
+
+msgid "Enable Top Bar"
+msgstr "Topleiste aktivieren"
+
+msgid "Enforce WCAG AA button contrast (3:1)"
+msgstr "WCAG-AA-Buttonkontrast erzwingen (3:1)"
+
+msgid "Enter default rating labels for testimonials, one per line. These will be available as quick-add options when editing testimonials."
+msgstr "Standard-Bewertungsbezeichnungen für Testimonials eingeben, eine pro Zeile. Sie stehen beim Bearbeiten von Testimonials als Schnellzugriff zur Verfügung."
+
+msgid "Enter your email address and we'll send you a link to reset your password."
+msgstr "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts."
+
+msgid "FAQ Archive Description"
+msgstr "FAQ-Archiv-Beschreibung"
+
+msgid "FAQ Archive Title"
+msgstr "FAQ-Archiv-Titel"
+
+msgid "FAQs: %s"
+msgstr "FAQs: %s"
+
+msgid "Featured Image Width"
+msgstr "Breite des Beitragsbildes"
+
+msgid "Footer Background Color"
+msgstr "Fußzeilen-Hintergrundfarbe"
+
+msgid "Footer Background Color (Dark Mode)"
+msgstr "Fußzeilen-Hintergrundfarbe (Dunkelmodus)"
+
+msgid "Frequently Asked Questions"
+msgstr "Häufig gestellte Fragen"
+
+msgid "Full-width Featured Image"
+msgstr "Beitragsbild über volle Breite"
+
+msgid "Full-width Featured Image on Pages"
+msgstr "Beitragsbild über volle Breite auf Seiten"
+
+msgid "Full-width banner"
+msgstr "Banner über volle Breite"
+
+msgid "Header Background Color"
+msgstr "Kopfzeilen-Hintergrundfarbe"
+
+msgid "Header Background Color (Dark Mode)"
+msgstr "Kopfzeilen-Hintergrundfarbe (Dunkelmodus)"
+
+msgid "Heading shown on the FAQ archive page. Leave empty to use the default \"Frequently Asked Questions\"."
+msgstr "Überschrift auf der FAQ-Archivseite. Leer lassen, um den Standard „Häufig gestellte Fragen“ zu verwenden."
+
+msgid "Hide FAQs in this category from the all-FAQs view"
+msgstr "FAQs dieser Kategorie in der Alle-FAQs-Ansicht ausblenden"
+
+msgid "Hide from all-FAQs view"
+msgstr "Aus Alle-FAQs-Ansicht ausblenden"
+
+msgid "If checked, FAQs in this category (and any of its sub-categories) will not appear when the FAQ archive or the FAQ list block shows all FAQs. They remain visible on the category's own taxonomy page and when this category is explicitly selected in a block."
+msgstr "Wenn aktiviert, erscheinen FAQs dieser Kategorie (und aller Unterkategorien) nicht, wenn das FAQ-Archiv oder der FAQ-Listen-Block alle FAQs anzeigt. Sie bleiben auf der Taxonomie-Seite der Kategorie sichtbar und wenn diese Kategorie in einem Block explizit ausgewählt wurde."
+
+msgid "If you don't receive an email, check your spam folder"
+msgstr "Falls du keine E-Mail erhältst, prüfe deinen Spam-Ordner"
+
+msgid "Image shape used on single team member pages."
+msgstr "Bildform auf einzelnen Team-Mitglied-Seiten."
+
+msgid "Job title or role (e.g., \"CEO at Acme\"). Rendered below the display name."
+msgstr "Position oder Rolle (z. B. „CEO bei Acme“). Wird unter dem Anzeigenamen ausgegeben."
+
+msgid "Label (optional)"
+msgstr "Bezeichnung (optional)"
+
+msgid "Main brand / accent color. Used for primary buttons, the sticky post indicator, link color in the editor palette, and focus outlines."
+msgstr "Haupt-Marken-/Akzentfarbe. Wird für primäre Buttons, den Pin-Indikator angepinnter Beiträge, die Linkfarbe in der Editor-Palette und Fokus-Umrandungen verwendet."
+
+msgid "Member Navigation"
+msgstr "Mitgliedernavigation"
+
+msgid "Menu CTA Button"
+msgstr "Menü-CTA-Button"
+
+msgid "Mobile Menu"
+msgstr "Mobiles Menü"
+
+msgid "Next »"
+msgstr "Weiter »"
+
+msgid "No FAQs found in this category."
+msgstr "Keine FAQs in dieser Kategorie gefunden."
+
+msgid "No SEO plugin detected. The theme's built-in breadcrumbs will be used. Supported plugins: Yoast SEO, Rank Math, SEOPress, The SEO Framework, All in One SEO, Slim SEO, Breadcrumb NavXT."
+msgstr "Kein SEO-Plugin erkannt. Es werden die theme-eigenen Breadcrumbs verwendet. Unterstützte Plugins: Yoast SEO, Rank Math, SEOPress, The SEO Framework, All in One SEO, Slim SEO, Breadcrumb NavXT."
+
+msgid "No default labels configured. Add them in Customizer > Post Types."
+msgstr "Keine Standardbezeichnungen konfiguriert. Im Customizer > Inhaltstypen hinzufügen."
+
+msgid "Normal"
+msgstr "Normal"
+
+msgid "Open search"
+msgstr "Suche öffnen"
+
+msgid "Optional contact bar shown above the header. Leave phone and email empty to hide the bar. On mobile screens only the icons are shown to save space."
+msgstr "Optionale Kontaktleiste oberhalb der Kopfzeile. Telefon und E-Mail leer lassen, um die Leiste auszublenden. Auf mobilen Bildschirmen werden zur Platzersparnis nur die Icons gezeigt."
+
+msgid "Optional intro paragraph shown under the FAQ archive heading. Leave empty to hide."
+msgstr "Optionaler Einleitungstext unter der FAQ-Archiv-Überschrift. Leer lassen, um auszublenden."
+
+msgid "Optional short text shown before the address on desktop (e.g. \"Write to:\"). Hidden on mobile."
+msgstr "Optionaler kurzer Text vor der Adresse am Desktop (z. B. „Schreib uns:“). Auf Mobilgeräten ausgeblendet."
+
+msgid "Optional short text shown before the number on desktop (e.g. \"Call us:\"). Hidden on mobile."
+msgstr "Optionaler kurzer Text vor der Telefonnummer am Desktop (z. B. „Ruf uns an:“). Auf Mobilgeräten ausgeblendet."
+
+msgid "Optional. Site footer background in light mode. Leave empty to use the auto-darkened page background color. Footer text color is auto-picked from the Text Color / Dark Mode Text Color settings based on contrast."
+msgstr "Optional. Hintergrund der Fußzeile im Hellmodus. Leer lassen, um die automatisch abgedunkelte Seitenhintergrundfarbe zu verwenden. Die Textfarbe wird basierend auf dem Kontrast automatisch aus den Einstellungen „Textfarbe“ / „Textfarbe Dunkelmodus“ gewählt."
+
+msgid "Optional. Site footer background when dark mode is active. Leave empty to use the auto-lifted dark mode page background color."
+msgstr "Optional. Hintergrund der Fußzeile wenn der Dunkelmodus aktiv ist. Leer lassen, um die automatisch aufgehellte Dunkelmodus-Seitenhintergrundfarbe zu verwenden."
+
+msgid "Optional. Site header background in light mode. Leave empty to use the page background color. Header text color is auto-picked from the Text Color / Dark Mode Text Color settings based on contrast."
+msgstr "Optional. Hintergrund der Kopfzeile im Hellmodus. Leer lassen, um die Seitenhintergrundfarbe zu verwenden. Die Textfarbe wird basierend auf dem Kontrast automatisch aus den Einstellungen „Textfarbe“ / „Textfarbe Dunkelmodus“ gewählt."
+
+msgid "Optional. Site header background when dark mode is active. Leave empty to use the dark mode page background color."
+msgstr "Optional. Hintergrund der Kopfzeile wenn der Dunkelmodus aktiv ist. Leer lassen, um die Dunkelmodus-Seitenhintergrundfarbe zu verwenden."
+
+msgid "Overrides the theme default for this entry only. Has no effect when no featured image is set."
+msgstr "Überschreibt die Theme-Standardeinstellung nur für diesen Eintrag. Hat keine Auswirkung, wenn kein Beitragsbild gesetzt ist."
+
+msgid "Page background in light mode. Card and footer backgrounds are automatically derived from this (slightly darker shade)."
+msgstr "Seitenhintergrund im Hellmodus. Karten- und Fußzeilenhintergründe werden automatisch davon abgeleitet (leicht abgedunkelt)."
+
+msgid "Page background when dark mode is active. Card and footer backgrounds are automatically derived from this (slightly lifted shade)."
+msgstr "Seitenhintergrund wenn der Dunkelmodus aktiv ist. Karten- und Fußzeilenhintergründe werden automatisch davon abgeleitet (leicht aufgehellt)."
+
+msgid "Phone Number"
+msgstr "Telefonnummer"
+
+msgid "Phone Prefix Text"
+msgstr "Telefon-Präfixtext"
+
+msgid "Portrait"
+msgstr "Hochformat"
+
+msgid "Posts"
+msgstr "Beiträge"
+
+msgid "Posts navigation"
+msgstr "Beitragsnavigation"
+
+msgid "Pre-Footer Widgets"
+msgstr "Pre-Footer-Widgets"
+
+msgid "Primary Menu"
+msgstr "Hauptmenü"
+
+msgid "Prospero Theme:"
+msgstr "Prospero Theme:"
+
+msgid "Prospero Theme: The update checker library is not installed. Automatic updates from GitHub are disabled. Please download the library from %s and place it in the theme's inc/lib/plugin-update-checker/ directory."
+msgstr "Prospero Theme: Die Update-Checker-Bibliothek ist nicht installiert. Automatische Updates von GitHub sind deaktiviert. Bitte lade die Bibliothek von %s herunter und lege sie in das Verzeichnis inc/lib/plugin-update-checker/ des Themes."
+
+msgid "Remove rating"
+msgstr "Bewertung entfernen"
+
+msgid "Render the featured image as a full-width banner that spans the viewport. Per-post override available in the editor sidebar."
+msgstr "Gibt das Beitragsbild als Banner über die volle Viewport-Breite aus. Eine individuelle Einstellung pro Beitrag ist in der Editor-Seitenleiste verfügbar."
+
+msgid "Rendered as a mailto: link (obfuscated with WordPress antispambot). Leave empty to hide."
+msgstr "Wird als mailto:-Link ausgegeben (mit WordPress-antispambot verschleiert). Leer lassen, um auszublenden."
+
+msgid "Renders this menu item as the Menu CTA button. Configure its appearance under Appearance > Customize > Button Styles > Menu CTA Button."
+msgstr "Gibt diesen Menüpunkt als Menü-CTA-Button aus. Erscheinungsbild unter Design > Customizer > Button-Stile > Menü-CTA-Button konfigurieren."
+
+msgid "Round"
+msgstr "Rund"
+
+msgid "Show Logo in Header"
+msgstr "Logo in der Kopfzeile anzeigen"
+
+msgid "Show a thin contact bar above the site header."
+msgstr "Schmale Kontaktleiste oberhalb der Kopfzeile anzeigen."
+
+msgid "Slider"
+msgstr "Slider"
+
+msgid "Slider (autoplay)"
+msgstr "Slider (Autoplay)"
+
+msgid "Square"
+msgstr "Quadratisch"
+
+msgid "Star Ratings"
+msgstr "Sterne-Bewertungen"
+
+msgid "Supporting accent color. Used for secondary buttons (including the read-more button) and for inline link hover states."
+msgstr "Sekundäre Akzentfarbe. Wird für sekundäre Buttons (einschließlich des „Weiterlesen“-Buttons) und für Hover-Zustände von Inline-Links verwendet."
+
+msgid "Team Member Image Style"
+msgstr "Bildstil für Team-Mitglieder"
+
+msgid "The following Google Fonts could not be downloaded locally yet: %s. They will be retried on the next admin or frontend page load."
+msgstr "Die folgenden Google Fonts konnten noch nicht lokal heruntergeladen werden: %s. Der Download wird beim nächsten Aufruf des Adminbereichs oder Frontends erneut versucht."
+
+msgid "The name shown on the frontend (e.g., \"John D.\")"
+msgstr "Der im Frontend angezeigte Name (z. B. „Max M.“)"
+
+msgid "Third accent color. Used only for the optional tertiary button style."
+msgstr "Dritte Akzentfarbe. Wird nur für den optionalen tertiären Button-Stil verwendet."
+
+msgid "Toggle dark mode"
+msgstr "Dunkelmodus umschalten"
+
+msgid "Top Bar"
+msgstr "Topleiste"
+
+msgid "UPPERCASE"
+msgstr "GROSSBUCHSTABEN"
+
+msgid "Uncategorised"
+msgstr "Nicht kategorisiert"
+
+msgid "Uncheck to hide every logo (your uploaded logo and the theme's bundled placeholder) and display only the site title and tagline."
+msgstr "Deaktivieren, um jedes Logo (sowohl dein hochgeladenes Logo als auch den im Theme mitgelieferten Platzhalter) auszublenden und nur den Seitentitel und Untertitel anzuzeigen."
+
+msgid "Use theme default (%s)"
+msgstr "Theme-Standard verwenden (%s)"
+
+msgid "Used for menu items flagged as \"Display as CTA button\" in Appearance → Menus."
+msgstr "Wird für Menüpunkte verwendet, die unter Design → Menüs als „Als CTA-Button anzeigen“ markiert sind."
+
+msgid "Visit website"
+msgstr "Website besuchen"
+
+msgid "What does \"Display as CTA button\" do?"
+msgstr "Was bewirkt „Als CTA-Button anzeigen“?"
+
+msgid "When checked, any button background whose contrast against the page background falls below the WCAG 1.4.11 3:1 threshold is automatically swapped for the page text color so the button stays readable. Recommended for accessibility-first sites. Leave unchecked to preserve designer-picked colors that are visibly distinct but fall below the strict 3:1 ratio (the theme still substitutes the accent when the button would otherwise be nearly invisible against the page)."
+msgstr "Wenn aktiviert, wird jeder Buttonhintergrund, dessen Kontrast zum Seitenhintergrund unter dem WCAG-1.4.11-Schwellenwert von 3:1 liegt, automatisch durch die Seitentextfarbe ersetzt, damit der Button lesbar bleibt. Empfohlen für barrierefreiheitsorientierte Seiten. Deaktiviert lassen, um vom Designer gewählte Farben zu erhalten, die sichtbar abgegrenzt sind, aber unter dem strengen 3:1-Verhältnis liegen (das Theme ersetzt den Akzent dennoch, wenn der Button andernfalls nahezu unsichtbar gegenüber der Seite wäre)."
+
+msgid "When enabled, pages with a featured image render it as a full-width banner above the page title. Per-page override available in the editor sidebar."
+msgstr "Wenn aktiviert, geben Seiten mit Beitragsbild dieses als Banner über die volle Breite oberhalb des Seitentitels aus. Eine individuelle Einstellung pro Seite ist in der Editor-Seitenleiste verfügbar."
+
+msgid "your@email.com"
+msgstr "deine@email.de"
+
+msgid "« Previous"
+msgstr "« Zurück"
+
+msgid "— None —"
+msgstr "— Keine —"
+
+msgid "← Back to Login"
+msgstr "← Zurück zur Anmeldung"
+
+msgid "← Back to all FAQs"
+msgstr "← Zurück zu allen FAQs"
+
+msgid "Star"
+msgid_plural "Stars"
+msgstr[0] "Stern"
+msgstr[1] "Sterne"

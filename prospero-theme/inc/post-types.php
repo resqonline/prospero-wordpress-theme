@@ -324,7 +324,17 @@ function prospero_add_meta_boxes() {
 			'normal',
 			'high'
 		);
-		
+
+		// Position
+		add_meta_box(
+			'prospero_testimonial_position',
+			esc_html__( 'Position', 'prospero-theme' ),
+			'prospero_testimonial_position_callback',
+			'testimonial',
+			'normal',
+			'high'
+		);
+
 		// Star ratings
 		add_meta_box(
 			'prospero_testimonial_ratings',
@@ -500,8 +510,18 @@ add_action( 'init', 'prospero_register_project_meta' );
 function prospero_testimonial_display_name_callback( $post ) {
 	wp_nonce_field( 'prospero_testimonial_display_name_nonce', 'prospero_testimonial_display_name_nonce' );
 	$value = get_post_meta( $post->ID, '_prospero_testimonial_display_name', true );
-	echo '<p class="description">' . esc_html__( 'The name shown on the frontend (e.g., "John D., CEO at Company")', 'prospero-theme' ) . '</p>';
+	echo '<p class="description">' . esc_html__( 'The name shown on the frontend (e.g., "John D.")', 'prospero-theme' ) . '</p>';
 	echo '<input type="text" name="prospero_testimonial_display_name" value="' . esc_attr( $value ) . '" class="widefat" />';
+}
+
+/**
+ * Testimonial position callback
+ */
+function prospero_testimonial_position_callback( $post ) {
+	wp_nonce_field( 'prospero_testimonial_position_nonce', 'prospero_testimonial_position_nonce' );
+	$value = get_post_meta( $post->ID, '_prospero_testimonial_position', true );
+	echo '<p class="description">' . esc_html__( 'Job title or role (e.g., "CEO at Acme"). Rendered below the display name.', 'prospero-theme' ) . '</p>';
+	echo '<input type="text" name="prospero_testimonial_position" value="' . esc_attr( $value ) . '" class="widefat" />';
 }
 
 /**
@@ -777,6 +797,13 @@ function prospero_save_meta_boxes( $post_id ) {
 	if ( isset( $_POST['prospero_testimonial_display_name_nonce'] ) && wp_verify_nonce( $_POST['prospero_testimonial_display_name_nonce'], 'prospero_testimonial_display_name_nonce' ) ) {
 		if ( isset( $_POST['prospero_testimonial_display_name'] ) ) {
 			update_post_meta( $post_id, '_prospero_testimonial_display_name', sanitize_text_field( $_POST['prospero_testimonial_display_name'] ) );
+		}
+	}
+
+	// Testimonial position
+	if ( isset( $_POST['prospero_testimonial_position_nonce'] ) && wp_verify_nonce( $_POST['prospero_testimonial_position_nonce'], 'prospero_testimonial_position_nonce' ) ) {
+		if ( isset( $_POST['prospero_testimonial_position'] ) ) {
+			update_post_meta( $post_id, '_prospero_testimonial_position', sanitize_text_field( $_POST['prospero_testimonial_position'] ) );
 		}
 	}
 	

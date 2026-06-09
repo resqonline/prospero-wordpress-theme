@@ -362,6 +362,11 @@ function prospero_render_testimonial_single_block( $attributes ) {
 	
 	ob_start();
 	?>
+	<?php
+	$display_name = get_post_meta( $testimonial_id, '_prospero_testimonial_display_name', true );
+	$author_name  = $display_name ? $display_name : $testimonial->post_title;
+	$position     = get_post_meta( $testimonial_id, '_prospero_testimonial_position', true );
+	?>
 	<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>">
 		<?php if ( $show_image && has_post_thumbnail( $testimonial_id ) ) : ?>
 			<div class="testimonial-image">
@@ -372,7 +377,10 @@ function prospero_render_testimonial_single_block( $attributes ) {
 			<blockquote class="testimonial-text">
 				<?php echo wp_kses_post( apply_filters( 'the_content', $testimonial->post_content ) ); ?>
 			</blockquote>
-			<cite class="testimonial-author"><?php echo esc_html( $testimonial->post_title ); ?></cite>
+			<cite class="testimonial-author"><?php echo esc_html( $author_name ); ?></cite>
+			<?php if ( $position ) : ?>
+				<span class="testimonial-position"><?php echo esc_html( $position ); ?></span>
+			<?php endif; ?>
 		</div>
 	</div>
 	<?php

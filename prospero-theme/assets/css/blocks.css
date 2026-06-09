@@ -258,6 +258,17 @@ body.dark-mode .prospero-testimonial-block {
 	color: var(--color-primary);
 }
 
+.prospero-testimonial-block .testimonial-position {
+	display: block;
+	font-size: 0.875rem;
+	font-style: italic;
+	color: color-mix(in srgb, var(--color-text) 65%, transparent);
+}
+
+body.dark-mode .prospero-testimonial-block .testimonial-position {
+	color: color-mix(in srgb, var(--color-text-dark) 65%, transparent);
+}
+
 @media (max-width: 768px) {
 	.prospero-testimonial-block {
 		flex-direction: column;

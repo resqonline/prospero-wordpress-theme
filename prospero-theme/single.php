@@ -11,29 +11,31 @@ get_header();
 $featured_position = get_theme_mod( 'prospero_single_featured_position', 'below' );
 $show_featured     = has_post_thumbnail() && 'hidden' !== $featured_position;
 $is_fullwidth_featured = $show_featured && prospero_should_show_fullwidth_featured();
+$fullwidth_above   = $is_fullwidth_featured && 'above' === $featured_position;
 ?>
 
 <main id="main-content" class="site-main single-post">
+	<?php if ( $fullwidth_above ) : ?>
+		<div class="post-featured-image post-featured-image-above post-featured-image-fullwidth">
+			<?php echo get_the_post_thumbnail( get_queried_object_id(), 'full', array( 'class' => 'post-thumbnail' ) ); ?>
+		</div>
+	<?php endif; ?>
+
 	<?php prospero_breadcrumbs( array( 'wrapper_class' => 'breadcrumbs container' ) ); ?>
 
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
 
 		<?php
-		// Featured image above title
-		if ( $show_featured && 'above' === $featured_position ) :
-			if ( $is_fullwidth_featured ) :
+		// Constrained "above" featured image. The fullwidth variant was already rendered above the breadcrumbs.
+		if ( $show_featured && 'above' === $featured_position && ! $fullwidth_above ) :
 		?>
-			<div class="post-featured-image post-featured-image-above post-featured-image-fullwidth">
-				<?php the_post_thumbnail( 'full', array( 'class' => 'post-thumbnail' ) ); ?>
-			</div>
-		<?php else : ?>
 			<div class="post-featured-image post-featured-image-above">
 				<div class="container">
 					<?php the_post_thumbnail( 'full', array( 'class' => 'post-thumbnail' ) ); ?>
 				</div>
 			</div>
-		<?php endif; endif; ?>
+		<?php endif; ?>
 
 		<header class="post-header">
 			<div class="container">
@@ -182,28 +184,20 @@ $is_fullwidth_featured = $show_featured && prospero_should_show_fullwidth_featur
 		}
 
 		if ( $related_posts->have_posts() ) :
+			$related_show_excerpt = (bool) get_theme_mod( 'prospero_blog_grid_excerpt', true );
+			$related_item_args    = array(
+				'layout'       => 'grid',
+				'show_excerpt' => $related_show_excerpt,
+				'allow_sticky' => false,
+			);
 		?>
-		<section class="related-posts">
+		<section class="related-posts blog-template">
 			<div class="container">
 				<h2 class="section-title"><?php esc_html_e( 'Related Posts', 'prospero-theme' ); ?></h2>
-				<div class="related-posts-grid">
-					<?php while ( $related_posts->have_posts() ) : $related_posts->the_post(); ?>
-						<article class="related-post-card">
-							<a href="<?php the_permalink(); ?>" class="related-post-link">
-								<?php if ( has_post_thumbnail() ) : ?>
-									<div class="related-post-thumbnail">
-										<?php the_post_thumbnail( 'medium', array( 'loading' => 'lazy' ) ); ?>
-									</div>
-								<?php endif; ?>
-								<div class="related-post-content">
-									<h3 class="related-post-title"><?php the_title(); ?></h3>
-									<span class="related-post-date">
-										<?php echo esc_html( get_the_date() ); ?>
-									</span>
-								</div>
-							</a>
-						</article>
-					<?php endwhile; ?>
+				<div class="posts-grid" data-columns="3">
+					<?php while ( $related_posts->have_posts() ) : $related_posts->the_post();
+						get_template_part( 'template-parts/content-blog-item', null, $related_item_args );
+					endwhile; ?>
 				</div>
 			</div>
 		</section>

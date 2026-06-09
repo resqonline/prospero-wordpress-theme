@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Prospero Theme package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Prospero Theme 1.0.0\n"
+"Project-Id-Version: Prospero Theme 1.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-07 12:00+0000\n"
+"POT-Creation-Date: 2026-06-09 15:30+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1175,3 +1175,334 @@ msgstr ""
 #: Filter
 msgid "Filter posts by category"
 msgstr ""
+
+# === Added 2026-06-09: previously-missing strings ===
+
+msgid "%d out of 5 stars"
+msgstr ""
+
+msgid "Accessibility"
+msgstr ""
+
+msgid "Account Navigation"
+msgstr ""
+
+msgid "Add Default Ratings"
+msgstr ""
+
+msgid "Add Rating"
+msgstr ""
+
+msgid "Add one or more star ratings. Each rating can have an optional label (e.g., \"Service\", \"Quality\", \"Price\")."
+msgstr ""
+
+msgid "Attention color. Used for the sticky post label and other emphasised markers."
+msgstr ""
+
+msgid "Back to top"
+msgstr ""
+
+msgid "Breadcrumbs from %s will be used. The settings below only apply when the theme's built-in breadcrumbs are used."
+msgstr ""
+
+msgid "Call %s"
+msgstr ""
+
+msgid "Close menu"
+msgstr ""
+
+msgid "Close search"
+msgstr ""
+
+msgid "Constrained to content width"
+msgstr ""
+
+msgid "Contact information"
+msgstr ""
+
+msgid "Default Rating Labels"
+msgstr ""
+
+msgid "Default body text color in light mode. Used for paragraphs, headings, post excerpts, post meta (muted), and breadcrumb text."
+msgstr ""
+
+msgid "Default body text color when dark mode is active."
+msgstr ""
+
+msgid "Display as CTA button"
+msgstr ""
+
+msgid "Displayed as entered; the tel: link strips formatting automatically. Leave empty to hide."
+msgstr ""
+
+msgid "Don't have an account?"
+msgstr ""
+
+msgid "Email %s"
+msgstr ""
+
+msgid "Email Prefix Text"
+msgstr ""
+
+msgid "Enable Top Bar"
+msgstr ""
+
+msgid "Enforce WCAG AA button contrast (3:1)"
+msgstr ""
+
+msgid "Enter default rating labels for testimonials, one per line. These will be available as quick-add options when editing testimonials."
+msgstr ""
+
+msgid "Enter your email address and we'll send you a link to reset your password."
+msgstr ""
+
+msgid "FAQ Archive Description"
+msgstr ""
+
+msgid "FAQ Archive Title"
+msgstr ""
+
+msgid "FAQs: %s"
+msgstr ""
+
+msgid "Featured Image Width"
+msgstr ""
+
+msgid "Footer Background Color"
+msgstr ""
+
+msgid "Footer Background Color (Dark Mode)"
+msgstr ""
+
+msgid "Frequently Asked Questions"
+msgstr ""
+
+msgid "Full-width Featured Image"
+msgstr ""
+
+msgid "Full-width Featured Image on Pages"
+msgstr ""
+
+msgid "Full-width banner"
+msgstr ""
+
+msgid "Header Background Color"
+msgstr ""
+
+msgid "Header Background Color (Dark Mode)"
+msgstr ""
+
+msgid "Heading shown on the FAQ archive page. Leave empty to use the default \"Frequently Asked Questions\"."
+msgstr ""
+
+msgid "Hide FAQs in this category from the all-FAQs view"
+msgstr ""
+
+msgid "Hide from all-FAQs view"
+msgstr ""
+
+msgid "If checked, FAQs in this category (and any of its sub-categories) will not appear when the FAQ archive or the FAQ list block shows all FAQs. They remain visible on the category's own taxonomy page and when this category is explicitly selected in a block."
+msgstr ""
+
+msgid "If you don't receive an email, check your spam folder"
+msgstr ""
+
+msgid "Image shape used on single team member pages."
+msgstr ""
+
+msgid "Job title or role (e.g., \"CEO at Acme\"). Rendered below the display name."
+msgstr ""
+
+msgid "Label (optional)"
+msgstr ""
+
+msgid "Main brand / accent color. Used for primary buttons, the sticky post indicator, link color in the editor palette, and focus outlines."
+msgstr ""
+
+msgid "Member Navigation"
+msgstr ""
+
+msgid "Menu CTA Button"
+msgstr ""
+
+msgid "Mobile Menu"
+msgstr ""
+
+msgid "Next »"
+msgstr ""
+
+msgid "No FAQs found in this category."
+msgstr ""
+
+msgid "No SEO plugin detected. The theme's built-in breadcrumbs will be used. Supported plugins: Yoast SEO, Rank Math, SEOPress, The SEO Framework, All in One SEO, Slim SEO, Breadcrumb NavXT."
+msgstr ""
+
+msgid "No default labels configured. Add them in Customizer > Post Types."
+msgstr ""
+
+msgid "Normal"
+msgstr ""
+
+msgid "Open search"
+msgstr ""
+
+msgid "Optional contact bar shown above the header. Leave phone and email empty to hide the bar. On mobile screens only the icons are shown to save space."
+msgstr ""
+
+msgid "Optional intro paragraph shown under the FAQ archive heading. Leave empty to hide."
+msgstr ""
+
+msgid "Optional short text shown before the address on desktop (e.g. \"Write to:\"). Hidden on mobile."
+msgstr ""
+
+msgid "Optional short text shown before the number on desktop (e.g. \"Call us:\"). Hidden on mobile."
+msgstr ""
+
+msgid "Optional. Site footer background in light mode. Leave empty to use the auto-darkened page background color. Footer text color is auto-picked from the Text Color / Dark Mode Text Color settings based on contrast."
+msgstr ""
+
+msgid "Optional. Site footer background when dark mode is active. Leave empty to use the auto-lifted dark mode page background color."
+msgstr ""
+
+msgid "Optional. Site header background in light mode. Leave empty to use the page background color. Header text color is auto-picked from the Text Color / Dark Mode Text Color settings based on contrast."
+msgstr ""
+
+msgid "Optional. Site header background when dark mode is active. Leave empty to use the dark mode page background color."
+msgstr ""
+
+msgid "Overrides the theme default for this entry only. Has no effect when no featured image is set."
+msgstr ""
+
+msgid "Page background in light mode. Card and footer backgrounds are automatically derived from this (slightly darker shade)."
+msgstr ""
+
+msgid "Page background when dark mode is active. Card and footer backgrounds are automatically derived from this (slightly lifted shade)."
+msgstr ""
+
+msgid "Phone Number"
+msgstr ""
+
+msgid "Phone Prefix Text"
+msgstr ""
+
+msgid "Portrait"
+msgstr ""
+
+msgid "Posts"
+msgstr ""
+
+msgid "Posts navigation"
+msgstr ""
+
+msgid "Pre-Footer Widgets"
+msgstr ""
+
+msgid "Primary Menu"
+msgstr ""
+
+msgid "Prospero Theme:"
+msgstr ""
+
+msgid "Prospero Theme: The update checker library is not installed. Automatic updates from GitHub are disabled. Please download the library from %s and place it in the theme's inc/lib/plugin-update-checker/ directory."
+msgstr ""
+
+msgid "Remove rating"
+msgstr ""
+
+msgid "Render the featured image as a full-width banner that spans the viewport. Per-post override available in the editor sidebar."
+msgstr ""
+
+msgid "Rendered as a mailto: link (obfuscated with WordPress antispambot). Leave empty to hide."
+msgstr ""
+
+msgid "Renders this menu item as the Menu CTA button. Configure its appearance under Appearance > Customize > Button Styles > Menu CTA Button."
+msgstr ""
+
+msgid "Round"
+msgstr ""
+
+msgid "Show Logo in Header"
+msgstr ""
+
+msgid "Show a thin contact bar above the site header."
+msgstr ""
+
+msgid "Slider"
+msgstr ""
+
+msgid "Slider (autoplay)"
+msgstr ""
+
+msgid "Square"
+msgstr ""
+
+msgid "Star Ratings"
+msgstr ""
+
+msgid "Supporting accent color. Used for secondary buttons (including the read-more button) and for inline link hover states."
+msgstr ""
+
+msgid "Team Member Image Style"
+msgstr ""
+
+msgid "The following Google Fonts could not be downloaded locally yet: %s. They will be retried on the next admin or frontend page load."
+msgstr ""
+
+msgid "The name shown on the frontend (e.g., \"John D.\")"
+msgstr ""
+
+msgid "Third accent color. Used only for the optional tertiary button style."
+msgstr ""
+
+msgid "Toggle dark mode"
+msgstr ""
+
+msgid "Top Bar"
+msgstr ""
+
+msgid "UPPERCASE"
+msgstr ""
+
+msgid "Uncategorised"
+msgstr ""
+
+msgid "Uncheck to hide every logo (your uploaded logo and the theme's bundled placeholder) and display only the site title and tagline."
+msgstr ""
+
+msgid "Use theme default (%s)"
+msgstr ""
+
+msgid "Used for menu items flagged as \"Display as CTA button\" in Appearance → Menus."
+msgstr ""
+
+msgid "Visit website"
+msgstr ""
+
+msgid "What does \"Display as CTA button\" do?"
+msgstr ""
+
+msgid "When checked, any button background whose contrast against the page background falls below the WCAG 1.4.11 3:1 threshold is automatically swapped for the page text color so the button stays readable. Recommended for accessibility-first sites. Leave unchecked to preserve designer-picked colors that are visibly distinct but fall below the strict 3:1 ratio (the theme still substitutes the accent when the button would otherwise be nearly invisible against the page)."
+msgstr ""
+
+msgid "When enabled, pages with a featured image render it as a full-width banner above the page title. Per-page override available in the editor sidebar."
+msgstr ""
+
+msgid "your@email.com"
+msgstr ""
+
+msgid "« Previous"
+msgstr ""
+
+msgid "— None —"
+msgstr ""
+
+msgid "← Back to Login"
+msgstr ""
+
+msgid "← Back to all FAQs"
+msgstr ""
+
+msgid "Star"
+msgid_plural "Stars"
+msgstr[0] ""
+msgstr[1] ""

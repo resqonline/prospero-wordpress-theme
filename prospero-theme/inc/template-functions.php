@@ -746,6 +746,19 @@ add_filter( 'the_content', 'prospero_add_product_placement_notice' );
 class Prospero_Mobile_Menu_Walker extends Walker_Nav_Menu {
 
 	/**
+	 * ID of the most recently rendered item; consumed by `start_lvl()` to
+	 * link the submenu panel to the toggle button it belongs to.
+	 *
+	 * The previous implementation tried to extract this from the output
+	 * buffer with a regex, but the buffer ends with the `</div>` wrapper
+	 * after `start_el()`, so the regex never matched and the rendered
+	 * panel was missing its `data-submenu-id` value, breaking the click.
+	 *
+	 * @var string
+	 */
+	protected $current_parent_id = '';
+
+	/**
 	 * Starts the element output.
 	 */
 	public function start_el( &$output, $item, $depth = 0, $args = null, $id = 0 ) {
@@ -758,6 +771,10 @@ class Prospero_Mobile_Menu_Walker extends Walker_Nav_Menu {
 		if ( $has_children ) {
 			$classes[] = 'has-submenu';
 		}
+
+		// Track this item's ID so the next start_lvl() can wire the panel
+		// to the toggle button rendered below.
+		$this->current_parent_id = (string) $item->ID;
 
 		$class_names = implode( ' ', array_filter( $classes ) );
 		$class_names = $class_names ? ' class="' . esc_attr( $class_names ) . '"' : '';
@@ -808,17 +825,14 @@ class Prospero_Mobile_Menu_Walker extends Walker_Nav_Menu {
 	 * Starts the list before the elements are added.
 	 */
 	public function start_lvl( &$output, $depth = 0, $args = null ) {
-		// Get the parent item ID from the output
-		preg_match( '/menu-item-(\d+)"[^>]*>\s*$/', $output, $matches );
-		$parent_id = isset( $matches[1] ) ? $matches[1] : '';
-
-		$indent  = str_repeat( "\t", $depth );
-		$output .= "\n{$indent}<div class=\"submenu-panel\" data-submenu-id=\"submenu-{$parent_id}\" aria-hidden=\"true\">";
-		$output .= '<button type="button" class="submenu-back">';
-		$output .= '<span class="submenu-back-icon" aria-hidden="true">&lsaquo;</span>';
-		$output .= '<span class="submenu-back-text">' . esc_html__( 'Back', 'prospero-theme' ) . '</span>';
-		$output .= '</button>';
-		$output .= "\n{$indent}<ul class=\"sub-menu\">\n";
+		$parent_id = $this->current_parent_id;
+		$indent    = str_repeat( "\t", $depth );
+		$output   .= "\n{$indent}<div class=\"submenu-panel\" data-submenu-id=\"submenu-{$parent_id}\" aria-hidden=\"true\">";
+		$output   .= '<button type="button" class="submenu-back">';
+		$output   .= '<span class="submenu-back-icon" aria-hidden="true">&lsaquo;</span>';
+		$output   .= '<span class="submenu-back-text">' . esc_html__( 'Back', 'prospero-theme' ) . '</span>';
+		$output   .= '</button>';
+		$output   .= "\n{$indent}<ul class=\"sub-menu\">\n";
 	}
 
 	/**

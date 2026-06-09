@@ -99,6 +99,7 @@ $tags = get_the_terms( get_the_ID(), 'project_tag' );
 			if ( $testimonial && $testimonial->post_status === 'publish' ) :
 				$display_name = get_post_meta( $testimonial_id, '_prospero_testimonial_display_name', true );
 				$author_name = $display_name ? $display_name : $testimonial->post_title;
+				$position    = get_post_meta( $testimonial_id, '_prospero_testimonial_position', true );
 		?>
 			<div class="project-testimonial-section">
 				<div class="container">
@@ -113,6 +114,9 @@ $tags = get_the_terms( get_the_ID(), 'project_tag' );
 								<?php echo wp_kses_post( apply_filters( 'the_content', $testimonial->post_content ) ); ?>
 							</blockquote>
 							<cite class="testimonial-author"><?php echo esc_html( $author_name ); ?></cite>
+							<?php if ( $position ) : ?>
+								<span class="testimonial-position"><?php echo esc_html( $position ); ?></span>
+							<?php endif; ?>
 						</div>
 					</div>
 				</div>

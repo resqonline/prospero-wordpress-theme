@@ -20,9 +20,20 @@ $categories = get_categories( array(
 	'orderby'    => 'name',
 	'order'      => 'ASC',
 ) );
+
+$posts_page_id        = (int) get_option( 'page_for_posts' );
+$blog_banner_fullwidth = $posts_page_id
+	&& has_post_thumbnail( $posts_page_id )
+	&& prospero_should_show_fullwidth_featured( $posts_page_id );
 ?>
 
 <main id="main-content" class="site-main blog-template <?php echo esc_attr( $layout_class ); ?>" role="main">
+	<?php if ( $blog_banner_fullwidth ) : ?>
+		<div class="post-featured-image post-featured-image-fullwidth">
+			<?php echo get_the_post_thumbnail( $posts_page_id, 'full', array( 'class' => 'post-thumbnail' ) ); ?>
+		</div>
+	<?php endif; ?>
+
 	<?php prospero_breadcrumbs( array( 'wrapper_class' => 'breadcrumbs container' ) ); ?>
 
 	<div class="container">

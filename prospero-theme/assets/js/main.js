@@ -63,16 +63,21 @@
 		 * Open a submenu panel
 		 */
 		function openSubmenu(submenuId) {
-			const submenuPanel = document.querySelector('[data-submenu-id="' + submenuId + '"]');
-			if (submenuPanel) {
-				submenuPanel.classList.add('is-open');
-				openSubmenus.push(submenuPanel);
+			const submenuPanel = menuPanel.querySelector('[data-submenu-id="' + submenuId + '"]');
+			if (!submenuPanel) return;
 
-				// Focus the back button
-				const backButton = submenuPanel.querySelector('.submenu-back');
-				if (backButton) {
-					backButton.focus();
-				}
+			submenuPanel.classList.add('is-open');
+			submenuPanel.setAttribute('aria-hidden', 'false');
+			openSubmenus.push(submenuPanel);
+
+			const toggle = menuPanel.querySelector('.submenu-toggle[data-submenu="' + submenuId + '"]');
+			if (toggle) {
+				toggle.setAttribute('aria-expanded', 'true');
+			}
+
+			const backButton = submenuPanel.querySelector('.submenu-back');
+			if (backButton) {
+				backButton.focus();
 			}
 		}
 
@@ -81,15 +86,16 @@
 		 */
 		function closeSubmenu() {
 			const lastSubmenu = openSubmenus.pop();
-			if (lastSubmenu) {
-				lastSubmenu.classList.remove('is-open');
+			if (!lastSubmenu) return;
 
-				// Focus the toggle that opened this submenu
-				const submenuId = lastSubmenu.getAttribute('data-submenu-id');
-				const toggle = document.querySelector('[data-submenu="' + submenuId + '"]');
-				if (toggle) {
-					toggle.focus();
-				}
+			lastSubmenu.classList.remove('is-open');
+			lastSubmenu.setAttribute('aria-hidden', 'true');
+
+			const submenuId = lastSubmenu.getAttribute('data-submenu-id');
+			const toggle = menuPanel.querySelector('.submenu-toggle[data-submenu="' + submenuId + '"]');
+			if (toggle) {
+				toggle.setAttribute('aria-expanded', 'false');
+				toggle.focus();
 			}
 		}
 

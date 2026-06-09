@@ -168,6 +168,17 @@ body.dark-mode .testimonial-item {
 	color: var(--color-primary);
 }
 
+.testimonial-position {
+	display: block;
+	font-size: 0.875rem;
+	font-style: italic;
+	color: color-mix(in srgb, var(--color-text) 65%, transparent);
+}
+
+body.dark-mode .testimonial-position {
+	color: color-mix(in srgb, var(--color-text-dark) 65%, transparent);
+}
+
 /* ==========================================================================
    Partners
    ========================================================================== */

@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define theme constants
-define( 'PROSPERO_VERSION', '1.1.0' );
+define( 'PROSPERO_VERSION', '1.2.0' );
 define( 'PROSPERO_THEME_DIR', get_template_directory() );
 define( 'PROSPERO_THEME_URI', get_template_directory_uri() );
 

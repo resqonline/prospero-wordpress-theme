@@ -23,6 +23,7 @@ $show_ratings = isset( $args['show_ratings'] ) ? $args['show_ratings'] : false;
 
 // Get testimonial data
 $display_name = get_post_meta( get_the_ID(), '_prospero_testimonial_display_name', true );
+$position     = get_post_meta( get_the_ID(), '_prospero_testimonial_position', true );
 $ratings      = get_post_meta( get_the_ID(), '_prospero_testimonial_ratings', true );
 ?>
 <div class="testimonial-item<?php echo $slider ? ' flickity-cell' : ''; ?>">
@@ -37,6 +38,9 @@ $ratings      = get_post_meta( get_the_ID(), '_prospero_testimonial_ratings', tr
 		</blockquote>
 		<?php if ( $display_name ) : ?>
 			<cite class="testimonial-author"><?php echo esc_html( $display_name ); ?></cite>
+		<?php endif; ?>
+		<?php if ( $position ) : ?>
+			<span class="testimonial-position"><?php echo esc_html( $position ); ?></span>
 		<?php endif; ?>
 		<?php if ( $show_ratings && ! empty( $ratings ) && is_array( $ratings ) ) : ?>
 			<div class="testimonial-ratings">

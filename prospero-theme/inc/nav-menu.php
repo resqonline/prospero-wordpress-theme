@@ -144,6 +144,54 @@ function prospero_nav_menu_cta_class( $classes, $item ) {
 add_filter( 'nav_menu_css_class', 'prospero_nav_menu_cta_class', 10, 2 );
 
 /**
+ * Mark the menu item linked to the "Posts page" as current when viewing
+ * a single post or any blog archive (category, tag, author, date).
+ *
+ * WordPress only auto-flags the posts-page menu item on the blog home;
+ * single posts and archive screens leave it inert. This filter fills
+ * that gap so the active-state CSS picks up the same item across the
+ * whole blog section.
+ *
+ * @param string[] $classes Menu item classes.
+ * @param WP_Post  $item    Current menu item.
+ * @return string[] Filtered classes.
+ */
+function prospero_nav_menu_blog_current_class( $classes, $item ) {
+	if ( ! isset( $item->object, $item->object_id ) ) {
+		return $classes;
+	}
+
+	if ( 'page' !== $item->object ) {
+		return $classes;
+	}
+
+	$posts_page_id = (int) get_option( 'page_for_posts' );
+	if ( ! $posts_page_id || (int) $item->object_id !== $posts_page_id ) {
+		return $classes;
+	}
+
+	$is_blog_context = is_singular( 'post' )
+		|| is_category()
+		|| is_tag()
+		|| is_author()
+		|| is_date()
+		|| is_post_type_archive( 'post' );
+
+	if ( ! $is_blog_context ) {
+		return $classes;
+	}
+
+	foreach ( array( 'current-menu-item', 'current_page_item' ) as $class ) {
+		if ( ! in_array( $class, $classes, true ) ) {
+			$classes[] = $class;
+		}
+	}
+
+	return $classes;
+}
+add_filter( 'nav_menu_css_class', 'prospero_nav_menu_blog_current_class', 10, 2 );
+
+/**
  * Show the FAQ post type's nav menu meta box by default on the
  * Appearance -> Menus screen. WP normally hides custom post type
  * meta boxes and users have to tick them in Screen Options first,
