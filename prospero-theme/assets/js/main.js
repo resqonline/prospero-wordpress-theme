@@ -353,6 +353,22 @@
 			e.preventDefault();
 			scrollToAnchor(target);
 		});
+
+		// Cross-page / reload arrival with a hash: use the same sticky-
+		// aware scroller instead of the browser's un-offset jump.
+		if (window.location.hash && window.location.hash.length > 1) {
+			const hashId = decodeURIComponent(window.location.hash.slice(1));
+			const hashTarget = document.getElementById(hashId) ||
+				document.querySelector('a[name="' + escapeSelectorValue(hashId) + '"]');
+
+			if (hashTarget) {
+				if ('scrollRestoration' in history) {
+					history.scrollRestoration = 'manual';
+				}
+				window.scrollTo(0, 0);
+				scrollToAnchor(hashTarget, 100);
+			}
+		}
 	}
 
 	/**

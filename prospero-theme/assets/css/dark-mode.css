@@ -334,6 +334,47 @@ body.dark-mode .desktop-menu .sub-menu {
 	transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
+/* Table of Contents */
+body.dark-mode .prospero-toc,
+body.dark-mode .prospero-toc-collapsible {
+	background: color-mix(in srgb, var(--color-background-dark) 88%, var(--color-text-dark));
+}
+
+body.dark-mode .prospero-toc-title,
+body.dark-mode .prospero-toc-collapsible > .prospero-toc-summary,
+body.dark-mode .prospero-toc-list .prospero-toc-page-marker {
+	color: var(--color-primary);
+}
+
+body.dark-mode .prospero-toc-list a {
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .prospero-toc-list a:hover,
+body.dark-mode .prospero-toc-list a:focus {
+	color: var(--color-primary);
+}
+
+body.dark-mode .prospero-page-links {
+	border-top-color: color-mix(in srgb, var(--color-text-dark) 25%, transparent);
+}
+
+body.dark-mode .prospero-page-links span:not(.prospero-page-links-label):not(:has(a)) {
+	background: var(--color-primary);
+	color: var(--color-background-dark);
+}
+
+body.dark-mode .prospero-page-links span a {
+	border-color: color-mix(in srgb, var(--color-text-dark) 30%, transparent);
+	color: var(--color-text-dark);
+}
+
+body.dark-mode .prospero-page-links span a:hover,
+body.dark-mode .prospero-page-links span a:focus {
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+}
+
 /* Prefers reduced motion */
 @media (prefers-reduced-motion: reduce) {
 	* {

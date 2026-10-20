@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define theme constants
-define( 'PROSPERO_VERSION', '1.2.0' );
+define( 'PROSPERO_VERSION', '1.3.0' );
 define( 'PROSPERO_THEME_DIR', get_template_directory() );
 define( 'PROSPERO_THEME_URI', get_template_directory_uri() );
 
@@ -359,6 +359,7 @@ require_once PROSPERO_THEME_DIR . '/inc/breadcrumbs.php';
 require_once PROSPERO_THEME_DIR . '/inc/customizer.php';
 require_once PROSPERO_THEME_DIR . '/inc/post-types.php';
 require_once PROSPERO_THEME_DIR . '/inc/featured-image-meta.php';
+require_once PROSPERO_THEME_DIR . '/inc/toc.php';
 require_once PROSPERO_THEME_DIR . '/inc/template-functions.php';
 require_once PROSPERO_THEME_DIR . '/inc/gutenberg.php';
 require_once PROSPERO_THEME_DIR . '/inc/blocks.php';

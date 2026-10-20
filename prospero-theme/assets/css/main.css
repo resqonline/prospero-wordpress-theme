@@ -4101,3 +4101,173 @@ body.dark-mode .pre-footer-widget .search-field {
 		max-height: 70vh;
 	}
 }
+
+/* ==========================================================================
+   Table of Contents
+   ========================================================================== */
+
+[id^="prospero-h-"] {
+	scroll-margin-top: calc(var(--prospero-top-bar-height, 0px) + 6rem);
+}
+
+.prospero-toc-collapsible {
+	background: color-mix(in srgb, var(--color-background) 92%, var(--color-text));
+	margin: 0 0 var(--spacing-sm);
+	border-radius: 6px;
+}
+
+.prospero-toc-collapsible > .prospero-toc-summary {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.75rem 1.25rem;
+	cursor: pointer;
+	font-weight: 600;
+	color: var(--color-primary);
+	font-size: 1rem;
+	list-style: none;
+	user-select: none;
+}
+
+.prospero-toc-collapsible > .prospero-toc-summary::marker,
+.prospero-toc-collapsible > .prospero-toc-summary::-webkit-details-marker {
+	display: none;
+}
+
+.prospero-toc-collapsible > .prospero-toc-summary::after {
+	content: '+';
+	font-size: 1.25rem;
+	font-weight: 400;
+	line-height: 1;
+}
+
+.prospero-toc-collapsible[open] > .prospero-toc-summary::after {
+	content: '\2212';
+}
+
+.prospero-toc-collapsible .prospero-toc {
+	background: transparent;
+	margin: 0;
+	padding-top: 0;
+}
+
+.prospero-toc {
+	background: color-mix(in srgb, var(--color-background) 92%, var(--color-text));
+	padding: 1rem 1.25rem;
+	margin: var(--spacing-sm) 0;
+	border-radius: 6px;
+}
+
+.prospero-toc-title {
+	font-weight: 600;
+	color: var(--color-primary);
+	margin: 0 0 0.75rem;
+	font-size: 1rem;
+}
+
+.entry-content .prospero-toc-list,
+.entry-content .prospero-toc-list ul,
+.post-content .prospero-toc-list,
+.post-content .prospero-toc-list ul {
+	list-style: none;
+	text-indent: 0;
+	margin: 0;
+	padding: 0;
+}
+
+.entry-content .prospero-toc-list li::before,
+.entry-content .prospero-toc-list ul li::before,
+.post-content .prospero-toc-list li::before,
+.post-content .prospero-toc-list ul li::before {
+	content: none !important;
+}
+
+.entry-content .prospero-toc-list > li,
+.post-content .prospero-toc-list > li {
+	margin: 0.3rem 0;
+	line-height: 1.4;
+}
+
+.entry-content .prospero-toc-list ul,
+.post-content .prospero-toc-list ul {
+	padding-left: 1.25rem;
+	margin: 0.15rem 0;
+}
+
+.entry-content .prospero-toc-list ul li,
+.post-content .prospero-toc-list ul li {
+	margin: 0.15rem 0;
+}
+
+.prospero-toc-list a {
+	color: var(--color-text);
+	text-decoration: none;
+}
+
+.prospero-toc-list a:hover,
+.prospero-toc-list a:focus {
+	color: var(--color-primary);
+}
+
+.prospero-toc-list a:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+}
+
+.entry-content .prospero-toc-list .prospero-toc-page-marker,
+.post-content .prospero-toc-list .prospero-toc-page-marker {
+	list-style: none;
+	margin: 0.5rem 0 0.15rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+}
+
+.entry-content .prospero-toc-list .prospero-toc-page-marker::before,
+.post-content .prospero-toc-list .prospero-toc-page-marker::before {
+	content: none !important;
+}
+
+.prospero-page-links {
+	margin-top: 0.75rem;
+	padding-top: 0.75rem;
+	border-top: 1px solid color-mix(in srgb, var(--color-text) 20%, transparent);
+	font-size: 0.875rem;
+	line-height: 2;
+}
+
+.prospero-page-links-label {
+	font-weight: 600;
+	margin-right: 0.25rem;
+}
+
+.prospero-page-links span:not(.prospero-page-links-label):not(:has(a)) {
+	display: inline-block;
+	padding: 0.1rem 0.5rem;
+	background: var(--color-primary);
+	color: var(--color-background);
+	border-radius: 3px;
+}
+
+.prospero-page-links span a {
+	display: inline-block;
+	padding: 0.1rem 0.5rem;
+	border: 1px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+	color: var(--color-text);
+	text-decoration: none;
+	border-radius: 3px;
+	transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.prospero-page-links span a:hover,
+.prospero-page-links span a:focus {
+	border-color: var(--color-primary);
+	color: var(--color-primary);
+}
+
+.prospero-page-links span a:focus-visible {
+	outline: 2px solid var(--color-primary);
+	outline-offset: 2px;
+}

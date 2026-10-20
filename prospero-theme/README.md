@@ -13,6 +13,7 @@ A modern, accessible WordPress theme with dark mode support, custom Gutenberg bl
 - [Page Templates](#page-templates)
 - [Menus](#menus)
 - [Frontend Login System](#frontend-login-system)
+- [Table of Contents](#table-of-contents)
 - [Typography](#typography)
 - [Accessibility](#accessibility)
 - [GDPR Compliance](#gdpr-compliance)
@@ -34,6 +35,7 @@ A modern, accessible WordPress theme with dark mode support, custom Gutenberg bl
 - **Local Google Fonts** - Automatic download and local hosting of fonts
 - **Accessibility** - European Accessibility Act compliant
 - **SEO Ready** - Schema.org markup and Open Graph tags
+- **Table of Contents** - Heading-based TOC for posts/pages with multipage support, shortcode, optional auto-insert, and per-entry override
 - **Security Hardened** - WordPress version hidden, XML-RPC disabled, REST API links removed
 
 ---
@@ -130,6 +132,14 @@ Additional FAQ settings (visible when FAQs are enabled):
 
 - **FAQ Archive Title** - Custom heading for the FAQ archive page (defaults to "Frequently Asked Questions")
 - **FAQ Archive Description** - Optional intro paragraph shown above the accordion
+
+### Table of Contents
+
+| Setting | Description |
+|---------|-------------|
+| Auto-insert Table of Contents | When checked, inserts a TOC after the first paragraph on posts/pages with enough headings. **Off by default** so existing sites are unchanged |
+
+Per-entry override in the editor sidebar (block editor document panel + classic meta box): use theme default, force enable, or force disable. Manual placement via `[prospero_toc]` / `[toc]` always works unless the entry is disabled.
 
 ### Frontend Login
 
@@ -398,6 +408,23 @@ Display FAQ items from the FAQ post type as a click-to-expand accordion.
 [/prospero_faq]
 ```
 
+### Table of Contents
+
+```
+[prospero_toc]
+[prospero_toc title="Inhalt" levels="2,3" min_headings="2"]
+[prospero_toc collapsed="1"]
+[toc]
+```
+
+**Parameters:**
+- `levels` - Comma-separated heading levels to include (default: `2,3`)
+- `title` - Label above the list (default: "Table of Contents")
+- `min_headings` - Minimum headings required before rendering (default: `2`)
+- `collapsed` - Wrap the TOC in a collapsible `<details>` element
+
+Supports multipage posts (`<!--nextpage-->` / Gutenberg nextpage): page markers in the list, page navigation below the TOC, and cross-page anchor links. Same-page links use the theme's sticky-header-aware smooth scroll.
+
 ### Login Forms (when frontend login enabled)
 
 ```
@@ -663,6 +690,7 @@ prospero-theme/
 │   ├── security.php
 │   ├── seo.php
 │   ├── shortcodes.php
+│   ├── toc.php              # Table of Contents shortcode, anchors, auto-insert, meta
 │   ├── template-functions.php
 │   └── typography.php
 ├── template-parts/          # Reusable template components
@@ -733,6 +761,27 @@ No open items.
 ---
 
 ## Changelog
+
+### Version 1.3.0 (2026-10-20, release)
+
+Minor release adding a built-in Table of Contents feature, plus a cleanup pass across the codebase. Highlights:
+
+- **Table of Contents** for posts and pages, with a shortcode, opt-in auto-insert, per-entry override, and multipage support.
+- **Cleanup:** removed dead code left over during TOC development (an unused client-side page-link resolver and its localized data) and a stale `TODO` comment in `inc/gutenberg.php` that listed custom blocks already implemented in `inc/blocks.php`.
+
+See the dated subsection below for the per-change detail.
+
+### Version 1.3.0 (2026-10-20, table of contents)
+
+- Added: **Table of Contents for posts and pages**, adapted from the wittheme implementation and fitted to Prospero patterns. New module `inc/toc.php` provides:
+  - `[prospero_toc]` shortcode (alias `[toc]`) with `levels`, `title`, `min_headings`, and `collapsed` attributes.
+  - Stable heading anchors (`id="prospero-h-{slug}"`) on h2–h6 when a TOC is active, with duplicate-slug suffixes and Gutenberg heading-link stripping so IDs stay in sync between the list and the content. Existing heading `id`s (e.g. from Gutenberg anchors) are preserved rather than overwritten.
+  - **Multipage support** for classic `<!--nextpage-->` and Gutenberg `<!-- wp:nextpage /-->`: page markers in the TOC list, page navigation under the TOC, and cross-page links built entirely in PHP via `prospero_toc_page_url()` from the queried post (avoids wrong permalinks when `$post` is swapped during `the_content`, and works with JavaScript disabled).
+  - **Customizer opt-in auto-insert** (`prospero_toc_auto_insert`, default **off**): after the first paragraph on page 1, collapsed at the top on pages 2+. Skipped when a shortcode is already in the content or when fewer than `min_headings` headings exist.
+  - **Per-entry enable/disable** via `_prospero_toc_status` (`''` / `enabled` / `disabled`): REST-registered meta, classic sidebar meta box, and a block editor **Document** panel (`assets/js/toc-editor.js`).
+- Changed: `assets/js/main.js` smooth-scrolls to URL hashes on load with the existing sticky-header offset (so cross-page TOC arrivals land correctly).
+- Added: TOC styles in `assets/css/main.css` and dark-mode counterparts in `assets/css/dark-mode.css` using Customizer color tokens.
+- Cleaned up: removed the client-side `initTocPageLinks()` resolver and its `prosperoToc` localized data from `assets/js/main.js` / `inc/toc.php` — superseded once multipage TOC links were moved to server-side `prospero_toc_page_url()`, leaving the JS path unused. Also removed a stale `TODO: Register custom blocks` comment in `inc/gutenberg.php` listing blocks that `inc/blocks.php` already implements.
 
 ### Version 1.2.0 (2026-06-09, release)
 

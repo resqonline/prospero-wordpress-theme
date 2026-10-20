@@ -1233,6 +1233,24 @@ function prospero_customize_register( $wp_customize ) {
 		'type'        => 'text',
 	) );
 	
+	// ===== TABLE OF CONTENTS SECTION =====
+	$wp_customize->add_section( 'prospero_toc', array(
+		'title'       => esc_html__( 'Table of Contents', 'prospero-theme' ),
+		'description' => esc_html__( 'Heading-based table of contents for posts and pages. Supports multipage content. Per-entry overrides are available in the editor sidebar.', 'prospero-theme' ),
+		'priority'    => 36,
+	) );
+
+	$wp_customize->add_setting( 'prospero_toc_auto_insert', array(
+		'default'           => false,
+		'sanitize_callback' => 'rest_sanitize_boolean',
+	) );
+	$wp_customize->add_control( 'prospero_toc_auto_insert', array(
+		'label'       => esc_html__( 'Auto-insert Table of Contents', 'prospero-theme' ),
+		'description' => esc_html__( 'When enabled, inserts a TOC after the first paragraph on posts and pages that have enough headings. Off by default so existing sites are unchanged. Use [prospero_toc] to place one manually, or override per entry in the editor.', 'prospero-theme' ),
+		'section'     => 'prospero_toc',
+		'type'        => 'checkbox',
+	) );
+
 	// ===== FRONTEND LOGIN SECTION =====
 	$wp_customize->add_section( 'prospero_frontend_login', array(
 		'title'    => esc_html__( 'Frontend Login', 'prospero-theme' ),

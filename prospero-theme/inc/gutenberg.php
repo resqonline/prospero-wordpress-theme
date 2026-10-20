@@ -55,15 +55,8 @@ function prospero_register_blocks() {
 		'name'  => 'slider-autoplay',
 		'label' => esc_html__( 'Slider (autoplay)', 'prospero-theme' ),
 	) );
-	
-	// TODO: Register custom blocks:
-	// - Text Content Block
-	// - Call to Action Block
-	// - Affiliate Link Block
-	// - Member Content Block
-	// - Testimonial Block
-	// - Partner Block
-	// - Team Block
+	// Custom blocks (Text Content, CTA, Affiliate Link, Member Content,
+	// Testimonial, Partner, Team) are registered in inc/blocks.php.
 }
 add_action( 'init', 'prospero_register_blocks' );
 
